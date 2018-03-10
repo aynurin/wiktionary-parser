@@ -18,7 +18,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
     <PackageReference Include="Phonix" Version="1.0.1" />
     <PackageReference Include="QuickGraph" Version="3.6.61119.7" />
-    <PackageReference Include="WikimediaProcessing" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WikimediaProcessing\WikimediaProcessing.Portable.csproj" />
   </ItemGroup>
 
 </Project>

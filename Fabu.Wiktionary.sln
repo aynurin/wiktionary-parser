@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabu.Wiktionary", "Fabu.Wik
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabu.Wiktionary.Tests", "Fabu.Wiktionary.Tests\Fabu.Wiktionary.Tests.csproj", "{012EBCE2-4278-4E22-A9FB-60F72107703D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WikimediaProcessing.Portable", "WikimediaProcessing\WikimediaProcessing.Portable.csproj", "{3D1EEB8F-A0D8-4986-AAD6-79862D36FC61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{012EBCE2-4278-4E22-A9FB-60F72107703D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{012EBCE2-4278-4E22-A9FB-60F72107703D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{012EBCE2-4278-4E22-A9FB-60F72107703D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D1EEB8F-A0D8-4986-AAD6-79862D36FC61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D1EEB8F-A0D8-4986-AAD6-79862D36FC61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D1EEB8F-A0D8-4986-AAD6-79862D36FC61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D1EEB8F-A0D8-4986-AAD6-79862D36FC61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
