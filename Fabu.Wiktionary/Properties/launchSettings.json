@@ -2,7 +2,7 @@
   "profiles": {
     "Fabu.Wiktionary": {
       "commandName": "Project",
-      "commandLineArgs": "lang --in C:\\repos\\data\\fabu\\enwiktionary-20180120-pages-articles.xml --out c:\\repos\\data\\fabu\\languages.tsv"
+      "commandLineArgs": "cluster"
     }
   }
 }

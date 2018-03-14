@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Fabu.Wiktionary.Transform
+﻿namespace Fabu.Wiktionary.Transform
 {
-    internal abstract class BaseTransform<TSrc,TOut>
+    internal abstract class BaseSectionNameTransform<TName>
+        where TName: SectionName
     {
-        public abstract TOut Apply(TSrc value);
+        public abstract TName Apply(TName sectionName);
+    }
+
+    internal abstract class SectionNameTransform : BaseSectionNameTransform<SectionName>
+    {
     }
 }

@@ -3,43 +3,91 @@ using Fabu.Wiktionary.FuzzySearch;
 using Fabu.Wiktionary.Graph;
 using Fabu.Wiktionary.Transform;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Fabu.Wiktionary.Commands
 {
     internal class SectionGraphCommand : BaseCommand<SectionGraphCommand.Args>
     {
-        [Verb("sectionsgraph", HelpText = "Extract language names")]
+        [Verb("graph", HelpText = "Extract language names")]
         public class Args : BaseArgs
         {
-            [Option("langs", Required = true, HelpText = "Language names file.")]
-            public string LanguagesFile { get; set; }
-            [Option("types", Required = true, HelpText = "Section names file.")]
-            public string SectionTypesFile { get; set; }
-            [Option("weights", Required = true, HelpText = "Section names file.")]
-            public string SectionWeightsFile { get; set; }
+            [Option("onlystandard", Required = false, Default = true, HelpText = "Keep only the sections that could be matched to standard.")]
+            public bool KeepOnlyStandardSections { get; set; }
+            [Option("minfreq", Required = false, Default = 2, HelpText = "Minimum edge frequency in graph.")]
+            public int MinimumEdgeFrequency { get; set; }
+            [Option("clearstats", Required = false, Default = false, HelpText = "Clear and recalc stats.")]
+            public bool ClearStats { get; set; }
         }
 
-        // sectionsgraph --in C:\repos\data\fabu\enwiktionary-20180120-pages-articles.xml --langs c:\repos\data\fabu\languagenames.tsv --types c:\repos\data\fabu\types.tsv --weights c:\repos\data\fabu\weights.tsv --out c:\repos\data\fabu\wiktionary_graph.json
+        // graph --in enwiktionary-20180120-pages-articles.xml --minfreq 2 --clear
         protected override void RunCommand(Args args, Func<int, BaseArgs, bool> onProgress)
         {
-            var languageNames = DumpTool.LoadLanguages(args.LanguagesFile);
-            var languageSearch = new IgnoreCaseSearch<LanguageWeight>(languageNames, _ => _.Name, new LanguageWeightComparer());
-            var sectionWeights = DumpTool.LoadSectionWeights(args.SectionWeightsFile);
-            var sectionsSearch = new LevenshteinSearch<SectionWeight>(sectionWeights, _ => _.Name, 3);
-            var sectionTypes = DumpTool.LoadSectionTypes(args.SectionTypesFile);
-            var sectionTypesSearch = new IgnoreCaseSearch<SectionType>(sectionTypes, _ => _.Name, new SectionTypeComparer());
+            var languages = LoadLanguages(args.DumpDir);
+            var sections = LoadSections(args.DumpDir);
 
-            var wiktionaryMeta = new WiktionaryMeta(languageSearch, sectionsSearch, sectionTypesSearch);
-            var transform = new SectionClass(wiktionaryMeta);
-            var graphBuilder = new GraphBuilder(transform, wiktionaryMeta);
-            var wiktionaryDump = DumpTool.LoadWikimediaDump(args.WiktionaryDumpFile);
-            var analyzer = new WiktionaryAnalyzer(graphBuilder, wiktionaryDump);
+            if (args.ClearStats)
+                ClearSectionStats(sections.Dict);
+
+            var transform = new GraphVertexSectionName(languages, sections, args.KeepOnlyStandardSections);
+            var graphBuilder = new GraphBuilder(transform);
+
+            // TODO NOW: If Leva won't find a section in sections, user has to decide whether to add this section to the graph or not.
+
+            var wiktionaryDump = DumpTool.LoadWikimediaDump(args.DumpDir, args.WiktionaryDumpFile);
+            var analyzer = new WiktionaryAnalyzer(graphBuilder, wiktionaryDump, args.MinimumEdgeFrequency);
             if (onProgress != null)
                 analyzer.PageProcessed += (sender, e) => e.Abort = onProgress(e.Index, args);
-            analyzer.GetStatistics();
-            using (var file = File.CreateText(args.OutputFile))
+            analyzer.Compute();
+
+            using (var file = File.CreateText(Path.Combine(args.DumpDir, DumpTool.SectionsGraph + ".json")))
                 graphBuilder.Serialize(file);
+
+            Console.WriteLine();
+
+            PrintSkeptItemsStats(graphBuilder);
+            
+            CleanupSectionStats(sections.Dict);
+
+            DumpTool.SaveDump(args.DumpDir, DumpTool.SectionsDictDump, sections.Dict);
+        }
+
+        private static void CleanupSectionStats(List<SectionName> sections)
+        {
+            sections.ForEach(s => s.Parents = s.Parents.CutOff(0.005));
+            sections.ForEach(s => s.Children = s.Children.CutOff(0.005));
+            sections.ForEach(s => s.DepthStats = s.DepthStats.CutOff(0.005));
+        }
+
+        private static void ClearSectionStats(List<SectionName> sections)
+        {
+            sections.ForEach(s => s.Parents.Clear());
+            sections.ForEach(s => s.Children.Clear());
+            sections.ForEach(s => s.DepthStats.Clear());
+        }
+
+        private static void PrintSkeptItemsStats(GraphBuilder graphBuilder)
+        {
+            Console.WriteLine("Skept items stats: ");
+            Console.WriteLine("Less than 10 mentions: " + graphBuilder.NamesSkept.Count(s => s.Value < 10));
+            Console.WriteLine("Less than 50 mentions: " + graphBuilder.NamesSkept.Count(s => s.Value >= 10 && s.Value < 50));
+            Console.WriteLine("More than 50 mentions: " + graphBuilder.NamesSkept.Count(s => s.Value >= 50));
+        }
+
+        private static ReverseLevenshteinSearch LoadSections(string dir)
+        {
+            var sections = DumpTool.LoadDump<List<SectionName>>(dir, DumpTool.SectionsDictDump);
+            var sectionsSearch = new ReverseLevenshteinSearch(sections);
+            return sectionsSearch;
+        }
+
+        private static IgnoreCaseSearch<SectionName> LoadLanguages(string dir)
+        {
+            var languageNames = DumpTool.LoadDump<List<SectionName>>(dir, DumpTool.LanguagesDump);
+            var languageSearch = new IgnoreCaseSearch<SectionName>(languageNames, _ => _.Name, new SectionNameComparer());
+            return languageSearch;
         }
     }
 }

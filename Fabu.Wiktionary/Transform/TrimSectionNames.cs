@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Fabu.Wiktionary.Transform
 {
-    internal class TrimSectionNames : BaseTransform<string, string>
+    internal class TrimSectionNames : SectionNameTransform
     {
-        public override string Apply(string obj)
+        public override SectionName Apply(SectionName sectionName)
         {
-            return obj?.Trim();
+            return sectionName.CloneWithName(sectionName.Name.Trim());
         }
     }
 }

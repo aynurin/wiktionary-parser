@@ -10,16 +10,18 @@ namespace Fabu.Wiktionary
     {
         private readonly GraphBuilder _graphBuilder;
         private readonly Wikimedia _dump;
+        private readonly int _minimumEdgeFrequency;
 
         public event EventHandler<WikimediaPageProcessedEventArgs> PageProcessed;
 
-        public WiktionaryAnalyzer(GraphBuilder builder, Wikimedia dump)
+        public WiktionaryAnalyzer(GraphBuilder builder, Wikimedia dump, int minimumAllowedEdgeFrequency = 1)
         {
             _graphBuilder = builder;
             _dump = dump;
+            _minimumEdgeFrequency = minimumAllowedEdgeFrequency;
         }
 
-        public GraphBuilder GetStatistics()
+        public GraphBuilder Compute()
         {
             var counter = 0;
             foreach (var article in _dump.Articles)
@@ -34,6 +36,7 @@ namespace Fabu.Wiktionary
                 if(args.Abort)
                     break;
             }
+            _graphBuilder.RemoveEdges(_minimumEdgeFrequency);
             return _graphBuilder;
         }
     }

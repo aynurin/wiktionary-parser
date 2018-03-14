@@ -4,125 +4,80 @@ using Fabu.Wiktionary.Graph;
 using Fabu.Wiktionary.Transform;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace Fabu.Wiktionary.Commands
 {
     internal class StandardSectionsCommand : BaseCommand<StandardSectionsCommand.Args>
     {
-        [Verb("standardsections", HelpText = "Extract section names")]
+        [Verb("sectionsdict", HelpText = "Extract section names")]
         public class Args : BaseArgs
         {
-            [Option("sections", Required = true, HelpText = "Section names file.")]
-            public string AllSectionsFile { get; set; }
-            [Option("weights", Required = false, HelpText = "Section names file.")]
-            public string SectionWeightsFile { get; set; }
-            [Option("brief", Required = false, HelpText = "Section names file.")]
-            public bool BriefOutput { get; set; }
         }
 
-        // standardsections --in C:\repos\data\fabu\enwiktionary-20180120-pages-articles.xml --sections c:\repos\data\fabu\sections.tsv --weights c:\repos\data\fabu\weights.tsv --out c:\repos\data\fabu\matches.tsv
-        // standardsections --in C:\repos\data\fabu\enwiktionary-20180120-pages-articles.xml --sections c:\repos\data\fabu\sections.tsv --out c:\repos\data\fabu\matches.tsv
+        // sectionsdict
         protected override void RunCommand(Args args, Func<int, BaseArgs, bool> onProgress)
         {
-            var allSections = DumpTool.LoadSectionWeights(args.AllSectionsFile)
+            var allSections = DumpTool.LoadDump<List<SectionName>>(args.DumpDir, DumpTool.SectionsDump)
                 // so that when a new standard section is created, it is created from the most frequent term
-                .OrderByDescending(v => v.Weight) 
+                .OrderByDescending(v => v.Weight)
+                .ToList();
+            
+            var searchableSectionName = new SearchableSectionName();
+
+            var standardSections = allSections
+                .GroupBy(_ => searchableSectionName.Apply(_))
+                .Select(group => new SectionName
+                {
+                    Name = group.OrderByDescending(_ => _.Weight).First().Name,
+                    Weight = group.Sum(_ => _.Weight)
+                })
+                .OrderByDescending(_ => _.Weight)
+                .TakeWhile(_ => _.Weight > 100)
                 .ToList();
 
-            var transform = new OptimizeSectionName();
-            var standardSections = new List<SectionWeight>();
-            var autoGenerateStandardSections = false;
+            var reducedSectionsList = ReduceTyposFuzzySearch(allSections, standardSections, searchableSectionName)
+                .OrderByDescending(_ => _.Weight)
+                .TakeWhile(_ => _.Weight > 30)
+                .ToList();
 
-            if(!String.IsNullOrEmpty(args.SectionWeightsFile))
-            {
-                standardSections = DumpTool.LoadSectionWeights(args.SectionWeightsFile);
-            }
-            else
-            {
-                autoGenerateStandardSections = true;
-                Console.WriteLine("Standard setions not provided, will auto-generate? (Ctrl+C to abort)");
-                Console.ReadLine();
-                foreach (var section in allSections)
-                {
-                    section.Name = transform.Apply(section.Name);
-                }
-                var sectionAnalyzer = new SectionStatsAnalyzer(
-                    allSections.Select(s => new SectionVertex { Title = s.Name, Count = (int)s.Weight }));
-                standardSections = sectionAnalyzer.GetMostPopularSections()
-                    .OrderByDescending(v => v.Count)
-                    .Select(v => new SectionWeight(v.Title, v.Count))
-                    .ToList();
-            }
+            DumpTool.SaveDump(args.DumpDir, "sections_dict", reducedSectionsList);
+        }
 
+        private static List<SectionName> ReduceTyposFuzzySearch(
+            List<SectionName> allSections, List<SectionName> standardSections,
+            SectionNameTransform searchableSectionName)
+        {
+            var mappingResult = new Dictionary<string, SectionName>();
 
+            var searchImpl = new LevenshteinSearch<SectionName>(standardSections, 
+                _ => searchableSectionName.Apply(_).Name, 2);
 
-            var mappingResult = new Dictionary<string, List<SectionWeight>>();
-            var unknown = new List<SectionWeight>();
-
-            var searchImpl = new LevenshteinSearch<SectionWeight>(standardSections, _ => _.Name, 2);
             foreach (var section in allSections)
             {
-                var candidates = searchImpl.FindBest(section.Name);
+                var searchableName = searchableSectionName.Apply(section);
+                if (searchableName.Name == "etymology")
+                    System.Diagnostics.Debugger.Break();
+                var candidate = searchImpl.FindBest(searchableName.Name)
+                    .OrderByDescending(s => s.Weight)
+                    .FirstOrDefault();
                 // if none found, add unknowns to the search and to the result so that they can 
                 // attach new unknowns to themselves using Levenshtein
-                if (candidates.Count == 0)
+                if (candidate == null)
                 {
-                    if (autoGenerateStandardSections)
-                    {
-                        standardSections.Add(section);
-                        candidates.Add(section);
-                    }
-                    else
-                    {
-                        unknown.Add(section);
-                    }
+                    standardSections.Add(section);
+                    candidate = section;
                 }
-                foreach (var candidate in candidates)
-                {
-                    if (!mappingResult.TryGetValue(candidate.Name, out List<SectionWeight> sections))
-                    {
-                        sections = new List<SectionWeight>();
-                        mappingResult.Add(candidate.Name, sections);
-                    }
-                    sections.Add(section);
-                }
-            }
-            if (unknown.Count > 0)
-                mappingResult.Add("UNKNOWN", unknown);
 
-            using (var file = File.CreateText(args.OutputFile))
-            {
-                foreach (var item in mappingResult)
+                var candidateName = searchableSectionName.Apply(candidate);
+                if (!mappingResult.TryGetValue(candidateName.Name, out SectionName sections))
                 {
-                    if (args.BriefOutput)
-                    {
-                        var mentions = allSections.Find(v => v.Name == item.Key).Weight + 
-                            item.Value.Sum(w => w.Weight);
-                        if (mentions > 5)
-                        {
-                            file.Write(item.Key);
-                            file.Write('\t');
-                            file.Write(mentions);
-                            file.WriteLine();
-                        }
-                    }
-                    else
-                    {
-                        file.Write(item.Key);
-                        foreach (var value in item.Value)
-                        {
-                            file.Write('\t');
-                            file.Write(value.Name);
-                            file.Write('\t');
-                            file.Write(value.Weight);
-                            file.WriteLine();
-                        }
-                    }
+                    sections = new SectionName { Name = candidate.Name };
+                    mappingResult.Add(candidateName.Name, sections);
                 }
-                file.Flush();
+                sections.AddSpelling(searchableName.Name, section.Weight);
             }
+            return mappingResult.Values.ToList();
         }
     }
 }

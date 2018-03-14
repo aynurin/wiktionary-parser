@@ -22,7 +22,7 @@ namespace Fabu.Wiktionary.FuzzySearch
                 if (!dict.TryGetValue(getKey(item), out List<TVal> values))
                 {
                     values = new List<TVal>();
-                    dict.Add(getKey(item), values);
+                    dict.Add(getKey(item).Trim(), values);
                 }
                 values.Add(item);
             }
@@ -38,7 +38,7 @@ namespace Fabu.Wiktionary.FuzzySearch
 
         public List<TVal> FindAll(string term)
         {
-            if (_innerDict.TryGetValue(term, out List<TVal> values))
+            if (_innerDict.TryGetValue(term.Trim(), out List<TVal> values))
                 return values;
             return new List<TVal>();
         }

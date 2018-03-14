@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,27 +28,34 @@ namespace Fabu.Wiktionary.Graph
         };
 
         [XmlAttribute("id")]
+        [JsonProperty("id")]
         public string ID { get; set; }
         [XmlAttribute("title")]
+        [JsonProperty("title")]
         public string Title { get; set; }
         [XmlAttribute("count")]
+        [JsonProperty("count")]
         public int Count { get; set; }
         [XmlIgnore]
+        [JsonIgnore]
         public List<string> Samples { get; set; }
         [XmlIgnore]
+        [JsonIgnore]
         public int Depth => _depthStats.OrderByDescending(kvp => kvp.Value).Select(kvp => kvp.Key).First();
+        [XmlIgnore]
+        [JsonIgnore]
+        public Dictionary<int, int> DepthStats { get => _depthStats; }
+        [XmlIgnore]
+        [JsonIgnore]
+        public SectionName OriginalSection { get; internal set; }
 
         private readonly Dictionary<int, int> _depthStats = new Dictionary<int, int>();
         public void AddDepth(int depth)
         {
             if (_depthStats.ContainsKey(depth))
-            {
                 _depthStats[depth] += 1;
-            }
             else
-            {
                 _depthStats.Add(depth, 1);
-            }
         }
 
         public override bool Equals(object obj)

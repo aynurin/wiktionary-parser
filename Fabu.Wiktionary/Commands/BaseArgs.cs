@@ -4,10 +4,10 @@ namespace Fabu.Wiktionary.Commands
 {
     internal class BaseArgs
     {
-        [Option("in", Required = true, HelpText = "Wiktionary dump to be processed.")]
+        [Option("in", Required = false, HelpText = "Wiktionary dump to be processed.")]
         public string WiktionaryDumpFile { get; set; }
-        [Option("out", Required = true, HelpText = "Output file.")]
-        public string OutputFile { get; set; }
+        [Option("dumps", Required = false, Default = @"c:\repos\data\fabu\", HelpText = "Output directory name")]
+        public string DumpDir { get; set; }
         [Option("limit", Required = false, HelpText = "Limit number of processed pages.", Default = -1)]
         public int LimitPages { get; internal set; }
 

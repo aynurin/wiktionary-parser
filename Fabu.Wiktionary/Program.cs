@@ -14,14 +14,14 @@ namespace Fabu.Wiktionary
         {
             _runTimer.Start();
             return Parser.Default.ParseArguments<
-                LanguagesCommand.Args,
-                AllSectionsCommand.Args,
+                PrepDictsCommand.Args,
                 StandardSectionsCommand.Args,
+                SectionsClusteringCommand.Args,
                 SectionGraphCommand.Args>(args)
               .MapResult(
-                    (LanguagesCommand.Args opts) => new LanguagesCommand().Run(opts, Progress),
-                    (AllSectionsCommand.Args opts) => new AllSectionsCommand().Run(opts, Progress),
+                    (PrepDictsCommand.Args opts) => new PrepDictsCommand().Run(opts, Progress),
                     (StandardSectionsCommand.Args opts) => new StandardSectionsCommand().Run(opts, Progress),
+                    (SectionsClusteringCommand.Args opts) => new SectionsClusteringCommand().Run(opts, Progress),
                     (SectionGraphCommand.Args opts) => new SectionGraphCommand().Run(opts, Progress),
                     errs => 1);
         }

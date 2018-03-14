@@ -31,12 +31,9 @@ namespace Fabu.Wiktionary.FuzzySearch
             var candidates = new List<KeyValuePair<TVal, int>>();
             foreach (var known in Values)
             {
-                var distance = Levenshtein.CalculateDistance(
-                    _getKey(known).ToLowerInvariant(), term.ToLowerInvariant(), 1);
+                var distance = Levenshtein.CalculateDistance(_getKey(known), term, 1);
                 if (distance <= _maxEdits)
-                {
                     candidates.Add(new KeyValuePair<TVal, int>(known, distance));
-                }
             }
             return candidates.OrderBy(kvp => kvp.Value).ToList();
         }
