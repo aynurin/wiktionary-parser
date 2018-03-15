@@ -1,4 +1,7 @@
-﻿namespace Fabu.Wiktionary.Transform
+﻿using Fabu.Wiktionary.FuzzySearch;
+using System.Collections.Generic;
+
+namespace Fabu.Wiktionary.Transform
 {
     /// <summary>
     /// Applies <see cref="NormalizeSectionName"/> normalization, then makes all lowercase,

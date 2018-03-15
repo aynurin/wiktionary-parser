@@ -13,10 +13,18 @@ namespace Fabu.Wiktionary.Graph
     {
         private static SectionVertex _root = new SectionVertex
         {
-            ID = WiktionaryMeta.ROOT_NODE_NAME,
-            Title = "PageRoot"
+            ID = SimpleSectionsCategorizer.RootSectionName,
+            Title = SimpleSectionsCategorizer.RootSectionName,
+            OriginalSection = new SectionName { Name = SimpleSectionsCategorizer.RootSectionName }
+        };
+        private static SectionVertex _lang = new SectionVertex
+        {
+            ID = SimpleSectionsCategorizer.LanguageSectionName,
+            Title = SimpleSectionsCategorizer.LanguageSectionName,
+            OriginalSection = new SectionName { Name = SimpleSectionsCategorizer.LanguageSectionName }
         };
         public static SectionVertex Root => _root;
+        public static SectionVertex Lang => _lang;
 
         internal static SectionVertex From(WikiSection section, string parentTitle, string sampleRef) 
             => new SectionVertex
@@ -38,7 +46,7 @@ namespace Fabu.Wiktionary.Graph
         public int Count { get; set; }
         [XmlIgnore]
         [JsonIgnore]
-        public List<string> Samples { get; set; }
+        public List<string> Samples { get; set; } = new List<string>();
         [XmlIgnore]
         [JsonIgnore]
         public int Depth => _depthStats.OrderByDescending(kvp => kvp.Value).Select(kvp => kvp.Key).First();

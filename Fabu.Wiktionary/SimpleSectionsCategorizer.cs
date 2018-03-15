@@ -53,6 +53,7 @@ namespace Fabu.Wiktionary
         public const string LanguagesCluster = ClusterNamePrefix + "LANG";
 
         public const string LanguageSectionName = "LANG";
+        public const string RootSectionName = "PAGE";
 
         private readonly Dictionary<string, string> _staticSectionCategories = new Dictionary<string, string>()
         {

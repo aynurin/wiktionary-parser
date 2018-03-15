@@ -9,6 +9,28 @@ using System.Linq;
 
 namespace Fabu.Wiktionary.Commands
 {
+    /// <summary>
+    /// The results of this research is that I couldn't get any clusters that would introuce any human-recognizable value.
+    /// I still have a problem understanding Wiktionary page structure and getting an idea of how to interpret its sections.
+    /// What I can do now is to avoid deeper nodes, or to avoid leafs of deeper nodes to see a clear and understandable graph.
+    /// 
+    /// My goal is to create a single structured way of represending Wiktionary content.
+    /// In order to do that I need to have a programmable way to understand the structure of Wiktionary page. There is a 
+    /// recommendation, but if a page doesn't follow the recommended structure, it doesn't mean this is page does not have 
+    /// interesting content.
+    /// 
+    /// In order to resolve this, after normalizing section names I have a way to address and identify section names. 
+    /// The next thing is to work out a way to put sections of any page into a universal object structure.
+    /// 
+    /// One way is to manually tag section names for whether it is a POS or a reference, or etc. This work cannot be repeated, 
+    /// so I won't try it first.
+    /// 
+    /// I tried clustering based on the childred frequency, parents frequency, both children and parents frequency, based on 
+    /// raw or normalized and rounded numbers. All these attempts created no meaningful clusters so I cannot build a clean 
+    /// repeatable graph of sections.
+    /// 
+    /// Try throwing away all connections after the 2nd level of depth.
+    /// </summary>
     internal class SectionsClusteringCommand : BaseCommand<SectionsClusteringCommand.Args>
     {
         [Verb("cluster", HelpText = "Extract section names")]

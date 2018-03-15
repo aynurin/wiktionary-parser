@@ -1,5 +1,6 @@
 ﻿
 using Fabu.Wiktionary.FuzzySearch;
+using Fabu.Wiktionary.Graph;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,8 +15,8 @@ namespace Fabu.Wiktionary.Transform
     internal class GraphVertexSectionName : FixTyposSectionName
     {
         private readonly IFuzzySearcher<SectionName> _knownLanguages;
-        private readonly IFuzzySearcher<SectionName> _knownSections;
         private readonly bool _keepOnlyMatchedNames;
+        private readonly Dictionary<string, SectionName> _categorySections = new Dictionary<string, SectionName>();
 
         public GraphVertexSectionName(
             IFuzzySearcher<SectionName> knownLanguages,
@@ -24,7 +25,6 @@ namespace Fabu.Wiktionary.Transform
             : base(knownLanguages, knownSections, keepOnlyStandardSections)
         {
             _knownLanguages = knownLanguages;
-            _knownSections = knownSections;
             _keepOnlyMatchedNames = keepOnlyStandardSections;
         }
 
@@ -41,8 +41,8 @@ namespace Fabu.Wiktionary.Transform
 
             Debug.Assert(normalName != null && !String.IsNullOrWhiteSpace(normalName.Name));
 
-            if (TryGetSectionClass(normalName, out string newValue))
-                normalName = normalName.CloneWithName(newValue);
+            if (TryGetSectionClass(normalName, out SectionName newValue))
+                normalName = newValue;
 
             Debug.Assert(normalName != null && !String.IsNullOrWhiteSpace(normalName.Name));
 
@@ -55,16 +55,20 @@ namespace Fabu.Wiktionary.Transform
         /// <remarks>
         /// E.g. returns "LANGUAGE_NAME" for "English"
         /// </remarks>
-        public bool TryGetSectionClass(SectionName section, out string newValue)
+        public bool TryGetSectionClass(SectionName section, out SectionName newValue)
         {
             if (section.Category != null)
             {
-                newValue = section.Category;
+                if (!_categorySections.TryGetValue(section.Category, out newValue))
+                {
+                    newValue = section.CloneWithName(section.Category);
+                    _categorySections.Add(section.Category, newValue);
+                }
                 return true;
             }
             if (_knownLanguages != null && _knownLanguages.TryFindBest(section.Name, out List<SectionName> result))
             {
-                newValue = SimpleSectionsCategorizer.LanguageSectionName;
+                newValue = SectionVertex.Lang.OriginalSection;
                 return true;
             }
             newValue = null;

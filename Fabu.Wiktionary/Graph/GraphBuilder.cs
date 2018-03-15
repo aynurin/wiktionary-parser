@@ -14,15 +14,23 @@ namespace Fabu.Wiktionary.Graph
     {
         private readonly SectionsGraph _graph = new SectionsGraph();
         private readonly SectionNameTransform _sectionNameToVertexNameTransform;
+        private readonly List<SectionName> _allSections;
         private readonly Dictionary<string, SectionVertex> _addedVertices = new Dictionary<string, SectionVertex>();
         private readonly Dictionary<string, int> _namesSkept = new Dictionary<string, int>();
         private readonly Dictionary<string, SectionName> _nameTransformCache = new Dictionary<string, SectionName>();
 
-        public GraphBuilder(SectionNameTransform sectionNameToVertexNameTransform)
+        public GraphBuilder(SectionNameTransform sectionNameToVertexNameTransform, List<SectionName> allSections)
         {
-            _graph.AddVertex(SectionVertex.Root);
-
             _sectionNameToVertexNameTransform = sectionNameToVertexNameTransform;
+            _allSections = allSections;
+
+            _graph.AddVertex(SectionVertex.Root);
+            _addedVertices.Add(SectionVertex.Root.ID, SectionVertex.Root);
+
+            _graph.AddVertex(SectionVertex.Lang);
+            _addedVertices.Add(SectionVertex.Lang.ID, SectionVertex.Lang);
+
+            _allSections.InsertRange(0, new [] { SectionVertex.Root.OriginalSection, SectionVertex.Lang.OriginalSection });
         }
 
         internal void AddPage(WikimediaPage page)
@@ -39,6 +47,9 @@ namespace Fabu.Wiktionary.Graph
         {
             foreach (var section in childSections)
             {
+                if (depth >= 3 && section.SubSections.Count == 0)
+                    continue;
+
                 var vertexName = CachedNameTransform(section);
                 if (vertexName == null)
                 {
@@ -88,6 +99,7 @@ namespace Fabu.Wiktionary.Graph
                     }
                     _graph.AddEdge(newEdge);
                 }
+
                 AddSectionsToGraph(vertex, section.SubSections, sampleRef, depth + 1);
             }
         }
@@ -123,10 +135,10 @@ namespace Fabu.Wiktionary.Graph
             //});
         }
 
-        internal List<SectionVertex> LanguageNames => 
+        internal IEnumerable<SectionVertex> LanguageNames => 
             BreadthFirstSearch(v => v.Depth == 1, v => v.Depth > 1);
 
-        internal List<SectionVertex> AllSections =>
+        internal IEnumerable<SectionVertex> AllSections =>
             BreadthFirstSearch(v => v.Depth > 1);
 
         public Dictionary<string, int> NamesSkept => _namesSkept;
