@@ -1,0 +1,1929 @@
+[
+  {
+    "Name": "Verb",
+    "Weight": 4931667.0,
+    "Spellings": [
+      "verb",
+      "vetb",
+      "averb"
+    ],
+    "DepthStats": {
+      "2": 2457085.0,
+      "3": 9102.0
+    },
+    "Parents": {
+      "LANG": 2457085.0,
+      "Etymology": 8814.0
+    },
+    "Children": {
+      "Conjugation": 203.0,
+      "Related terms": 56.0,
+      "Derived terms": 23.0,
+      "Synonyms": 19.0,
+      "Inflection": 17.0,
+      "Usage notes": 8.0,
+      "Antonyms": 4.0,
+      "Translations": 3.0,
+      "Noun": 3.0,
+      "Etymology": 1.0,
+      "References": 1.0,
+      "See also": 1.0
+    }
+  },
+  {
+    "Name": "Noun",
+    "Weight": 4102420.0,
+    "Spellings": [
+      "noun",
+      "note",
+      "nooun",
+      "non",
+      "none",
+      "nounm",
+      "nun",
+      "nuon"
+    ],
+    "DepthStats": {
+      "2": 2029485.0,
+      "3": 23313.0
+    },
+    "Parents": {
+      "LANG": 2029484.0,
+      "Etymology": 22735.0
+    },
+    "Children": {
+      "Declension": 310.0,
+      "Derived terms": 107.0,
+      "Synonyms": 98.0,
+      "Related terms": 85.0,
+      "Inflection": 18.0,
+      "Antonyms": 9.0,
+      "Usage notes": 9.0,
+      "See also": 8.0,
+      "Coordinate terms": 7.0,
+      "Hypernyms": 6.0,
+      "Translations": 6.0,
+      "Descendants": 6.0,
+      "Noun": 3.0,
+      "Alternative forms": 3.0,
+      "Quotations": 3.0,
+      "References": 2.0,
+      "Adjective": 1.0,
+      "Pronunciation": 1.0
+    }
+  },
+  {
+    "Name": "Pronunciation",
+    "Weight": 2301761.0,
+    "Spellings": [
+      "pronunciation",
+      "pronunctiation",
+      "pronuciation",
+      "pronunication",
+      "pronuncation",
+      "pronunciaiton",
+      "pronciation",
+      "prounciation",
+      "pronuncaition",
+      "pronūnciation",
+      "pronuncuation",
+      "pronuniation",
+      "proninciation",
+      "pronunciaton",
+      "pornunciation",
+      "prinunciation",
+      "prnunciation",
+      "promunciation",
+      "pronhnciation",
+      "prononciation",
+      "pronucniation",
+      "pronunciaition",
+      "pronunciatin",
+      "pronunciatioon",
+      "pronunciatoon",
+      "pronunciayion",
+      "pronuncistion",
+      "pronunciztion",
+      "pronuncoation",
+      "pronunction",
+      "pronuntiation",
+      "pronynciation",
+      "proununciation",
+      "prronunciation"
+    ],
+    "DepthStats": {
+      "2": 1150998.0
+    },
+    "Parents": {
+      "LANG": 1150998.0
+    },
+    "Children": {
+      "Noun": 568.0,
+      "Verb": 288.0,
+      "Definitions": 153.0,
+      "Adjective": 147.0,
+      "Etymology": 51.0,
+      "Proper noun": 32.0,
+      "Adverb": 25.0,
+      "Conjunction": 9.0,
+      "Pronoun": 9.0,
+      "Suffix": 8.0,
+      "Participle": 8.0,
+      "Synonyms": 7.0,
+      "Interjection": 6.0,
+      "Conjugation": 6.0,
+      "Preposition": 5.0,
+      "Letter": 4.0,
+      "Derived terms": 4.0,
+      "Usage notes": 4.0,
+      "Numeral": 4.0,
+      "Prefix": 3.0,
+      "Determiner": 2.0,
+      "Declension": 2.0,
+      "Coordinate terms": 2.0,
+      "Particle": 2.0
+    }
+  },
+  {
+    "Name": "Etymology",
+    "Weight": 2126878.0,
+    "Spellings": [
+      "etymology",
+      "etymolgy",
+      "etymlogy",
+      "etymologi",
+      "ethymology",
+      "etmology",
+      "etmyology",
+      "etymoloy",
+      "eymology",
+      "etymolog",
+      "etymoogy",
+      "etimology",
+      "etmymology",
+      "etymolgoy",
+      "etymologie",
+      "etymolology",
+      "etyology",
+      "ertymology",
+      "erymology",
+      "etumology",
+      "etxmology",
+      "etylmology",
+      "etylology",
+      "etymlolgy",
+      "etymmology",
+      "etymnology",
+      "etymogoly",
+      "etymologgy",
+      "ٍetymology",
+      "etymologym",
+      "etymololgy",
+      "etymolopgy",
+      "etymonology",
+      "etymyology",
+      "etynology",
+      "etyomology"
+    ],
+    "DepthStats": {
+      "2": 1064673.0
+    },
+    "Parents": {
+      "LANG": 1064673.0
+    },
+    "Children": {
+      "Noun": 22735.0,
+      "Verb": 8814.0,
+      "Adjective": 3714.0,
+      "Proper noun": 890.0,
+      "Suffix": 653.0,
+      "Adverb": 563.0,
+      "Participle": 559.0,
+      "Pronoun": 518.0,
+      "Pronunciation": 362.0,
+      "Definitions": 306.0,
+      "Preposition": 256.0,
+      "Interjection": 241.0,
+      "Prefix": 198.0,
+      "Numeral": 134.0,
+      "Conjunction": 134.0,
+      "Particle": 128.0,
+      "Derived terms": 96.0,
+      "Synonyms": 96.0,
+      "Letter": 94.0,
+      "Syllable": 91.0,
+      "Determiner": 84.0,
+      "Declension": 67.0,
+      "Adjectival noun": 50.0,
+      "Conjugation": 43.0,
+      "Affix": 43.0
+    }
+  },
+  {
+    "Name": "Adjective",
+    "Weight": 1509629.0,
+    "Spellings": [
+      "adjective",
+      "adejctive",
+      "adjecitive",
+      "ajective",
+      "adjetive",
+      "adjdctive",
+      "adjectice",
+      "adjectival",
+      "adjectivev",
+      "adjectivie",
+      "adjectivue",
+      "adjectve",
+      "adjektiv",
+      "adjektive"
+    ],
+    "DepthStats": {
+      "2": 751271.0,
+      "3": 3867.0
+    },
+    "Parents": {
+      "LANG": 751271.0,
+      "Etymology": 3714.0
+    },
+    "Children": {
+      "Derived terms": 28.0,
+      "Related terms": 27.0,
+      "Declension": 24.0,
+      "Synonyms": 15.0,
+      "Antonyms": 13.0,
+      "Inflection": 6.0,
+      "Translations": 2.0,
+      "Descendants": 2.0,
+      "Usage notes": 1.0,
+      "Quotations": 1.0,
+      "Noun": 1.0,
+      "Etymology": 1.0,
+      "Alternative forms": 1.0,
+      "See also": 1.0
+    }
+  },
+  {
+    "Name": "Anagrams",
+    "Weight": 730426.0,
+    "Spellings": [
+      "anagram",
+      "anagaram"
+    ],
+    "DepthStats": {
+      "2": 365249.0
+    },
+    "Parents": {
+      "LANG": 365248.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Participle",
+    "Weight": 605488.0,
+    "Spellings": [
+      "participle"
+    ],
+    "DepthStats": {
+      "2": 302210.0,
+      "3": 566.0
+    },
+    "Parents": {
+      "LANG": 302210.0,
+      "Etymology": 559.0
+    },
+    "Children": {
+      "Inflection": 1.0
+    }
+  },
+  {
+    "Name": "Proper noun",
+    "Weight": 434169.0,
+    "Spellings": [
+      "proper noun",
+      "proepr noun",
+      "proper nun",
+      "proper oun",
+      "proper-noun"
+    ],
+    "DepthStats": {
+      "2": 216440.0,
+      "3": 921.0
+    },
+    "Parents": {
+      "LANG": 216440.0,
+      "Etymology": 890.0
+    },
+    "Children": {
+      "Inflection": 25.0,
+      "Declension": 22.0,
+      "Derived terms": 5.0,
+      "Synonyms": 5.0,
+      "Coordinate terms": 3.0,
+      "See also": 1.0
+    }
+  },
+  {
+    "Name": "References",
+    "Weight": 358094.0,
+    "Spellings": [
+      "reference",
+      "refererence",
+      "refrence",
+      "referene",
+      "refence",
+      "refenrence",
+      "referance",
+      "referece",
+      "referenced",
+      "refernce",
+      "refernence",
+      "refqerence",
+      "rererence",
+      "rreference"
+    ],
+    "DepthStats": {
+      "2": 180285.0
+    },
+    "Parents": {
+      "LANG": 180285.0
+    },
+    "Children": {
+      "Verb": 4.0,
+      "Conjunction": 1.0,
+      "Related terms": 1.0,
+      "See also": 1.0
+    }
+  },
+  {
+    "Name": "Alternative forms",
+    "Weight": 283497.0,
+    "Spellings": [
+      "alternative form",
+      "alternative term",
+      "altermnative form",
+      "alternative from",
+      "alterative form",
+      "alterntive form",
+      "altenative form",
+      "alternative fom",
+      "alternatives form",
+      "alernative form",
+      "altermative form",
+      "alternaative form",
+      "alternaive form",
+      "alternatif form",
+      "alternatinve form",
+      "alternative forma",
+      "alternative formm",
+      "alternativeform",
+      "alternatve form",
+      "alternetive form",
+      "alterntative form",
+      "altrenative form",
+      "altrernative form",
+      "aternative form",
+      "atlernative form"
+    ],
+    "DepthStats": {
+      "2": 142142.0
+    },
+    "Parents": {
+      "LANG": 142142.0
+    },
+    "Children": {
+      "Noun": 28.0,
+      "Verb": 8.0,
+      "Adjective": 5.0,
+      "Antonyms": 1.0,
+      "Derived terms": 1.0,
+      "Suffix": 1.0,
+      "Phrase": 1.0
+    }
+  },
+  {
+    "Name": "Further reading",
+    "Weight": 220443.0,
+    "Spellings": [
+      "further reading",
+      "furthe reading",
+      "futher reading",
+      "fruther reading",
+      "further readin"
+    ],
+    "DepthStats": {
+      "2": 110549.0
+    },
+    "Parents": {
+      "LANG": 110549.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Adverb",
+    "Weight": 159111.0,
+    "Spellings": [
+      "adverb",
+      "adberb",
+      "aderb",
+      "advrbe"
+    ],
+    "DepthStats": {
+      "2": 79196.0,
+      "3": 588.0
+    },
+    "Parents": {
+      "LANG": 79196.0,
+      "Etymology": 563.0
+    },
+    "Children": {
+      "Derived terms": 6.0,
+      "Synonyms": 5.0,
+      "Usage notes": 3.0,
+      "Related terms": 2.0,
+      "Noun": 2.0,
+      "Quotations": 1.0
+    }
+  },
+  {
+    "Name": "Romanization",
+    "Weight": 115973.0,
+    "Spellings": [
+      "romanization",
+      "romamization"
+    ],
+    "DepthStats": {
+      "2": 57996.0
+    },
+    "Parents": {
+      "LANG": 57996.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "See also",
+    "Weight": 96112.0,
+    "Spellings": [
+      "see also",
+      "se also",
+      "see al̃so",
+      "seealso"
+    ],
+    "DepthStats": {
+      "2": 48309.0
+    },
+    "Parents": {
+      "LANG": 48309.0
+    },
+    "Children": {
+      "Noun": 2.0,
+      "Adverb": 1.0,
+      "Verb": 1.0
+    }
+  },
+  {
+    "Name": "Han character",
+    "Weight": 71391.0,
+    "Spellings": [
+      "han character"
+    ],
+    "DepthStats": {
+      "2": 35699.0
+    },
+    "Parents": {
+      "LANG": 35699.0
+    },
+    "Children": {
+      "Readings": 1.0,
+      "Compounds": 1.0
+    }
+  },
+  {
+    "Name": "Mutation",
+    "Weight": 51357.0,
+    "Spellings": [
+      "mutation",
+      "citation"
+    ],
+    "DepthStats": {
+      "2": 25686.0
+    },
+    "Parents": {
+      "LANG": 25686.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Statistics",
+    "Weight": 42622.0,
+    "Spellings": [
+      "statistic"
+    ],
+    "DepthStats": {
+      "2": 21319.0
+    },
+    "Parents": {
+      "LANG": 21319.0
+    },
+    "Children": {
+      "See also": 6.0,
+      "Related terms": 2.0
+    }
+  },
+  {
+    "Name": "Hanzi",
+    "Weight": 35778.0,
+    "Spellings": [
+      "hanzi",
+      "honzi"
+    ],
+    "DepthStats": {
+      "2": 17892.0
+    },
+    "Parents": {
+      "LANG": 17892.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Pronoun",
+    "Weight": 28860.0,
+    "Spellings": [
+      "pronoun",
+      "pronounun"
+    ],
+    "DepthStats": {
+      "2": 14200.0,
+      "3": 527.0
+    },
+    "Parents": {
+      "LANG": 14200.0,
+      "Etymology": 518.0
+    },
+    "Children": {
+      "Declension": 3.0,
+      "Usage notes": 2.0,
+      "Related terms": 1.0
+    }
+  },
+  {
+    "Name": "Numeral",
+    "Weight": 27954.0,
+    "Spellings": [
+      "numeral"
+    ],
+    "DepthStats": {
+      "2": 14168.0,
+      "3": 138.0
+    },
+    "Parents": {
+      "LANG": 14168.0,
+      "Etymology": 134.0
+    },
+    "Children": {
+      "Declension": 5.0,
+      "Noun": 1.0,
+      "Derived terms": 1.0,
+      "Related terms": 1.0
+    }
+  },
+  {
+    "Name": "Kanji",
+    "Weight": 27096.0,
+    "Spellings": [
+      "kanji"
+    ],
+    "DepthStats": {
+      "2": 13550.0
+    },
+    "Parents": {
+      "LANG": 13550.0
+    },
+    "Children": {
+      "Readings": 14.0,
+      "See also": 1.0,
+      "Alternative forms": 1.0
+    }
+  },
+  {
+    "Name": "Definitions",
+    "Weight": 18574.0,
+    "Spellings": [
+      "definition",
+      "defintion",
+      "definiton"
+    ],
+    "DepthStats": {
+      "2": 8838.0,
+      "3": 438.0,
+      "4": 21.0
+    },
+    "Parents": {
+      "LANG": 8838.0,
+      "Etymology": 306.0,
+      "Pronunciation": 153.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Hanja",
+    "Weight": 18227.0,
+    "Spellings": [
+      "hanja"
+    ],
+    "DepthStats": {
+      "2": 9113.0
+    },
+    "Parents": {
+      "LANG": 9113.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Interjection",
+    "Weight": 18170.0,
+    "Spellings": [
+      "interjection"
+    ],
+    "DepthStats": {
+      "2": 8995.0,
+      "3": 247.0
+    },
+    "Parents": {
+      "LANG": 8995.0,
+      "Etymology": 241.0
+    },
+    "Children": {
+      "Synonyms": 5.0,
+      "Usage notes": 1.0,
+      "Quotations": 1.0
+    }
+  },
+  {
+    "Name": "Suffix",
+    "Weight": 16529.0,
+    "Spellings": [
+      "suffix"
+    ],
+    "DepthStats": {
+      "2": 7731.0,
+      "3": 659.0
+    },
+    "Parents": {
+      "LANG": 7731.0,
+      "Etymology": 653.0
+    },
+    "Children": {
+      "Usage notes": 2.0,
+      "Declension": 1.0,
+      "Derived terms": 1.0
+    }
+  },
+  {
+    "Name": "Glyph origin",
+    "Weight": 16243.0,
+    "Spellings": [
+      "glyph origin",
+      "glyph orgin"
+    ],
+    "DepthStats": {
+      "2": 8129.0
+    },
+    "Parents": {
+      "LANG": 8129.0
+    },
+    "Children": {
+      "Kanji": 3.0,
+      "Etymology": 1.0
+    }
+  },
+  {
+    "Name": "Phrase",
+    "Weight": 14613.0,
+    "Spellings": [
+      "phrase"
+    ],
+    "DepthStats": {
+      "2": 7384.0
+    },
+    "Parents": {
+      "LANG": 7384.0
+    },
+    "Children": {
+      "Usage notes": 1.0,
+      "Synonyms": 1.0
+    }
+  },
+  {
+    "Name": "Letter",
+    "Weight": 13820.0,
+    "Spellings": [
+      "letter",
+      "lette"
+    ],
+    "DepthStats": {
+      "2": 7006.0,
+      "3": 98.0
+    },
+    "Parents": {
+      "LANG": 7006.0,
+      "Etymology": 94.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Related terms",
+    "Weight": 13642.0,
+    "Spellings": [
+      "related term",
+      "related form",
+      "related rerm",
+      "related tersm"
+    ],
+    "DepthStats": {
+      "2": 6687.0,
+      "3": 210.0
+    },
+    "Parents": {
+      "LANG": 6687.0,
+      "Noun": 85.0,
+      "Verb": 56.0,
+      "Etymology": 39.0,
+      "Adjective": 27.0
+    },
+    "Children": {
+      "Verb": 1.0
+    }
+  },
+  {
+    "Name": "Prefix",
+    "Weight": 11281.0,
+    "Spellings": [
+      "prefix"
+    ],
+    "DepthStats": {
+      "2": 5533.0,
+      "3": 201.0
+    },
+    "Parents": {
+      "LANG": 5533.0,
+      "Etymology": 198.0
+    },
+    "Children": {
+      "Derived terms": 2.0,
+      "Antonyms": 1.0
+    }
+  },
+  {
+    "Name": "Preposition",
+    "Weight": 10550.0,
+    "Spellings": [
+      "preposition",
+      "proposition",
+      "presposition"
+    ],
+    "DepthStats": {
+      "2": 5145.0,
+      "3": 261.0
+    },
+    "Parents": {
+      "LANG": 5145.0,
+      "Etymology": 256.0
+    },
+    "Children": {
+      "Synonyms": 1.0
+    }
+  },
+  {
+    "Name": "Symbol",
+    "Weight": 9829.0,
+    "Spellings": [
+      "symbol"
+    ],
+    "DepthStats": {
+      "2": 4928.0,
+      "3": 15.0
+    },
+    "Parents": {
+      "LANG": 4928.0,
+      "Etymology": 15.0
+    },
+    "Children": {
+      "Usage notes": 1.0,
+      "See also": 1.0
+    }
+  },
+  {
+    "Name": "Conjunction",
+    "Weight": 7566.0,
+    "Spellings": [
+      "conjunction",
+      "conjuntion"
+    ],
+    "DepthStats": {
+      "2": 3805.0,
+      "3": 144.0
+    },
+    "Parents": {
+      "LANG": 3805.0,
+      "Etymology": 134.0,
+      "Pronunciation": 9.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Abbreviation",
+    "Weight": 7328.0,
+    "Spellings": [
+      "abbreviation"
+    ],
+    "DepthStats": {
+      "2": 3687.0,
+      "3": 18.0
+    },
+    "Parents": {
+      "LANG": 3687.0,
+      "Etymology": 18.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Initialism",
+    "Weight": 7265.0,
+    "Spellings": [
+      "initialism",
+      "initializm"
+    ],
+    "DepthStats": {
+      "2": 3654.0,
+      "3": 8.0
+    },
+    "Parents": {
+      "LANG": 3654.0,
+      "Etymology": 8.0
+    },
+    "Children": {
+      "Related terms": 1.0
+    }
+  },
+  {
+    "Name": "Derived terms",
+    "Weight": 7083.0,
+    "Spellings": [
+      "derived term",
+      "derived form",
+      "derived item",
+      "derived tetm"
+    ],
+    "DepthStats": {
+      "2": 3258.0,
+      "3": 370.0
+    },
+    "Parents": {
+      "LANG": 3258.0,
+      "Noun": 107.0,
+      "Etymology": 96.0,
+      "Root": 95.0,
+      "Adjective": 28.0,
+      "Verb": 23.0,
+      "Adverb": 6.0,
+      "Proper noun": 5.0,
+      "Pronunciation": 4.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Synonyms",
+    "Weight": 6337.0,
+    "Spellings": [
+      "synonym",
+      "hyponym",
+      "synonim",
+      "synonymou",
+      "synoynm"
+    ],
+    "DepthStats": {
+      "2": 3012.0,
+      "3": 252.0
+    },
+    "Parents": {
+      "LANG": 3012.0,
+      "Noun": 98.0,
+      "Etymology": 96.0,
+      "Verb": 19.0,
+      "Adjective": 15.0,
+      "Pronunciation": 7.0,
+      "Adverb": 5.0,
+      "Proper noun": 5.0,
+      "Interjection": 5.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Idiom",
+    "Weight": 6033.0,
+    "Spellings": [
+      "idiom"
+    ],
+    "DepthStats": {
+      "2": 3035.0
+    },
+    "Parents": {
+      "LANG": 3035.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Proverb",
+    "Weight": 5919.0,
+    "Spellings": [
+      "proverb",
+      "preverb",
+      "proper"
+    ],
+    "DepthStats": {
+      "2": 3003.0
+    },
+    "Parents": {
+      "LANG": 3003.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Usage notes",
+    "Weight": 5597.0,
+    "Spellings": [
+      "usage note"
+    ],
+    "DepthStats": {
+      "2": 2810.0,
+      "3": 66.0
+    },
+    "Parents": {
+      "LANG": 2810.0,
+      "Etymology": 33.0,
+      "Noun": 9.0,
+      "Verb": 8.0,
+      "Pronunciation": 4.0,
+      "Adverb": 3.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Compounds",
+    "Weight": 4527.0,
+    "Spellings": [
+      "compound"
+    ],
+    "DepthStats": {
+      "2": 2268.0,
+      "3": 3.0
+    },
+    "Parents": {
+      "LANG": 2268.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Determiner",
+    "Weight": 4035.0,
+    "Spellings": [
+      "determiner",
+      "determinter"
+    ],
+    "DepthStats": {
+      "2": 2030.0,
+      "3": 86.0
+    },
+    "Parents": {
+      "LANG": 2030.0,
+      "Etymology": 84.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Prepositional phrase",
+    "Weight": 3332.0,
+    "Spellings": [
+      "prepositional phrase"
+    ],
+    "DepthStats": {
+      "2": 1681.0
+    },
+    "Parents": {
+      "LANG": 1681.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Contraction",
+    "Weight": 3078.0,
+    "Spellings": [
+      "contraction"
+    ],
+    "DepthStats": {
+      "2": 1541.0,
+      "3": 33.0
+    },
+    "Parents": {
+      "LANG": 1541.0,
+      "Etymology": 32.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Rafsi",
+    "Weight": 2989.0,
+    "Spellings": [
+      "rafsi"
+    ],
+    "DepthStats": {
+      "2": 1495.0
+    },
+    "Parents": {
+      "LANG": 1495.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Adjectival noun",
+    "Weight": 2910.0,
+    "Spellings": [
+      "adjectival noun"
+    ],
+    "DepthStats": {
+      "2": 1408.0,
+      "3": 50.0
+    },
+    "Parents": {
+      "LANG": 1408.0,
+      "Etymology": 50.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Particle",
+    "Weight": 2862.0,
+    "Spellings": [
+      "particle"
+    ],
+    "DepthStats": {
+      "2": 1411.0,
+      "3": 129.0
+    },
+    "Parents": {
+      "LANG": 1411.0,
+      "Etymology": 128.0,
+      "Pronunciation": 2.0
+    },
+    "Children": {
+      "Derived terms": 2.0
+    }
+  },
+  {
+    "Name": "Gismu",
+    "Weight": 2689.0,
+    "Spellings": [
+      "gismu"
+    ],
+    "DepthStats": {
+      "2": 1345.0
+    },
+    "Parents": {
+      "LANG": 1345.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Declension",
+    "Weight": 1860.0,
+    "Spellings": [
+      "declension",
+      "declesion"
+    ],
+    "DepthStats": {
+      "2": 524.0,
+      "3": 434.0
+    },
+    "Parents": {
+      "LANG": 524.0,
+      "Noun": 310.0,
+      "Etymology": 67.0,
+      "Adjective": 24.0,
+      "Proper noun": 22.0,
+      "Numeral": 5.0,
+      "Pronoun": 3.0,
+      "Pronunciation": 2.0,
+      "Suffix": 1.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Descendants",
+    "Weight": 1847.0,
+    "Spellings": [
+      "descendant",
+      "descendent",
+      "descedant"
+    ],
+    "DepthStats": {
+      "2": 941.0,
+      "3": 15.0,
+      "4": 1.0
+    },
+    "Parents": {
+      "LANG": 941.0,
+      "Etymology": 8.0,
+      "Noun": 6.0,
+      "Adjective": 2.0
+    },
+    "Children": {
+      "Adjective": 2.0,
+      "Noun": 2.0
+    }
+  },
+  {
+    "Name": "Syllable",
+    "Weight": 1685.0,
+    "Spellings": [
+      "syllable"
+    ],
+    "DepthStats": {
+      "2": 757.0,
+      "3": 92.0
+    },
+    "Parents": {
+      "LANG": 757.0,
+      "Etymology": 91.0,
+      "Pronunciation": 1.0
+    },
+    "Children": {
+      "Usage notes": 1.0
+    }
+  },
+  {
+    "Name": "Postposition",
+    "Weight": 1578.0,
+    "Spellings": [
+      "postposition",
+      "posposition",
+      "postpoosition",
+      "postpositin"
+    ],
+    "DepthStats": {
+      "2": 805.0,
+      "3": 15.0
+    },
+    "Parents": {
+      "LANG": 805.0,
+      "Etymology": 15.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Root",
+    "Weight": 1363.0,
+    "Spellings": [
+      "root"
+    ],
+    "DepthStats": {
+      "2": 682.0,
+      "3": 10.0
+    },
+    "Parents": {
+      "LANG": 682.0,
+      "Etymology": 10.0
+    },
+    "Children": {
+      "Derived terms": 95.0
+    }
+  },
+  {
+    "Name": "Quotations",
+    "Weight": 1224.0,
+    "Spellings": [
+      "quotation"
+    ],
+    "DepthStats": {
+      "2": 608.0,
+      "3": 17.0
+    },
+    "Parents": {
+      "LANG": 608.0,
+      "Etymology": 11.0,
+      "Noun": 3.0,
+      "Adjective": 1.0,
+      "Adverb": 1.0,
+      "Interjection": 1.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Cmavo",
+    "Weight": 1214.0,
+    "Spellings": [
+      "cmavo"
+    ],
+    "DepthStats": {
+      "2": 600.0,
+      "3": 8.0
+    },
+    "Parents": {
+      "LANG": 600.0,
+      "Etymology": 8.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "External links",
+    "Weight": 1186.0,
+    "Spellings": [
+      "external link"
+    ],
+    "DepthStats": {
+      "2": 609.0
+    },
+    "Parents": {
+      "LANG": 609.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Article",
+    "Weight": 1089.0,
+    "Spellings": [
+      "article"
+    ],
+    "DepthStats": {
+      "2": 573.0,
+      "3": 40.0
+    },
+    "Parents": {
+      "LANG": 573.0,
+      "Etymology": 40.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Acronym",
+    "Weight": 1030.0,
+    "Spellings": [
+      "acronym",
+      "meronym"
+    ],
+    "DepthStats": {
+      "2": 527.0,
+      "3": 1.0
+    },
+    "Parents": {
+      "LANG": 527.0,
+      "Etymology": 1.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Conjugation",
+    "Weight": 891.0,
+    "Spellings": [
+      "conjugation"
+    ],
+    "DepthStats": {
+      "3": 251.0,
+      "2": 214.0,
+      "4": 1.0
+    },
+    "Parents": {
+      "LANG": 214.0,
+      "Verb": 203.0,
+      "Etymology": 43.0,
+      "Pronunciation": 6.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Ordinal number",
+    "Weight": 764.0,
+    "Spellings": [
+      "ordinal number"
+    ],
+    "DepthStats": {
+      "2": 393.0,
+      "3": 1.0
+    },
+    "Parents": {
+      "LANG": 393.0,
+      "Etymology": 1.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Number",
+    "Weight": 763.0,
+    "Spellings": [
+      "number"
+    ],
+    "DepthStats": {
+      "2": 386.0,
+      "3": 14.0
+    },
+    "Parents": {
+      "LANG": 386.0,
+      "Etymology": 14.0
+    },
+    "Children": {
+      "Noun": 1.0
+    }
+  },
+  {
+    "Name": "Ligature",
+    "Weight": 608.0,
+    "Spellings": [
+      "ligature"
+    ],
+    "DepthStats": {
+      "2": 306.0
+    },
+    "Parents": {
+      "LANG": 306.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Classifier",
+    "Weight": 561.0,
+    "Spellings": [
+      "classifier"
+    ],
+    "DepthStats": {
+      "2": 285.0,
+      "3": 7.0
+    },
+    "Parents": {
+      "LANG": 285.0,
+      "Etymology": 7.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Antonyms",
+    "Weight": 561.0,
+    "Spellings": [
+      "antonym"
+    ],
+    "DepthStats": {
+      "2": 270.0,
+      "3": 38.0
+    },
+    "Parents": {
+      "LANG": 270.0,
+      "Adjective": 13.0,
+      "Etymology": 10.0,
+      "Noun": 9.0,
+      "Verb": 4.0,
+      "Alternative forms": 1.0,
+      "Prefix": 1.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Inflection",
+    "Weight": 551.0,
+    "Spellings": [
+      "inflection",
+      "injection"
+    ],
+    "DepthStats": {
+      "2": 208.0,
+      "3": 80.0,
+      "4": 1.0
+    },
+    "Parents": {
+      "LANG": 208.0,
+      "Proper noun": 25.0,
+      "Noun": 18.0,
+      "Verb": 17.0,
+      "Etymology": 14.0,
+      "Adjective": 6.0,
+      "Participle": 1.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Punctuation mark",
+    "Weight": 546.0,
+    "Spellings": [
+      "punctuation mark"
+    ],
+    "DepthStats": {
+      "2": 290.0
+    },
+    "Parents": {
+      "LANG": 290.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Affix",
+    "Weight": 527.0,
+    "Spellings": [
+      "affix"
+    ],
+    "DepthStats": {
+      "2": 230.0,
+      "3": 43.0
+    },
+    "Parents": {
+      "LANG": 230.0,
+      "Etymology": 43.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Production",
+    "Weight": 513.0,
+    "Spellings": [
+      "production"
+    ],
+    "DepthStats": {
+      "2": 258.0
+    },
+    "Parents": {
+      "LANG": 258.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Alternative spellings",
+    "Weight": 511.0,
+    "Spellings": [
+      "alternative spelling",
+      "alternate spelling"
+    ],
+    "DepthStats": {
+      "2": 273.0
+    },
+    "Parents": {
+      "LANG": 273.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Verbal noun",
+    "Weight": 437.0,
+    "Spellings": [
+      "verbal noun"
+    ],
+    "DepthStats": {
+      "2": 221.0
+    },
+    "Parents": {
+      "LANG": 221.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Coordinate terms",
+    "Weight": 414.0,
+    "Spellings": [
+      "coordinate term"
+    ],
+    "DepthStats": {
+      "2": 193.0,
+      "3": 22.0
+    },
+    "Parents": {
+      "LANG": 193.0,
+      "Etymology": 10.0,
+      "Noun": 7.0,
+      "Proper noun": 3.0,
+      "Pronunciation": 2.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Alternate forms",
+    "Weight": 374.0,
+    "Spellings": [
+      "alternate form",
+      "alternate term"
+    ],
+    "DepthStats": {
+      "2": 205.0,
+      "3": 1.0
+    },
+    "Parents": {
+      "LANG": 205.0,
+      "Etymology": 1.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Description",
+    "Weight": 277.0,
+    "Spellings": [
+      "description"
+    ],
+    "DepthStats": {
+      "2": 140.0
+    },
+    "Parents": {
+      "LANG": 140.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Counter",
+    "Weight": 255.0,
+    "Spellings": [
+      "counter"
+    ],
+    "DepthStats": {
+      "2": 119.0,
+      "3": 14.0
+    },
+    "Parents": {
+      "LANG": 119.0,
+      "Etymology": 13.0,
+      "Pronunciation": 1.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Brivla",
+    "Weight": 250.0,
+    "Spellings": [
+      "brivla",
+      "trivia"
+    ],
+    "DepthStats": {
+      "2": 127.0
+    },
+    "Parents": {
+      "LANG": 127.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Diacritical mark",
+    "Weight": 236.0,
+    "Spellings": [
+      "diacritical mark"
+    ],
+    "DepthStats": {
+      "2": 145.0
+    },
+    "Parents": {
+      "LANG": 145.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Gallery",
+    "Weight": 214.0,
+    "Spellings": [
+      "gallery"
+    ],
+    "DepthStats": {
+      "2": 114.0
+    },
+    "Parents": {
+      "LANG": 114.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Predicative",
+    "Weight": 204.0,
+    "Spellings": [
+      "predicative",
+      "predicate"
+    ],
+    "DepthStats": {
+      "2": 105.0
+    },
+    "Parents": {
+      "LANG": 105.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Combining form",
+    "Weight": 203.0,
+    "Spellings": [
+      "combining form"
+    ],
+    "DepthStats": {
+      "2": 97.0,
+      "3": 7.0
+    },
+    "Parents": {
+      "LANG": 97.0,
+      "Etymology": 7.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Character",
+    "Weight": 185.0,
+    "Spellings": [
+      "character"
+    ],
+    "DepthStats": {
+      "2": 93.0
+    },
+    "Parents": {
+      "LANG": 93.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Stem",
+    "Weight": 179.0,
+    "Spellings": [
+      "stem"
+    ],
+    "DepthStats": {
+      "2": 90.0
+    },
+    "Parents": {
+      "LANG": 90.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Infix",
+    "Weight": 155.0,
+    "Spellings": [
+      "infix"
+    ],
+    "DepthStats": {
+      "2": 84.0,
+      "3": 3.0
+    },
+    "Parents": {
+      "LANG": 84.0,
+      "Etymology": 3.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Lujvo",
+    "Weight": 139.0,
+    "Spellings": [
+      "lujvo"
+    ],
+    "DepthStats": {
+      "2": 70.0
+    },
+    "Parents": {
+      "LANG": 70.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Translations",
+    "Weight": 135.0,
+    "Spellings": [
+      "translation"
+    ],
+    "DepthStats": {
+      "2": 39.0,
+      "3": 32.0
+    },
+    "Parents": {
+      "LANG": 37.0,
+      "Etymology": 23.0,
+      "Noun": 6.0,
+      "Verb": 3.0,
+      "Adjective": 2.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Source",
+    "Weight": 110.0,
+    "Spellings": [
+      "source"
+    ],
+    "DepthStats": {
+      "2": 57.0
+    },
+    "Parents": {
+      "LANG": 57.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Interfix",
+    "Weight": 96.0,
+    "Spellings": [
+      "interfix"
+    ],
+    "DepthStats": {
+      "2": 57.0,
+      "3": 3.0
+    },
+    "Parents": {
+      "LANG": 57.0,
+      "Etymology": 3.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Adnominal",
+    "Weight": 91.0,
+    "Spellings": [
+      "adnominal"
+    ],
+    "DepthStats": {
+      "2": 43.0,
+      "3": 5.0
+    },
+    "Parents": {
+      "LANG": 43.0,
+      "Etymology": 4.0,
+      "Pronunciation": 1.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Logogram",
+    "Weight": 86.0,
+    "Spellings": [
+      "logogram"
+    ],
+    "DepthStats": {
+      "2": 44.0
+    },
+    "Parents": {
+      "LANG": 44.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Hypernyms",
+    "Weight": 72.0,
+    "Spellings": [
+      "hypernym"
+    ],
+    "DepthStats": {
+      "2": 31.0,
+      "3": 11.0
+    },
+    "Parents": {
+      "LANG": 31.0,
+      "Noun": 6.0,
+      "Etymology": 5.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Gerund",
+    "Weight": 55.0,
+    "Spellings": [
+      "gerund"
+    ],
+    "DepthStats": {
+      "2": 28.0,
+      "3": 1.0
+    },
+    "Parents": {
+      "LANG": 28.0,
+      "Etymology": 1.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Relative",
+    "Weight": 51.0,
+    "Spellings": [
+      "relative"
+    ],
+    "DepthStats": {
+      "2": 26.0,
+      "3": 1.0
+    },
+    "Parents": {
+      "LANG": 26.0,
+      "Etymology": 1.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Verb form",
+    "Weight": 46.0,
+    "Spellings": [
+      "verb form"
+    ],
+    "DepthStats": {
+      "2": 26.0
+    },
+    "Parents": {
+      "LANG": 26.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Readings",
+    "Weight": 42.0,
+    "Spellings": [
+      "reading",
+      "meaning"
+    ],
+    "DepthStats": {
+      "3": 15.0,
+      "2": 10.0
+    },
+    "Parents": {
+      "Kanji": 14.0,
+      "LANG": 10.0,
+      "Han character": 1.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Kanji reading",
+    "Weight": 40.0,
+    "Spellings": [
+      "kanji reading",
+      "hanja reading"
+    ],
+    "DepthStats": {
+      "2": 21.0
+    },
+    "Parents": {
+      "LANG": 21.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Circumfix",
+    "Weight": 38.0,
+    "Spellings": [
+      "circumfix"
+    ],
+    "DepthStats": {
+      "2": 24.0
+    },
+    "Parents": {
+      "LANG": 24.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "Derived characters",
+    "Weight": 33.0,
+    "Spellings": [
+      "derived character"
+    ],
+    "DepthStats": {
+      "2": 17.0
+    },
+    "Parents": {
+      "LANG": 17.0
+    },
+    "Children": {}
+  },
+  {
+    "Name": "PAGE",
+    "Spellings": [],
+    "DepthStats": {},
+    "Parents": {},
+    "Children": {
+      "LANG": 5984791.0
+    }
+  },
+  {
+    "Name": "LANG",
+    "Spellings": [],
+    "DepthStats": {
+      "1": 5984791.0
+    },
+    "Parents": {
+      "PAGE": 5984791.0
+    },
+    "Children": {
+      "Verb": 2457085.0,
+      "Noun": 2029484.0,
+      "Pronunciation": 1150998.0,
+      "Etymology": 1064673.0,
+      "Adjective": 751271.0,
+      "Anagrams": 365248.0,
+      "Participle": 302210.0,
+      "Proper noun": 216440.0,
+      "References": 180285.0,
+      "Alternative forms": 142142.0,
+      "Further reading": 110549.0,
+      "Adverb": 79196.0,
+      "Romanization": 57996.0,
+      "See also": 48309.0,
+      "Han character": 35699.0,
+      "Mutation": 25686.0,
+      "Statistics": 21319.0,
+      "Hanzi": 17892.0,
+      "Pronoun": 14200.0,
+      "Numeral": 14168.0,
+      "Kanji": 13550.0
+    }
+  }
+]
