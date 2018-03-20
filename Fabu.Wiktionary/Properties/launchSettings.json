@@ -2,7 +2,7 @@
   "profiles": {
     "Fabu.Wiktionary": {
       "commandName": "Project",
-      "commandLineArgs": "graph --in enwiktionary-20180120-pages-articles.xml --minfreq 2 --limit 100"
+      "commandLineArgs": "extract --in enwiktionary-20180120-pages-articles.xml --term cat"
     }
   }
 }

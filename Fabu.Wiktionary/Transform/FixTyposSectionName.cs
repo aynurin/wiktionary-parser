@@ -81,6 +81,7 @@ namespace Fabu.Wiktionary.Transform
             if (_knownLanguages.TryFindBest(name.Name, out List<SectionName> result))
             {
                 newValue = result.First();
+                newValue.IsLanguage = true;
                 return true;
             }
             newValue = null;

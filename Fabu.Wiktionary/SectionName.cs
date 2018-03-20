@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Fabu.Wiktionary
         public double Weight { get; set; }
 
         public string Category { get; set; }
+        public bool IsLanguage { get; set; }
 
         public List<string> Spellings { get; set; } = new List<string>();
 
@@ -79,9 +81,16 @@ namespace Fabu.Wiktionary
         public Stats<TKey> CutOff(double freqToCutOff)
         {
             var full = this.Sum(p => p.Value);
-            var cut = this.Where(kvp => (kvp.Value / full) > freqToCutOff)
+            var cut = this.Where(kvp => (kvp.Value / full) >= freqToCutOff)
                 .OrderByDescending(kvp => kvp.Value);
-            return new Stats<TKey>(cut);
+
+            var newStats = new Stats<TKey>(cut);
+
+            var left = this.Where(kvp => (kvp.Value / full) < freqToCutOff).Sum(kvp => kvp.Value);
+            if (typeof(TKey) == typeof(String) && left > 0)
+                newStats.Add((TKey)Convert.ChangeType(SimpleSectionsCategorizer.OtherSectionName, typeof(TKey)), left);
+
+            return newStats;
         }
     }
 }

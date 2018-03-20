@@ -20,7 +20,7 @@ namespace Fabu.Wiktionary.Commands
             public int MinimumEdgeFrequency { get; set; }
         }
 
-        // graph --in enwiktionary-20180120-pages-articles.xml --minfreq 2 --clear
+        // graph --in enwiktionary-20180120-pages-articles.xml --minfreq 2
         protected override void RunCommand(Args args, Func<int, BaseArgs, bool> onProgress)
         {
             var languages = LoadLanguages(args.DumpDir);

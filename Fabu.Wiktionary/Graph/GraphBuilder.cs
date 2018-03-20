@@ -10,7 +10,7 @@ using WikimediaProcessing;
 
 namespace Fabu.Wiktionary.Graph
 {
-    internal partial class GraphBuilder
+    internal partial class GraphBuilder : IWiktionaryPageProcessor
     {
         private readonly SectionsGraph _graph = new SectionsGraph();
         private readonly SectionNameTransform _sectionNameToVertexNameTransform;
@@ -33,7 +33,7 @@ namespace Fabu.Wiktionary.Graph
             _allSections.InsertRange(0, new [] { SectionVertex.Root.OriginalSection, SectionVertex.Lang.OriginalSection });
         }
 
-        internal void AddPage(WikimediaPage page)
+        public void AddPage(WikimediaPage page)
         {
             if (page.IsSpecialPage || page.IsRedirect || page.IsDisambiguation)
                 return;
@@ -185,6 +185,11 @@ namespace Fabu.Wiktionary.Graph
                     xmlWriter.Flush();
                 }
             }
+        }
+
+        public void Complete(dynamic completionArgs)
+        {
+            this.RemoveEdges(completionArgs.MinimumEdgeFrequency);
         }
     }
 }

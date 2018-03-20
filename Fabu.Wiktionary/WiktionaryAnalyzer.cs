@@ -8,25 +8,25 @@ namespace Fabu.Wiktionary
 {
     class WiktionaryAnalyzer
     {
-        private readonly GraphBuilder _graphBuilder;
+        private readonly IWiktionaryPageProcessor _processor;
         private readonly Wikimedia _dump;
-        private readonly int _minimumEdgeFrequency;
+        private readonly dynamic _completionArgs;
 
         public event EventHandler<WikimediaPageProcessedEventArgs> PageProcessed;
 
-        public WiktionaryAnalyzer(GraphBuilder builder, Wikimedia dump, int minimumAllowedEdgeFrequency = 1)
+        public WiktionaryAnalyzer(IWiktionaryPageProcessor processor, Wikimedia dump, dynamic completionArgs = null)
         {
-            _graphBuilder = builder;
+            _processor = processor;
             _dump = dump;
-            _minimumEdgeFrequency = minimumAllowedEdgeFrequency;
+            _completionArgs = completionArgs;
         }
 
-        public GraphBuilder Compute()
+        public IWiktionaryPageProcessor Compute()
         {
             var counter = 0;
             foreach (var article in _dump.Articles)
             {
-                _graphBuilder.AddPage(article);
+                _processor.AddPage(article);
                 counter++;
 
                 var args = new WikimediaPageProcessedEventArgs { Index = counter, PageProcessed = article };
@@ -36,8 +36,8 @@ namespace Fabu.Wiktionary
                 if(args.Abort)
                     break;
             }
-            _graphBuilder.RemoveEdges(_minimumEdgeFrequency);
-            return _graphBuilder;
+            _processor.Complete(_completionArgs ?? new { });
+            return _processor;
         }
     }
 
