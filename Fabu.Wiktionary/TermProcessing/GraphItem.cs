@@ -3,44 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using WikimediaProcessing;
 
-namespace Fabu.Wiktionary
+namespace Fabu.Wiktionary.TermProcessing
 {
     public class GraphItem
     {
         private readonly GraphItem _parent;
         private readonly List<GraphItem> _children = new List<GraphItem>();
         private readonly string[] _allowedMembers;
+        protected readonly List<Term> _createdTerms;
 
         private Term _term;
 
-        private bool _isTermCreated = false;
         private bool _isTermUpdated = false;
-        private bool _isTermDefined = false;
         private bool _hasDefinedATerm = false;
 
         public readonly string ItemTitle;
-        public readonly WikimediaPage OwnerPage;
-        public readonly WikiSection RelatedSection;
+        public readonly string OwnerPageTitle;
+        public readonly string RelatedSectionContent;
         public readonly bool IsLanguage;
         public readonly bool CanDefineTerm;
 
         public IEnumerable<GraphItem> Children => _children;
 
-        public bool IsTermDefined { get => _isTermDefined; }
+        public bool IsTermDefined { get => _term?.Status == Term.TermStatus.Defined; }
 
         public string Language { get; private set; }
 
-        public static GraphItem CreateRoot(WikimediaPage page) => new GraphItem("PAGE", null, page, null, false, false, null);
+        public IEnumerable<Term> FinalizedTerms => _createdTerms.Where(t => t.Status == Term.TermStatus.Finalized);
+        public IEnumerable<Term> AllItems => _createdTerms;
 
-        public GraphItem(string title, GraphItem parent, WikimediaPage page, WikiSection section, bool isLanguage, bool canDefineTerm, string[] allowedMembers)
+        public static GraphItem CreateRoot(string pageTitle) => new GraphItem("PAGE", null, pageTitle, null, false, false, null, new List<Term>());
+
+        public GraphItem(string title, GraphItem parent, string pageTitle, string sectionContent, bool isLanguage, bool canDefineTerm, string[] allowedMembers)
+            : this(title, parent, pageTitle, sectionContent, isLanguage, canDefineTerm, allowedMembers, parent._createdTerms)
+        {
+        }
+
+        protected GraphItem(string title, 
+            GraphItem parent, string pageTitle, string sectionContent, 
+            bool isLanguage, bool canDefineTerm, string[] allowedMembers,
+            List<Term> termsStore)
         {
             ItemTitle = title;
             _parent = parent;
-            OwnerPage = page;
-            RelatedSection = section;
+            OwnerPageTitle = pageTitle;
+            RelatedSectionContent = sectionContent;
             IsLanguage = isLanguage;
             CanDefineTerm = canDefineTerm;
             _allowedMembers = allowedMembers;
+            _createdTerms = termsStore;
+            _term = new Term(OwnerPageTitle);
         }
 
         private void ForEachChild(GraphItem parent, Action<GraphItem, GraphItem> p)
@@ -59,12 +71,10 @@ namespace Fabu.Wiktionary
 
         internal void UpdateTerm()
         {
-            if (_isTermCreated)
+            if (_term?.Status == Term.TermStatus.Finalized)
                 throw new InvalidOperationException("A term has already been created");
             if (_isTermUpdated)
                 throw new InvalidOperationException("A term has already been updated");
-            if (!IsTermDefined)
-                throw new InvalidOperationException("A term has not yet been defined");
 
             AddMember(_term, this);
             _isTermUpdated = true;
@@ -75,23 +85,21 @@ namespace Fabu.Wiktionary
         /// </summary>
         internal void DefineTerm()
         {
-            if (_isTermCreated)
+            if (_term?.Status == Term.TermStatus.Finalized)
                 throw new InvalidOperationException("A term has already been created");
             if (_hasDefinedATerm)
                 throw new InvalidOperationException("This item has already defined a term");
             if (!CanDefineTerm)
                 throw new InvalidOperationException("This item cannot define a term");
-
-            Term term;
-            if (_isTermDefined)
-            {
-                // we will need to redefine the term
-                term = _term.Clone();
-            }
-            else
-            {
-                term = new Term();
-            }
+            
+            // we will need to redefine the term
+            // to do this, we must mark the original term as void,
+            // so that duplicated terms are not created.
+            // Only the finally defined and never voided terms 
+            // should be saved.
+            _term.Status = Term.TermStatus.Void;
+            _term = _term.Clone();
+            _createdTerms.Add(_term);
 
             if (_parent != null)
             {
@@ -99,21 +107,16 @@ namespace Fabu.Wiktionary
                 {
                     if (sibling != this && sibling.ItemTitle != this.ItemTitle)
                     {
-                        DefineTerm(sibling, term);
-                        ForEachChild(sibling, (p, nephew) => DefineTerm(nephew, term));
+                        sibling._term = _term;
+                        ForEachChild(sibling, (p, nephew) => nephew._term = _term);
                     }
                 }
             }
-            ForEachChild(this, (p, child) => DefineTerm(child, term));
-            DefineTerm(this, term);
+            ForEachChild(this, (p, child) => child._term = _term);
+            _term.Status = Term.TermStatus.Defined;
             _hasDefinedATerm = true;
-            AddMember(_term, this);
-        }
 
-        private void DefineTerm(GraphItem item, Term term)
-        {
-            item._term = term;
-            item._isTermDefined = true;
+            AddMember(_term, this);
         }
 
         internal Term CreateTerm()
@@ -121,7 +124,12 @@ namespace Fabu.Wiktionary
             if (!IsTermDefined)
                 throw new InvalidOperationException("A term has not yet been defined");
 
-            _isTermCreated = true;
+            _term.Status = Term.TermStatus.Finalized;
+
+            if (_createdTerms.Contains(_term))
+                throw new InvalidOperationException("This term has already been created");
+
+            _createdTerms.Add(_term);
 
             return _term;
         }
@@ -136,10 +144,10 @@ namespace Fabu.Wiktionary
 
         private void AddMember(Term term, GraphItem graphItem)
         {
-            term.SetProperty(graphItem.ItemTitle, graphItem.RelatedSection.Content);
+            term.SetProperty(graphItem.ItemTitle, graphItem.RelatedSectionContent);
         }
 
-        internal void AddChild(GraphItem item)
+        public void AddChild(GraphItem item)
         {
             _children.Add(item);
         }
@@ -147,33 +155,6 @@ namespace Fabu.Wiktionary
         public override string ToString()
         {
             return ItemTitle;
-        }
-    }
-
-    public class Term : ICloneable
-    {
-        public Dictionary<string, Term> Properties { get; private set; } = new Dictionary<string, Term>();
-        public string Content { get; private set; }
-
-        public void SetProperty(string key, string content)
-        {
-            Properties[key] = new Term() { Content = content };
-        }
-
-        internal Term Clone()
-        {
-            return ((ICloneable)this).Clone() as Term;
-        }
-
-        object ICloneable.Clone()
-        {
-            return new Term
-            {
-                Content = Content,
-                Properties = new Dictionary<string, Term>(
-                    Properties.Select(kvp => 
-                        new KeyValuePair<string, Term>(kvp.Key, kvp.Value.Clone())))
-            };
         }
     }
 }

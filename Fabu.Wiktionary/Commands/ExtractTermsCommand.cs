@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using Fabu.Wiktionary.FuzzySearch;
+using Fabu.Wiktionary.TermProcessing;
 using Fabu.Wiktionary.Transform;
 using System;
 using System.Collections.Generic;
