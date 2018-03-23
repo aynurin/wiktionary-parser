@@ -15,26 +15,36 @@ namespace Fabu.Wiktionary.Commands
         {
         }
 
+        private readonly string[] _additionalStandardSections = new string[]
+        {
+            // Wiktionary recommendation is to use Homographs and Homophones instead, that's why it doesn't make it into statistics. 
+            // But if it's not here then it easily makes it into Holonyms's misspellings, which I definitely don't want to.
+            "Homonyms"
+        };
+
         // sectionsdict
         protected override void RunCommand(Args args, Func<int, BaseArgs, bool> onProgress)
         {
+            var searchableSectionName = new SearchableSectionName();
+
             var allSections = DumpTool.LoadDump<List<SectionName>>(args.DumpDir, DumpTool.SectionsDump)
                 // so that when a new standard section is created, it is created from the most frequent term
                 .OrderByDescending(v => v.Weight)
+                //.Select(s => new Tuple<string,SectionName> (searchableSectionName.Apply(s).Na, s))
                 .ToList();
-            
-            var searchableSectionName = new SearchableSectionName();
 
             var standardSections = allSections
-                .GroupBy(_ => searchableSectionName.Apply(_))
-                .Select(group => new SectionName
-                {
-                    Name = group.OrderByDescending(_ => _.Weight).First().Name,
-                    Weight = group.Sum(_ => _.Weight)
-                })
+                .GroupBy(_ => searchableSectionName.Apply(_).Name,
+                        (key, group) => new SectionName
+                        {
+                            Name = group.OrderByDescending(_ => _.Weight).First().Name,
+                            Weight = group.Sum(_ => _.Weight)
+                        })
                 .OrderByDescending(_ => _.Weight)
                 .TakeWhile(_ => _.Weight > 100)
                 .ToList();
+            var additionalStandard = allSections.Where(s => Array.BinarySearch(_additionalStandardSections, s.Name) >= 0 && !standardSections.Any(_ => _.Name == s.Name));
+            standardSections.AddRange(additionalStandard);
 
             var reducedSectionsList = ReduceTyposFuzzySearch(allSections, standardSections, searchableSectionName)
                 .OrderByDescending(_ => _.Weight)
@@ -56,8 +66,6 @@ namespace Fabu.Wiktionary.Commands
             foreach (var section in allSections)
             {
                 var searchableName = searchableSectionName.Apply(section);
-                if (searchableName.Name == "etymology")
-                    System.Diagnostics.Debugger.Break();
                 var candidate = searchImpl.FindBest(searchableName.Name)
                     .OrderByDescending(s => s.Weight)
                     .FirstOrDefault();

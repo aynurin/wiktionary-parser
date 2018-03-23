@@ -31,6 +31,7 @@ namespace Fabu.Wiktionary.Commands
     /// 
     /// Try throwing away all connections after the 2nd level of depth.
     /// </summary>
+    [Obsolete("Attempted clustering strategies do not bring any goodness.")]
     internal class SectionsClusteringCommand : BaseCommand<SectionsClusteringCommand.Args>
     {
         [Verb("cluster", HelpText = "Extract section names")]

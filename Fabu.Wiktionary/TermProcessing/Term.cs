@@ -7,16 +7,17 @@ namespace Fabu.Wiktionary.TermProcessing
     public class Term : ICloneable
     {
         public string Title { get; set; }
-        public Dictionary<string, Term> Properties { get; private set; } = new Dictionary<string, Term>();
+        public string Language { get; set; }
         public string Content { get; private set; }
 
+        public Dictionary<string, Term> Properties { get; private set; } = new Dictionary<string, Term>();
         public TermStatus Status { get; set; }
 
         public Term(string title)
         {
             Title = title;
         }
-
+        
         public void SetProperty(string key, string content)
         {
             Properties[key] = new Term(key) { Content = content };

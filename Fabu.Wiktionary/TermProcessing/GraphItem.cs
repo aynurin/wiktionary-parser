@@ -34,6 +34,8 @@ namespace Fabu.Wiktionary.TermProcessing
 
         public static GraphItem CreateRoot(string pageTitle) => new GraphItem("PAGE", null, pageTitle, null, false, false, null, new List<Term>());
 
+        internal List<Term> GetItems(Term.TermStatus defined) => _createdTerms.Where(i => i.Status == Term.TermStatus.Defined).ToList();
+
         public GraphItem(string title, GraphItem parent, string pageTitle, string sectionContent, bool isLanguage, bool canDefineTerm, string[] allowedMembers)
             : this(title, parent, pageTitle, sectionContent, isLanguage, canDefineTerm, allowedMembers, parent._createdTerms)
         {
@@ -81,8 +83,16 @@ namespace Fabu.Wiktionary.TermProcessing
         }
 
         /// <summary>
-        /// A term is always defined on this child, on all its siblings that have a different names, and all its children
+        /// A term is always defined on this node, all its children, on all its siblings that have a different names, and all their children, recursively.
         /// </summary>
+        /// <remarks>
+        /// This is because of the nature of how sections are structured on the page. In general, if a section can create a term, then this term relates
+        /// to all neighbour and child sections, unless someone else wants to define a term in this tree.
+        /// The exception is similarly named siblings, i.e. same name section titles on the same level within the same tree, e.g. 
+        /// "Etymology 1", "Etymology 2", etc - they define different terms.
+        /// The unsolved thing is when a page does not have any term definers, but does have POS sections. Probably has to be resolved in the second run,
+        /// but not yet implemented.
+        /// </remarks>
         internal void DefineTerm()
         {
             if (_term?.Status == Term.TermStatus.Finalized)
@@ -99,6 +109,7 @@ namespace Fabu.Wiktionary.TermProcessing
             // should be saved.
             _term.Status = Term.TermStatus.Void;
             _term = _term.Clone();
+            _term.Language = Language;
             _createdTerms.Add(_term);
 
             if (_parent != null)

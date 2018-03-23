@@ -1,12 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Fabu.Wiktionary.TermProcessing
 {
-    internal class ProcessingMode
+    public class ProcessingMode
     {
         public string[] AllowedTermModelSubSections;
         public bool AllowWiktionaryChildrenProcessing;
         public bool MayDefineTerm;
+
+        public static ProcessingMode operator | (ProcessingMode one, ProcessingMode another)
+        {
+            var newMode = new ProcessingMode
+            {
+                AllowWiktionaryChildrenProcessing = one.AllowWiktionaryChildrenProcessing || another.AllowWiktionaryChildrenProcessing,
+                MayDefineTerm = one.MayDefineTerm || another.MayDefineTerm
+            };
+            if (one.AllowedTermModelSubSections != null || another.AllowedTermModelSubSections != null)
+            {
+                var newSections = new List<string>(one.AllowedTermModelSubSections ?? new string[0]);
+                if (another.AllowedTermModelSubSections != null)
+                {
+                    foreach (var s in another.AllowedTermModelSubSections)
+                        if (!newSections.Contains(s))
+                            newSections.Add(s);
+                    newSections.Sort();
+                }
+                newMode.AllowedTermModelSubSections = newSections.ToArray();
+            }
+            return newMode;
+        }
 
         public readonly static ProcessingMode CanDefineTerm = new ProcessingMode
         {

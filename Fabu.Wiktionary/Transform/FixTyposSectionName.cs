@@ -32,6 +32,9 @@ namespace Fabu.Wiktionary.Transform
         /// </summary>
         public override SectionName Apply(SectionName sectionName)
         {
+            if (TryGetLanguage(sectionName, out SectionName lang))
+                return lang;
+
             var normalName = base.Apply(sectionName);
 
             Debug.Assert(normalName != null && !String.IsNullOrWhiteSpace(normalName.Name));
@@ -39,8 +42,6 @@ namespace Fabu.Wiktionary.Transform
             if (TryGetStandardSectionName(normalName, out SectionName sect))
                 return sect;
 
-            if (TryGetLanguage(normalName, out SectionName lang))
-                return lang;
 
             if (_keepOnlyStandardSections)
                 return null;
