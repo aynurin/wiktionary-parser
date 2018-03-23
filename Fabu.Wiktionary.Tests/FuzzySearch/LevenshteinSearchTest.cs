@@ -111,11 +111,16 @@ namespace Fabu.Wiktionary.Tests.FuzzySearch
         }
 
         [Fact]
-        public void Averb()
+        public void ShouldChooseFirstInRow()
         {
-            // Averb should choose Adverb, not Verb
+            // Leva should choose first in row
             var search = GetSearcher(new string[] { "Verb", "Adverb", "Proverb" });
-            var results = search.FindAll("Averb");
+            var results = search.FindBest("Averb");
+            Assert.True(results.First().Item1 == "Verb");
+
+            // Leva should choose first in row
+            search = GetSearcher(new string[] { "Adverb", "Verb", "Proverb" });
+            results = search.FindBest("Averb");
             Assert.True(results.First().Item1 == "Adverb");
         }
     }

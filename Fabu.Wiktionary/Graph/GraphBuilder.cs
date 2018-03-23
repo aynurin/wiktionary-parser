@@ -1,5 +1,6 @@
 ﻿using Fabu.Wiktionary.FuzzySearch;
 using Fabu.Wiktionary.Transform;
+using Microsoft.CSharp.RuntimeBinder;
 using QuickGraph.Algorithms.Search;
 using QuickGraph.Serialization;
 using System;
@@ -47,9 +48,6 @@ namespace Fabu.Wiktionary.Graph
         {
             foreach (var section in childSections)
             {
-                if (depth >= 3 && section.SubSections.Count == 0)
-                    continue;
-
                 var vertexName = CachedNameTransform(section);
                 if (vertexName == null)
                 {
@@ -189,7 +187,14 @@ namespace Fabu.Wiktionary.Graph
 
         public void Complete(dynamic completionArgs)
         {
-            this.RemoveEdges(completionArgs.MinimumEdgeFrequency);
+            try
+            {
+                this.RemoveEdges(completionArgs.MinimumEdgeFrequency);
+            }
+            catch (RuntimeBinderException)
+            {
+                // just do nothing if nothing is what is requested
+            }
         }
     }
 }

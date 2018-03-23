@@ -4,6 +4,7 @@ using Fabu.Wiktionary.TermProcessing;
 using Fabu.Wiktionary.Transform;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Fabu.Wiktionary.Commands
 {
@@ -19,31 +20,23 @@ namespace Fabu.Wiktionary.Commands
         // extract --in enwiktionary-20180120-pages-articles.xml
         protected override void RunCommand(Args args, Func<int, BaseArgs, bool> onProgress)
         {
-            var languages = LoadLanguages(args.DumpDir);
-            var sections = LoadSections(args.DumpDir);
+            var sections = DumpTool.LoadDump<List<SectionName>>(args.DumpDir, DumpTool.SectionsDictDump);
+            var sectionsSearch = new ReverseLevenshteinSearch(sections);
+            var languageNames = DumpTool.LoadDump<List<SectionName>>(args.DumpDir, DumpTool.LanguagesDump);
+            var languageSearch = new IgnoreCaseSearch<SectionName>(languageNames, _ => _.Name, new SectionNameComparer());
 
-            var transform = new FixTyposSectionName(languages, sections, true);
+            var termDefiners = sections.OrderByDescending(s => s.Weight).Take(5).ToArray();
+
+            var transform = new FixTyposSectionName(languageSearch, sectionsSearch, true);
 
             var wiktionaryDump = DumpTool.LoadWikimediaDump(args.DumpDir, args.WiktionaryDumpFile);
-            var extractor = new WiktionaryTermExtractor(transform, args.Term);
+            var processor = new TermGraphProcessor(transform, termDefiners);
+            var extractor = new WiktionaryTermExtractor(processor, args.Term);
             var analyzer = new WiktionaryAnalyzer(extractor, wiktionaryDump);
             if (onProgress != null)
                 analyzer.PageProcessed += (sender, e) => e.Abort = onProgress(e.Index, args);
             analyzer.Compute();
-        }
-
-        internal static ReverseLevenshteinSearch LoadSections(string dir)
-        {
-            var sections = DumpTool.LoadDump<List<SectionName>>(dir, DumpTool.SectionsDictDump);
-            var sectionsSearch = new ReverseLevenshteinSearch(sections);
-            return sectionsSearch;
-        }
-
-        internal static IgnoreCaseSearch<SectionName> LoadLanguages(string dir)
-        {
-            var languageNames = DumpTool.LoadDump<List<SectionName>>(dir, DumpTool.LanguagesDump);
-            var languageSearch = new IgnoreCaseSearch<SectionName>(languageNames, _ => _.Name, new SectionNameComparer());
-            return languageSearch;
+            Console.WriteLine($"Terms defined: {extractor.DefinedTerms.Count}");
         }
     }
 }
