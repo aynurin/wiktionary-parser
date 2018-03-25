@@ -16,13 +16,11 @@ namespace Fabu.Wiktionary
             return Parser.Default.ParseArguments<
                 PrepDictsCommand.Args,
                 StandardSectionsCommand.Args,
-                SectionsClusteringCommand.Args,
                 ExtractTermsCommand.Args,
                 SectionGraphCommand.Args>(args)
               .MapResult(
                     (PrepDictsCommand.Args opts) => new PrepDictsCommand().Run(opts, Progress),
                     (StandardSectionsCommand.Args opts) => new StandardSectionsCommand().Run(opts, Progress),
-                    (SectionsClusteringCommand.Args opts) => new SectionsClusteringCommand().Run(opts, Progress),
                     (ExtractTermsCommand.Args opts) => new ExtractTermsCommand().Run(opts, Progress),
                     (SectionGraphCommand.Args opts) => new SectionGraphCommand().Run(opts, Progress),
                     errs => 1);
