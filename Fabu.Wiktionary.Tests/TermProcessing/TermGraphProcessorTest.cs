@@ -11,18 +11,18 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
         public TermGraphProcessor GraphProcessor() => new TermGraphProcessor(new SectionNameNoTransform(), new SectionName[0]);
 
         [Fact]
-        public void TryOptionOne()
+        public void EtymologyDefinesTerms()
         {
             var graph = TestGraphItem.TestRoot("OptionOne")
                 .Langage("English",
                     language => language.Definer("Pronunciation",
                         pronun =>
                             pronun.Definer("Etymology", ety1 =>
-                                ety1.Pos("Noun", noun => noun.Other("Synonyms"))
-                                    .Pos("Verb"))
+                                    ety1.Pos("Noun", noun => noun.Other("Synonyms"))
+                                        .Pos("Verb"))
                                 .Definer("Etymology", ety2 =>
-                                ety2.Pos("Adjective", adj => adj.Other("Quotations"))
-                                    .Pos("Adverb"))));
+                                    ety2.Pos("Adjective", adj => adj.Other("Quotations"))
+                                        .Pos("Adverb"))));
 
             GraphProcessor().ProcessGraph(graph);
 
@@ -32,7 +32,9 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
             Assert.Collection(items,
                 item =>
                 {
+                    Assert.Equal("OptionOne", item.Title);
                     Assert.Equal(4, item.Properties.Count);
+                    Assert.Equal("English", item.Language);
                     Assert.Contains(item.Properties.Keys, k => k == "Etymology");
                     Assert.Contains(item.Properties.Keys, k => k == "Pronunciation");
                     Assert.Contains(item.Properties.Keys, k => k == "Noun");
@@ -41,7 +43,9 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
                 },
                 item =>
                 {
+                    Assert.Equal("OptionOne", item.Title);
                     Assert.Equal(4, item.Properties.Count);
+                    Assert.Equal("English", item.Language);
                     Assert.Contains(item.Properties.Keys, k => k == "Etymology");
                     Assert.Contains(item.Properties.Keys, k => k == "Pronunciation");
                     Assert.Contains(item.Properties.Keys, k => k == "Adjective");
@@ -51,7 +55,7 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
         }
 
         [Fact]
-        public void TryOptionTwo()
+        public void PronunciationDefinesTerms()
         {
             var graph = TestGraphItem.TestRoot("OptionOne")
                 .Langage("English",
@@ -73,7 +77,9 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
             Assert.Collection(items,
                 item =>
                 {
+                    Assert.Equal("OptionOne", item.Title);
                     Assert.Equal(4, item.Properties.Count);
+                    Assert.Equal("English", item.Language);
                     Assert.Contains(item.Properties.Keys, k => k == "Etymology");
                     Assert.Contains(item.Properties.Keys, k => k == "Pronunciation");
                     Assert.Contains(item.Properties.Keys, k => k == "Noun");
@@ -82,7 +88,9 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
                 },
                 item =>
                 {
+                    Assert.Equal("OptionOne", item.Title);
                     Assert.Equal(4, item.Properties.Count);
+                    Assert.Equal("English", item.Language);
                     Assert.Contains(item.Properties.Keys, k => k == "Etymology");
                     Assert.Contains(item.Properties.Keys, k => k == "Pronunciation");
                     Assert.Contains(item.Properties.Keys, k => k == "Adjective");
@@ -92,7 +100,7 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
         }
 
         [Fact]
-        public void TryOptionThree()
+        public void SeparatePronunciationIsInheritedByEtymologyDefinedTerms()
         {
             var graph = TestGraphItem.TestRoot("OptionOne")
                 .Langage("English",
@@ -113,7 +121,9 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
             Assert.Collection(items,
                 item =>
                 {
+                    Assert.Equal("OptionOne", item.Title);
                     Assert.Equal(4, item.Properties.Count);
+                    Assert.Equal("English", item.Language);
                     Assert.Contains(item.Properties.Keys, k => k == "Etymology");
                     Assert.Contains(item.Properties.Keys, k => k == "Pronunciation");
                     Assert.Contains(item.Properties.Keys, k => k == "Noun");
@@ -122,7 +132,9 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
                 },
                 item =>
                 {
+                    Assert.Equal("OptionOne", item.Title);
                     Assert.Equal(4, item.Properties.Count);
+                    Assert.Equal("English", item.Language);
                     Assert.Contains(item.Properties.Keys, k => k == "Etymology");
                     Assert.Contains(item.Properties.Keys, k => k == "Pronunciation");
                     Assert.Contains(item.Properties.Keys, k => k == "Adjective");
@@ -132,7 +144,7 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
         }
 
         [Fact]
-        public void TryOptionFour()
+        public void PlainListDefinesOneTerm()
         {
             var graph = TestGraphItem.TestRoot("OptionOne")
                 .Langage("English",
@@ -150,7 +162,9 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
             Assert.Collection(items,
                 item =>
                 {
+                    Assert.Equal("OptionOne", item.Title);
                     Assert.Equal(4, item.Properties.Count);
+                    Assert.Equal("English", item.Language);
                     Assert.Contains(item.Properties.Keys, k => k == "Etymology");
                     Assert.Contains(item.Properties.Keys, k => k == "Pronunciation");
                     Assert.Contains(item.Properties.Keys, k => k == "Noun");
@@ -158,11 +172,85 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
                     Assert.Contains(item.Properties["Noun"].Properties.Keys, k => k == "Synonyms");
                 });
         }
+
+
+        [Fact]
+        public void LanguageDefinesIfNoOtherDefiners()
+        {
+            var rawGraph = TestGraphItem.TestRoot("OptionOne")
+                .Langage("English",
+                    language => language
+                        .Pos("Noun", noun => noun.Other("Synonyms"))
+                        .Pos("Verb"))
+                .Langage("Old German",
+                    language => language
+                        .Pos("Pronunciation")
+                        .Pos("Etymology"));
+
+            var proc = GraphProcessor();
+            var graph = proc.CreateGraph(rawGraph.ItemTitle, rawGraph.Children);
+            proc.ProcessGraph(graph);
+
+            var items = graph.AllItems.Where(i => i.Status == Term.TermStatus.Defined).ToArray();
+
+            Assert.Equal(2, items.Length);
+            Assert.Collection(items,
+                item =>
+                {
+                    Assert.Equal("OptionOne", item.Title);
+                    Assert.Equal(2, item.Properties.Count);
+                    Assert.Equal("English", item.Language);
+                    Assert.Contains(item.Properties.Keys, k => k == "Noun");
+                    Assert.Contains(item.Properties.Keys, k => k == "Verb");
+                    Assert.Contains(item.Properties["Noun"].Properties.Keys, k => k == "Synonyms");
+                },
+                item =>
+                {
+                    Assert.Equal("OptionOne", item.Title);
+                    Assert.Equal(2, item.Properties.Count);
+                    Assert.Equal("Old German", item.Language);
+                    Assert.Contains(item.Properties.Keys, k => k == "Pronunciation");
+                    Assert.Contains(item.Properties.Keys, k => k == "Etymology");
+                });
+        }
+
+        [Fact]
+        public void PosInAPosGoesUp()
+        {
+            var rawGraph = TestGraphItem.TestRoot("OptionOne")
+                .Langage("English",
+                    language => language
+                        .Pos("Noun", noun => noun
+                            .Other("Synonyms"))
+                        .Pos("Verb", verb => verb
+                            .Other("Synonyms")
+                            .Pos("Acronym")));
+
+            var proc = GraphProcessor();
+            var graph = proc.CreateGraph(rawGraph.ItemTitle, rawGraph.Children);
+            proc.ProcessGraph(graph);
+
+            var items = graph.AllItems.Where(i => i.Status == Term.TermStatus.Defined).ToArray();
+
+            Assert.Single(items);
+            Assert.Collection(items,
+                item =>
+                {
+                    Assert.Equal("OptionOne", item.Title);
+                    Assert.Equal(3, item.Properties.Count);
+                    Assert.Equal("English", item.Language);
+                    Assert.Contains(item.Properties.Keys, k => k == "Noun");
+                    Assert.Contains(item.Properties.Keys, k => k == "Verb");
+                    Assert.Contains(item.Properties.Keys, k => k == "Acronym");
+                    Assert.Contains(item.Properties["Noun"].Properties.Keys, k => k == "Synonyms");
+                    Assert.Contains(item.Properties["Verb"].Properties.Keys, k => k == "Synonyms");
+                });
+        }
     }
 
     internal class TestGraphItem : GraphItem
     {
-        public static TestGraphItem TestRoot(string pageTitle) => new TestGraphItem("PAGE", null, pageTitle, null, false, false, null, new List<Term>());
+        public static TestGraphItem TestRoot(string pageTitle) => new TestGraphItem(pageTitle, null, pageTitle, null, false, false, null, new List<Term>());
         
         private TestGraphItem(string title,
             GraphItem parent, string pageTitle, string sectionContent,

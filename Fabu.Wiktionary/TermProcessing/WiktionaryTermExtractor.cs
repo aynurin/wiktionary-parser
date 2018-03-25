@@ -15,6 +15,7 @@ namespace Fabu.Wiktionary.TermProcessing
         private readonly string _onlyTheTerm;
 
         public List<Term> DefinedTerms { get; } = new List<Term>();
+        public List<string> EmptyResults { get; } = new List<string>();
 
         public WiktionaryTermExtractor(TermGraphProcessor processor, string onlyTheTerm)
         {
@@ -34,9 +35,15 @@ namespace Fabu.Wiktionary.TermProcessing
 
             _graphProcessor.ProcessGraph(graph);
 
+            foreach (var item in graph.AllItems.Where(i => i.Status == Term.TermStatus.Defined && i.IsEmpty))
+                item.Status = Term.TermStatus.Empty;
+
             var termsDefined = graph.GetItems(Term.TermStatus.Defined);
-            if (termsDefined.Count == 0)
-                Debugger.Break();
+            if (termsDefined.Count == 0 && graph.AllItems.Any(i => i.Language == "English"))
+            {
+                Console.WriteLine($"Empty result for https://en.wiktionary.org/wiki/{page.Title}");
+                EmptyResults.Add(page.Title);
+            }
             DefinedTerms.AddRange(termsDefined);
 
         }

@@ -36,6 +36,7 @@ namespace Fabu.Wiktionary.Commands
             if (onProgress != null)
                 analyzer.PageProcessed += (sender, e) => e.Abort = onProgress(e.Index, args);
             analyzer.Compute();
+            DumpTool.SaveDump(args.DumpDir, "empty-pages.json", extractor.EmptyResults);
             Console.WriteLine($"Terms defined: {extractor.DefinedTerms.Count}");
         }
     }

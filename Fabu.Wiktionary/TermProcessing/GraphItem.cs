@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WikimediaProcessing;
 
 namespace Fabu.Wiktionary.TermProcessing
 {
-    public class GraphItem
+    public class GraphItem: ISectionAccessor
     {
         private readonly GraphItem _parent;
         private readonly List<GraphItem> _children = new List<GraphItem>();
@@ -17,11 +16,12 @@ namespace Fabu.Wiktionary.TermProcessing
         private bool _isTermUpdated = false;
         private bool _hasDefinedATerm = false;
 
+        private bool _canDefineTerm;
+
         public readonly string ItemTitle;
         public readonly string OwnerPageTitle;
         public readonly string RelatedSectionContent;
         public readonly bool IsLanguage;
-        public readonly bool CanDefineTerm;
 
         public IEnumerable<GraphItem> Children => _children;
 
@@ -31,6 +31,8 @@ namespace Fabu.Wiktionary.TermProcessing
 
         public IEnumerable<Term> FinalizedTerms => _createdTerms.Where(t => t.Status == Term.TermStatus.Finalized);
         public IEnumerable<Term> AllItems => _createdTerms;
+
+        public bool CanDefineTerm { get => _canDefineTerm; set => _canDefineTerm = value; }
 
         public static GraphItem CreateRoot(string pageTitle) => new GraphItem("PAGE", null, pageTitle, null, false, false, null, new List<Term>());
 
@@ -51,7 +53,7 @@ namespace Fabu.Wiktionary.TermProcessing
             OwnerPageTitle = pageTitle;
             RelatedSectionContent = sectionContent;
             IsLanguage = isLanguage;
-            CanDefineTerm = canDefineTerm;
+            _canDefineTerm = canDefineTerm;
             _allowedMembers = allowedMembers;
             _createdTerms = termsStore;
             _term = new Term(OwnerPageTitle);
@@ -68,6 +70,7 @@ namespace Fabu.Wiktionary.TermProcessing
 
         internal void SetLanguage()
         {
+            Language = ItemTitle;
             ForEachChild(this, (parent, child) => child.Language = ItemTitle);
         }
 
@@ -112,7 +115,7 @@ namespace Fabu.Wiktionary.TermProcessing
             _term.Language = Language;
             _createdTerms.Add(_term);
 
-            if (_parent != null)
+            if (_parent != null && !IsLanguage)
             {
                 foreach (var sibling in _parent._children)
                 {
@@ -127,7 +130,8 @@ namespace Fabu.Wiktionary.TermProcessing
             _term.Status = Term.TermStatus.Defined;
             _hasDefinedATerm = true;
 
-            AddMember(_term, this);
+            if (!IsLanguage)
+                AddMember(_term, this);
         }
 
         internal Term CreateTerm()
@@ -167,5 +171,11 @@ namespace Fabu.Wiktionary.TermProcessing
         {
             return ItemTitle;
         }
+
+        public string GetSectionName() => this.ItemTitle;
+
+        public string GetContent() => this.RelatedSectionContent;
+
+        public IEnumerable<ISectionAccessor> GetSubSections() => this.Children;
     }
 }

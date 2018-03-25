@@ -12,6 +12,7 @@ namespace Fabu.Wiktionary.TermProcessing
 
         public Dictionary<string, Term> Properties { get; private set; } = new Dictionary<string, Term>();
         public TermStatus Status { get; set; }
+        public bool IsEmpty { get => String.IsNullOrWhiteSpace(Content) && Properties.Count == 0; }
 
         public Term(string title)
         {
@@ -50,7 +51,8 @@ namespace Fabu.Wiktionary.TermProcessing
             None,
             Void,
             Defined,
-            Finalized
+            Finalized,
+            Empty
         }
     }
 }
