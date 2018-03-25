@@ -8,7 +8,7 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
 {
     public class TermGraphProcessorTest
     {
-        public TermGraphProcessor GraphProcessor() => new TermGraphProcessor(new SectionNameNoTransform(), new SectionName[0]);
+        public TermGraphProcessor GraphProcessor() => new TermGraphProcessor(new SectionNameNoTransform());
 
         [Fact]
         public void EtymologyDefinesTerms()

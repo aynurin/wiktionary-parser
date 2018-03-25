@@ -25,12 +25,10 @@ namespace Fabu.Wiktionary.Commands
             var languageNames = DumpTool.LoadDump<List<SectionName>>(args.DumpDir, DumpTool.LanguagesDump);
             var languageSearch = new IgnoreCaseSearch<SectionName>(languageNames, _ => _.Name, new SectionNameComparer());
 
-            var termDefiners = sections.OrderByDescending(s => s.Weight).Take(5).ToArray();
-
             var transform = new FixTyposSectionName(languageSearch, sectionsSearch, true);
 
             var wiktionaryDump = DumpTool.LoadWikimediaDump(args.DumpDir, args.WiktionaryDumpFile);
-            var processor = new TermGraphProcessor(transform, termDefiners);
+            var processor = new TermGraphProcessor(transform);
             var extractor = new WiktionaryTermExtractor(processor, args.Term);
             var analyzer = new WiktionaryAnalyzer(extractor, wiktionaryDump);
             if (onProgress != null)

@@ -10,16 +10,9 @@ namespace Fabu.Wiktionary.TermProcessing
     {
         private readonly SectionNameTransform _transform;
 
-        public TermGraphProcessor(SectionNameTransform transform, SectionName[] termDefiners)
+        public TermGraphProcessor(SectionNameTransform transform)
         {
             _transform = transform;
-            // termDefiners ignored atm, as POSes cannot define new term each as several POSes can be within the same term.
-            //foreach (var name in termDefiners)
-            //{
-            //    if (_supportedSections.ContainsKey(name.Name))
-            //        _supportedSections[name.Name] |= ProcessingMode.CanDefineTerm;
-            //    else _supportedSections.Add(name.Name, ProcessingMode.CanDefineTerm);
-            //}
         }
 
         private readonly Dictionary<string, ProcessingMode> _supportedSections = new Dictionary<string, ProcessingMode>
