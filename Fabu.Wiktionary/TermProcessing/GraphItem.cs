@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Fabu.Wiktionary.TextConverters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Fabu.Wiktionary.TermProcessing
 {
-    public class GraphItem: ISectionAccessor
+    public class GraphItem
     {
         private readonly GraphItem _parent;
         private readonly List<GraphItem> _children = new List<GraphItem>();
@@ -20,7 +21,7 @@ namespace Fabu.Wiktionary.TermProcessing
 
         public readonly string ItemTitle;
         public readonly string OwnerPageTitle;
-        public readonly string RelatedSectionContent;
+        public readonly FormattedString RelatedSectionContent;
         public readonly bool IsLanguage;
 
         public IEnumerable<GraphItem> Children => _children;
@@ -38,13 +39,11 @@ namespace Fabu.Wiktionary.TermProcessing
 
         internal List<Term> GetItems(Term.TermStatus defined) => _createdTerms.Where(i => i.Status == Term.TermStatus.Defined).ToList();
 
-        public GraphItem(string title, GraphItem parent, string pageTitle, string sectionContent, bool isLanguage, bool canDefineTerm, string[] allowedMembers)
-            : this(title, parent, pageTitle, sectionContent, isLanguage, canDefineTerm, allowedMembers, parent._createdTerms)
-        {
-        }
+        public GraphItem CreateChild(string title, FormattedString sectionContent, bool isLanguage, bool canDefineTerm, string[] allowedMembers) => 
+            new GraphItem(title, this, OwnerPageTitle, sectionContent, isLanguage, canDefineTerm, allowedMembers, _createdTerms);
 
-        protected GraphItem(string title, 
-            GraphItem parent, string pageTitle, string sectionContent, 
+        private GraphItem(string title, 
+            GraphItem parent, string pageTitle, FormattedString sectionContent, 
             bool isLanguage, bool canDefineTerm, string[] allowedMembers,
             List<Term> termsStore)
         {
@@ -159,7 +158,7 @@ namespace Fabu.Wiktionary.TermProcessing
 
         private void AddMember(Term term, GraphItem graphItem)
         {
-            term.SetProperty(graphItem.ItemTitle, graphItem.RelatedSectionContent);
+            term.SetProperty(graphItem.ItemTitle, graphItem.RelatedSectionContent?.ToHtml());
         }
 
         public void AddChild(GraphItem item)
@@ -171,11 +170,5 @@ namespace Fabu.Wiktionary.TermProcessing
         {
             return ItemTitle;
         }
-
-        public string GetSectionName() => this.ItemTitle;
-
-        public string GetContent() => this.RelatedSectionContent;
-
-        public IEnumerable<ISectionAccessor> GetSubSections() => this.Children;
     }
 }

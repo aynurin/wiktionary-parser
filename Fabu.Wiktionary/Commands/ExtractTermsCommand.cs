@@ -1,10 +1,14 @@
 ﻿using CommandLine;
 using Fabu.Wiktionary.FuzzySearch;
 using Fabu.Wiktionary.TermProcessing;
+using Fabu.Wiktionary.TextConverters;
+using Fabu.Wiktionary.TextConverters.Wiki;
+using Fabu.Wiktionary.TextConverters.WikiMup;
 using Fabu.Wiktionary.Transform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Fabu.Wiktionary.Commands
 {
@@ -20,6 +24,10 @@ namespace Fabu.Wiktionary.Commands
         // extract --in enwiktionary-20180120-pages-articles.xml
         protected override void RunCommand(Args args, Func<int, BaseArgs, bool> onProgress)
         {
+            var str = "<TD>3</TD><TD>2</TD><TD>1</TD></TR></TABLE>}}";
+            var regex = new Regex(@"\G(\n)");
+            var match = regex.Match(str);
+            Console.WriteLine(match.Value);
             var sections = DumpTool.LoadDump<List<SectionName>>(args.DumpDir, DumpTool.SectionsDictDump);
             var sectionsSearch = new ReverseLevenshteinSearch(sections);
             var languageNames = DumpTool.LoadDump<List<SectionName>>(args.DumpDir, DumpTool.LanguagesDump);
@@ -28,14 +36,22 @@ namespace Fabu.Wiktionary.Commands
             var transform = new FixTyposSectionName(languageSearch, sectionsSearch, true);
 
             var wiktionaryDump = DumpTool.LoadWikimediaDump(args.DumpDir, args.WiktionaryDumpFile);
-            var processor = new TermGraphProcessor(transform);
+            var textConverter = new WikitextConverter();
+            var processor = new TermGraphProcessor(transform, textConverter);
             var extractor = new WiktionaryTermExtractor(processor, args.Term);
             var analyzer = new WiktionaryAnalyzer(extractor, wiktionaryDump);
+            var pagesProcessed = 0;
             if (onProgress != null)
-                analyzer.PageProcessed += (sender, e) => e.Abort = onProgress(e.Index, args);
+                analyzer.PageProcessed += (sender, e) => { pagesProcessed = e.Index; e.Abort = onProgress(e.Index, args); };
             analyzer.Compute();
             DumpTool.SaveDump(args.DumpDir, "empty-pages.json", extractor.EmptyResults);
-            Console.WriteLine($"Terms defined: {extractor.DefinedTerms.Count}");
+
+            DumpTool.SaveDump(args.DumpDir, "templates.json", TemplateConverter.ConvertedTemplates.CutOff(0.1).OrderByDescending(kvp => kvp.Value));
+            DumpTool.SaveDump(args.DumpDir, "nodes.json", BaseNodeConverter.ConvertedNodes.CutOff(0.1).OrderByDescending(kvp => kvp.Value));
+            Console.WriteLine();
+            Console.WriteLine($"Pages processed: {pagesProcessed}");
+            Console.WriteLine($"Words defined: {extractor.DefinedWords.Count}");
+            Console.WriteLine($"Total terms: {extractor.DefinedWords.Sum(w => w.Terms.Count)}");
         }
     }
 }

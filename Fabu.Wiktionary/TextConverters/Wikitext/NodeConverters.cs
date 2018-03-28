@@ -1,25 +1,49 @@
 ﻿using MwParserFromScratch.Nodes;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki
 {
     class HtmlTagConverter : BaseNodeConverter
     {
+        private static string[] _allowedTags = new string[]
+        {
+            "sup"
+        };
         public override ConversionResult Convert(Node node, ConversionContext context)
         {
             var tag = node as HtmlTag;
             var result = new ConversionResult();
-            //result.Write($"<{tag.Name}>");
-            result.Node = MaybeARun(tag.Content);
-            //result.WriteTail($"</{tag.Name}>");
+            var writeTags = Array.BinarySearch(_allowedTags, tag.Name) >= 0;
+            if (writeTags)
+                result.Write($"<{tag.Name}>");
+            if (tag.Content != null)
+                result.Node = MaybeARun(tag.Content);
+            if (writeTags)
+                result.WriteTail($"</{tag.Name}>");
             return result;
         }
     }
+
     class TemplateConverter : BaseNodeConverter
     {
+        private readonly string[] _okTemplates = new string[]
+        {
+            //"wikipedia"
+        };
+
+        public readonly static Stats<string> ConvertedTemplates = new Stats<string>();
+
+        public override ConversionResult Convert(Node node, ConversionContext context)
+        {
+            var template = node as Template;
+            if (template == null)
+                throw new ArgumentException("Node must be an instance of Template");
+            //if (Array.BinarySearch(_okTemplates, template.Name.ToPlainText()) < 0)
+            //    Debugger.Break();
+            ConvertedTemplates.Add(template.Name.ToPlainText());
+            return base.Convert(template.Arguments.ToRun(), context);
+        }
+
         public override string GetSubstitute(Node node)
         {
             var template = (node as Template).Name.ToPlainText();

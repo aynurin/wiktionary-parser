@@ -2,21 +2,27 @@
 using MwParserFromScratch;
 using MwParserFromScratch.Nodes;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Fabu.Wiktionary.TextConverters
+namespace Fabu.Wiktionary.TextConverters.Wiki
 {
-    public class WikitextConverter
+    public class WikitextConverter : ITextConverter
     {
         private static readonly ConverterFactory _converterFactory = new ConverterFactory();
 
         public FormattedString ConvertToStructured(string wikitext)
         {
-            var parser = new WikitextParser();
-            var ast = parser.Parse(wikitext);
+            if (wikitext == null)
+                return null;
 
-            PrintAst(ast, 0);
+            wikitext = StripHtml.Tables(wikitext);
+
+            var parser = new WikitextParser();
+            var ast = parser.Parse(wikitext.TrimEnd());
+
+            //PrintAst(ast, 0);
 
             var buffer = new StringBuilder();
             using (var writer = new StringWriter(buffer))
@@ -24,6 +30,7 @@ namespace Fabu.Wiktionary.TextConverters
 
             return new FormattedString(buffer.ToString());
         }
+
 
         private void BuildAst(Node node, TextWriter writer, ConversionContext context)
         {
@@ -63,25 +70,6 @@ namespace Fabu.Wiktionary.TextConverters
                 Escapse(printText));
             foreach (var child in node.EnumChildren())
                 PrintAst(child, level + 1);
-        }
-    }
-
-    /// <summary>
-    /// Contains a formatted string that is easy to render as rich text label or as HTML on mobile devices, or serialize as JSON for storage
-    /// </summary>
-    public class FormattedString
-    {
-        private readonly string _data;
-
-        public FormattedString(string data)
-        {
-            _data = data;
-        }
-
-        public string ToHtml()
-        {
-            return _data;
-            ;
         }
     }
 }

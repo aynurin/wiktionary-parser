@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.2.1" />
-    <PackageReference Include="CXuesong.MW.MwParserFromScratch" Version="0.2.0" />
     <PackageReference Include="DBSCAN" Version="2.0.12" />
     <PackageReference Include="HdbscanSharp" Version="1.0.9" />
     <PackageReference Include="LevenshteinMinimumEditDistance" Version="1.2.0" />
@@ -24,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\github.com\CXuesong\MwParserFromScratch\MwParserFromScratch\MwParserFromScratch.csproj" />
     <ProjectReference Include="..\WikimediaProcessing\WikimediaProcessing.Portable.csproj" />
   </ItemGroup>
 

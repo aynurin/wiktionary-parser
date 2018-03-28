@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using Fabu.Wiktionary.TextConverters;
+using Fabu.Wiktionary.TextConverters.Wiki;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

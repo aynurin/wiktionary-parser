@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Fabu.Wiktionary.TextConverters;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Fabu.Wiktionary.TermProcessing
         /// </summary>
         private readonly string _onlyTheTerm;
 
-        public List<Term> DefinedTerms { get; } = new List<Term>();
+        public List<DictionaryWord> DefinedWords { get; } = new List<DictionaryWord>();
         public List<string> EmptyResults { get; } = new List<string>();
 
         public WiktionaryTermExtractor(TermGraphProcessor processor, string onlyTheTerm)
@@ -31,6 +32,8 @@ namespace Fabu.Wiktionary.TermProcessing
             if (!String.IsNullOrWhiteSpace(_onlyTheTerm) && page.Title != _onlyTheTerm)
                 return;
 
+            page.Text = StripHtml.Comments(page.Text);
+
             var graph = _graphProcessor.CreateGraph(page);
 
             _graphProcessor.ProcessGraph(graph);
@@ -40,12 +43,9 @@ namespace Fabu.Wiktionary.TermProcessing
 
             var termsDefined = graph.GetItems(Term.TermStatus.Defined);
             if (termsDefined.Count == 0 && graph.AllItems.Any(i => i.Language == "English"))
-            {
-                Console.WriteLine($"Empty result for https://en.wiktionary.org/wiki/{page.Title}");
                 EmptyResults.Add(page.Title);
-            }
-            DefinedTerms.AddRange(termsDefined);
-
+            var dictword = new DictionaryWord(page.Title, termsDefined);
+            DefinedWords.Add(dictword);
         }
 
         public void Complete(dynamic completionArgs)

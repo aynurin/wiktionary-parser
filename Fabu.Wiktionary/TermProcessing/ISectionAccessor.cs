@@ -8,7 +8,7 @@ namespace Fabu.Wiktionary.TermProcessing
     {
         string GetSectionName();
 
-        string GetContent();
+        string GetRawContent();
 
         IEnumerable<ISectionAccessor> GetSubSections();
     }
@@ -22,7 +22,7 @@ namespace Fabu.Wiktionary.TermProcessing
             _section = section;
         }
 
-        public string GetContent() => _section.Content;
+        public string GetRawContent() => _section.Content;
 
         public string GetSectionName() => _section.SectionName;
 

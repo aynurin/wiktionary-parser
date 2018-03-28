@@ -1,6 +1,7 @@
 ﻿using MwParserFromScratch.Nodes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki
 {
@@ -13,11 +14,15 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             var converter = GetConverter(node.GetType().Name);
             var substitute = converter.GetSubstitute(node);
             if (substitute != null)
-                converter = GetConverter(substitute);
+            {
+                var substituteConverter = GetConverter(substitute);
+                if (substituteConverter.GetType() != typeof(BaseNodeConverter))
+                    converter = substituteConverter;
+            }
             return converter;
         }
 
-        public BaseNodeConverter GetConverter(string name)
+        private BaseNodeConverter GetConverter(string name)
         {
             if (_knownConverters.TryGetValue(name, out BaseNodeConverter converter))
                 return converter;

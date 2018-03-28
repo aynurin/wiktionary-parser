@@ -1,4 +1,5 @@
 ﻿using Fabu.Wiktionary.TermProcessing;
+using Fabu.Wiktionary.TextConverters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
 {
     public class TermGraphProcessorTest
     {
-        public TermGraphProcessor GraphProcessor() => new TermGraphProcessor(new SectionNameNoTransform());
+        public TermGraphProcessor GraphProcessor() => new TermGraphProcessor(new SectionNameNoTransform(), null);
 
         [Fact]
         public void EtymologyDefinesTerms()
@@ -24,9 +25,9 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
                                     ety2.Pos("Adjective", adj => adj.Other("Quotations"))
                                         .Pos("Adverb"))));
 
-            GraphProcessor().ProcessGraph(graph);
+            GraphProcessor().ProcessGraph(graph.InnerItem);
 
-            var items = graph.AllItems.Where(i => i.Status == Term.TermStatus.Defined).ToArray();
+            var items = graph.InnerItem.AllItems.Where(i => i.Status == Term.TermStatus.Defined).ToArray();
 
             Assert.Equal(2, items.Length);
             Assert.Collection(items,
@@ -69,9 +70,9 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
                                 ety1.Pos("Adjective", adj => adj.Other("Quotations"))
                                     .Pos("Adverb"))));
 
-            GraphProcessor().ProcessGraph(graph);
+            GraphProcessor().ProcessGraph(graph.InnerItem);
 
-            var items = graph.AllItems.Where(i => i.Status == Term.TermStatus.Defined).ToArray();
+            var items = graph.InnerItem.AllItems.Where(i => i.Status == Term.TermStatus.Defined).ToArray();
 
             Assert.Equal(2, items.Length);
             Assert.Collection(items,
@@ -113,9 +114,9 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
                                 ety1.Pos("Adjective", adj => adj.Other("Quotations"))
                                     .Pos("Adverb")));
 
-            GraphProcessor().ProcessGraph(graph);
+            GraphProcessor().ProcessGraph(graph.InnerItem);
 
-            var items = graph.AllItems.Where(i => i.Status == Term.TermStatus.Defined).ToArray();
+            var items = graph.InnerItem.AllItems.Where(i => i.Status == Term.TermStatus.Defined).ToArray();
 
             Assert.Equal(2, items.Length);
             Assert.Collection(items,
@@ -154,9 +155,9 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
                         .Pos("Noun", noun => noun.Other("Synonyms"))
                         .Pos("Verb"));
 
-            GraphProcessor().ProcessGraph(graph);
+            GraphProcessor().ProcessGraph(graph.InnerItem);
 
-            var items = graph.AllItems.Where(i => i.Status == Term.TermStatus.Defined).ToArray();
+            var items = graph.InnerItem.AllItems.Where(i => i.Status == Term.TermStatus.Defined).ToArray();
 
             Assert.Single(items);
             Assert.Collection(items,
@@ -188,7 +189,7 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
                         .Pos("Etymology"));
 
             var proc = GraphProcessor();
-            var graph = proc.CreateGraph(rawGraph.ItemTitle, rawGraph.Children);
+            var graph = proc.CreateGraph(rawGraph.GetSectionName(), rawGraph.GetSubSections());
             proc.ProcessGraph(graph);
 
             var items = graph.AllItems.Where(i => i.Status == Term.TermStatus.Defined).ToArray();
@@ -197,7 +198,6 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
             Assert.Collection(items,
                 item =>
                 {
-                    Assert.Equal("OptionOne", item.Title);
                     Assert.Equal(2, item.Properties.Count);
                     Assert.Equal("English", item.Language);
                     Assert.Contains(item.Properties.Keys, k => k == "Noun");
@@ -206,7 +206,6 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
                 },
                 item =>
                 {
-                    Assert.Equal("OptionOne", item.Title);
                     Assert.Equal(2, item.Properties.Count);
                     Assert.Equal("Old German", item.Language);
                     Assert.Contains(item.Properties.Keys, k => k == "Pronunciation");
@@ -227,7 +226,7 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
                             .Pos("Acronym")));
 
             var proc = GraphProcessor();
-            var graph = proc.CreateGraph(rawGraph.ItemTitle, rawGraph.Children);
+            var graph = proc.CreateGraph(rawGraph.GetSectionName(), rawGraph.GetSubSections());
             proc.ProcessGraph(graph);
 
             var items = graph.AllItems.Where(i => i.Status == Term.TermStatus.Defined).ToArray();
@@ -236,7 +235,6 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
             Assert.Collection(items,
                 item =>
                 {
-                    Assert.Equal("OptionOne", item.Title);
                     Assert.Equal(3, item.Properties.Count);
                     Assert.Equal("English", item.Language);
                     Assert.Contains(item.Properties.Keys, k => k == "Noun");
@@ -248,19 +246,32 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
         }
     }
 
-    internal class TestGraphItem : GraphItem
+    internal class TestGraphItem : ISectionAccessor
     {
-        public static TestGraphItem TestRoot(string pageTitle) => new TestGraphItem(pageTitle, null, pageTitle, null, false, false, null, new List<Term>());
-        
-        private TestGraphItem(string title,
-            GraphItem parent, string pageTitle, string sectionContent,
-            bool isLanguage, bool canDefineTerm, string[] allowedMembers, List<Term> termStore)
-            : base(title, parent, pageTitle, sectionContent, isLanguage, canDefineTerm, allowedMembers, termStore) { }
+        private readonly GraphItem _innerItem;
+        private readonly List<TestGraphItem> _children = new List<TestGraphItem>();
+
+        public GraphItem InnerItem => _innerItem;
+
+        public static TestGraphItem TestRoot(string pageTitle) => new TestGraphItem(GraphItem.CreateRoot(pageTitle));
+
+        private TestGraphItem(GraphItem item)
+        {
+            _innerItem = item;
+        }
+
+        public TestGraphItem CreateChild(string title, string sectionContent,
+            bool isLanguage, bool canDefineTerm, string[] allowedMembers)
+        {
+            var item = new TestGraphItem(_innerItem.CreateChild(title, new FormattedString(sectionContent), isLanguage, canDefineTerm, allowedMembers));
+            _innerItem.AddChild(item.InnerItem);
+            _children.Add(item);
+            return item;
+        }
 
         public TestGraphItem Definer(string title, params Action<TestGraphItem>[] childCreators)
         {
-            var newNode = new TestGraphItem(title, this, OwnerPageTitle, null, false, true, null, _createdTerms);
-            AddChild(newNode);
+            var newNode = CreateChild(title, null, false, true, null);
             foreach(var childCreator in childCreators)
                 childCreator(newNode);
             return this;
@@ -268,8 +279,7 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
 
         public TestGraphItem Pos(string title, params Action<TestGraphItem>[] childCreators)
         {
-            var newNode = new TestGraphItem(title, this, OwnerPageTitle, null, false, false, new[] { "Quotations", "Synonyms", "Usage notes" }, _createdTerms);
-            AddChild(newNode);
+            var newNode = CreateChild(title, null, false, false, new[] { "Quotations", "Synonyms", "Usage notes" });
             foreach (var childCreator in childCreators)
                 childCreator(newNode);
             return this;
@@ -277,8 +287,7 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
 
         public TestGraphItem Other(string title, params Action<TestGraphItem>[] childCreators)
         {
-            var newNode = new TestGraphItem(title, this, OwnerPageTitle, null, false, false, null, _createdTerms);
-            AddChild(newNode);
+            var newNode = CreateChild(title, null, false, false, null);
             foreach (var childCreator in childCreators)
                 childCreator(newNode);
             return this;
@@ -286,11 +295,16 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
 
         public TestGraphItem Langage(string title, params Action<TestGraphItem>[] childCreators)
         {
-            var newNode = new TestGraphItem(title, this, OwnerPageTitle, null, true, false, null, _createdTerms);
-            AddChild(newNode);
+            var newNode = CreateChild(title, null, true, false, null);
             foreach (var childCreator in childCreators)
                 childCreator(newNode);
             return this;
         }
+
+        public string GetSectionName() => _innerItem.ItemTitle;
+
+        public string GetRawContent() => null;
+
+        public IEnumerable<ISectionAccessor> GetSubSections() => _children;
     }
 }
