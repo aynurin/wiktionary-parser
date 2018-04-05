@@ -9,7 +9,7 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
 {
     public class TermGraphProcessorTest
     {
-        public TermGraphProcessor GraphProcessor() => new TermGraphProcessor(new SectionNameNoTransform(), null);
+        public TermGraphProcessor GraphProcessor() => new TermGraphProcessor(new SectionNameNoTransform());
 
         [Fact]
         public void EtymologyDefinesTerms()
@@ -263,7 +263,7 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
         public TestGraphItem CreateChild(string title, string sectionContent,
             bool isLanguage, bool canDefineTerm, string[] allowedMembers)
         {
-            var item = new TestGraphItem(_innerItem.CreateChild(title, new FormattedString(sectionContent), isLanguage, canDefineTerm, allowedMembers));
+            var item = new TestGraphItem(_innerItem.CreateChild(title, sectionContent, isLanguage, canDefineTerm, allowedMembers));
             _innerItem.AddChild(item.InnerItem);
             _children.Add(item);
             return item;

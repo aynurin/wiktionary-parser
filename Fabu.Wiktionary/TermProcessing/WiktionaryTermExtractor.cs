@@ -10,6 +10,8 @@ namespace Fabu.Wiktionary.TermProcessing
     internal class WiktionaryTermExtractor : IWiktionaryPageProcessor
     {
         private readonly TermGraphProcessor _graphProcessor;
+        private readonly ITextConverter _textConverter;
+
         /// <summary>
         /// Process only this given term
         /// </summary>
@@ -18,9 +20,10 @@ namespace Fabu.Wiktionary.TermProcessing
         public List<DictionaryWord> DefinedWords { get; } = new List<DictionaryWord>();
         public List<string> EmptyResults { get; } = new List<string>();
 
-        public WiktionaryTermExtractor(TermGraphProcessor processor, string onlyTheTerm)
+        public WiktionaryTermExtractor(TermGraphProcessor processor, ITextConverter contentConverter, string onlyTheTerm)
         {
             _graphProcessor = processor;
+            _textConverter = contentConverter;
             _onlyTheTerm = onlyTheTerm;
         }
 
@@ -44,8 +47,21 @@ namespace Fabu.Wiktionary.TermProcessing
             var termsDefined = graph.GetItems(Term.TermStatus.Defined);
             if (termsDefined.Count == 0 && graph.AllItems.Any(i => i.Language == "English"))
                 EmptyResults.Add(page.Title);
+            ConvertContent(termsDefined);
             var dictword = new DictionaryWord(page.Title, termsDefined);
             DefinedWords.Add(dictword);
+        }
+
+        private void ConvertContent(IEnumerable<Term> terms)
+        {
+            if (terms == null || _textConverter == null)
+                return;
+
+            foreach (var term in terms)
+            {
+                term.ConvertContent(_textConverter);
+                ConvertContent(term.Properties.Values);
+            }
         }
 
         public void Complete(dynamic completionArgs)

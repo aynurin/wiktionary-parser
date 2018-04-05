@@ -10,12 +10,10 @@ namespace Fabu.Wiktionary.TermProcessing
     public class TermGraphProcessor
     {
         private readonly SectionNameTransform _transform;
-        private readonly ITextConverter _contentConverter;
 
-        public TermGraphProcessor(SectionNameTransform transform, ITextConverter contentConverter)
+        public TermGraphProcessor(SectionNameTransform transform)
         {
             _transform = transform;
-            _contentConverter = contentConverter;
         }
 
         private readonly Dictionary<string, ProcessingMode> _supportedSections = new Dictionary<string, ProcessingMode>
@@ -85,13 +83,7 @@ namespace Fabu.Wiktionary.TermProcessing
                     if (sectionProcessingMode.MayDefineTerm)
                         containsTermDefiners = true;
 
-                    FormattedString sectionContent;
-                    if (_contentConverter != null)
-                        sectionContent = _contentConverter.ConvertToStructured(section.GetRawContent());
-                    else
-                        sectionContent = new FormattedString(section.GetRawContent());
-
-                    var item = graph.CreateChild(nodeName.Name, sectionContent, nodeName.IsLanguage,
+                    var item = graph.CreateChild(nodeName.Name, section.GetRawContent(), nodeName.IsLanguage,
                         sectionProcessingMode.MayDefineTerm, sectionProcessingMode.AllowedTermModelSubSections);
 
                     if (sectionProcessingMode.AllowWiktionaryChildrenProcessing)
@@ -141,11 +133,6 @@ namespace Fabu.Wiktionary.TermProcessing
 
                 ProcessGraph(child); // repeat for the child
             }
-        }
-
-        public object CreateGraph(string itemTitle, object children)
-        {
-            throw new NotImplementedException();
         }
     }
 }

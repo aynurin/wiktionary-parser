@@ -21,7 +21,7 @@ namespace Fabu.Wiktionary.TermProcessing
 
         public readonly string ItemTitle;
         public readonly string OwnerPageTitle;
-        public readonly FormattedString RelatedSectionContent;
+        public readonly string RelatedSectionContent;
         public readonly bool IsLanguage;
 
         public IEnumerable<GraphItem> Children => _children;
@@ -39,11 +39,11 @@ namespace Fabu.Wiktionary.TermProcessing
 
         internal List<Term> GetItems(Term.TermStatus defined) => _createdTerms.Where(i => i.Status == Term.TermStatus.Defined).ToList();
 
-        public GraphItem CreateChild(string title, FormattedString sectionContent, bool isLanguage, bool canDefineTerm, string[] allowedMembers) => 
+        public GraphItem CreateChild(string title, string sectionContent, bool isLanguage, bool canDefineTerm, string[] allowedMembers) => 
             new GraphItem(title, this, OwnerPageTitle, sectionContent, isLanguage, canDefineTerm, allowedMembers, _createdTerms);
 
         private GraphItem(string title, 
-            GraphItem parent, string pageTitle, FormattedString sectionContent, 
+            GraphItem parent, string pageTitle, string sectionContent, 
             bool isLanguage, bool canDefineTerm, string[] allowedMembers,
             List<Term> termsStore)
         {
@@ -154,7 +154,7 @@ namespace Fabu.Wiktionary.TermProcessing
 
         private void AddMember(Term term, GraphItem graphItem)
         {
-            term.SetProperty(graphItem.ItemTitle, graphItem.RelatedSectionContent?.ToHtml());
+            term.SetProperty(graphItem.ItemTitle, graphItem.RelatedSectionContent);
         }
 
         public void AddChild(GraphItem item)

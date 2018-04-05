@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using Fabu.Wiktionary.TextConverters;
 
 namespace Fabu.Wiktionary.TermProcessing
 {
@@ -8,7 +9,7 @@ namespace Fabu.Wiktionary.TermProcessing
     {
         public string Title { get; set; }
         public string Language { get; set; }
-        public string Content { get; private set; }
+        public string Content { get; internal set; }
 
         public Dictionary<string, Term> Properties { get; private set; } = new Dictionary<string, Term>();
         public TermStatus Status { get; set; }
@@ -22,6 +23,15 @@ namespace Fabu.Wiktionary.TermProcessing
         public void SetProperty(string key, string content)
         {
             Properties[key] = new Term(key) { Content = content };
+        }
+
+        public void ConvertContent(ITextConverter converter)
+        {
+            if (converter == null)
+                throw new ArgumentNullException("converter");
+            if (String.IsNullOrEmpty(Content))
+                return;
+            Content = converter.ConvertToStructured(Content).ToHtml();
         }
 
         internal Term Clone()

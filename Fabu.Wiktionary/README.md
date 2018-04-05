@@ -49,10 +49,15 @@ Every verb is implemented as a separate command class.
 6. Add statistics to section names: `dotnet run -- graph --in enwiktionary-20180120-pages-articles.xml`
 7. See what happened: `%DUMP_DIR%\sections_dict.json`
 8. WIP: Extract terms: `dotnet run -- extract --in enwiktionary-20180120-pages-articles.xml`
+9. See what happened: `%DUMP_DIR%\templates.json`, `%DUMP_DIR%\nodes.json` - these are all the nodes and templates we need to address to make magic happen.
 
 # Challenges
 
+0. When parsing Wiktionary, you have no means to tell if you did something right or wrong. It is very difficult to test, and sometimes there is just 
+no correct solution. So you need to be creative in how to test your work and make sure not to overcomplicate (maybe I did overcomplicate the 
+section names normalization, but now it looks nice to me now).
 1. Parsing Wikitext is EXTREMELY EXTREMELY SLOW. With no wikitext parsing I get 30k pages per second, with parsing I get up to 500 pages per second.
 All wikitext parsers are based on negligent use of Regular Expressions. I will live with that because I don't need to parse the entire dump 
 all the time, instead I will be careful in what needs to be parsed while debugging, and in prod we don't need very fast updates of the search index.
-2. Parsing Wikitext is very tedious. Very many macroses to address, and in many cases you can't just convert them to HTML (e.g. pronunciation audio files?..)
+2. Parsing Wikitext is very tedious. Very many templates and tags to address, and in many cases you can't just convert them to HTML 
+(e.g. pronunciation audio files?..)
