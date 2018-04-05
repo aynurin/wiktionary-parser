@@ -72,6 +72,21 @@ Of feline animal";
             Assert.Equal(html, result.ToHtml());
         }
 
+        [Fact]
+        public void ShouldProcessUnorderedLists()
+        {
+            var creole = @"Blabla!
+* first item
+* second item
+* third item
+
+Balala!";
+            var html = "<p>Blabla!\r</p><ul><li> first item\r</li><li> second item\r</li><li> third item\r</li></ul><p>\r\nBalala!</p>";
+            var converter = GetConverter();
+            var result = converter.ConvertToStructured(creole);
+            Assert.Equal(html, result.ToHtml());
+        }
+
         // todo: paragraphs
     }
 }

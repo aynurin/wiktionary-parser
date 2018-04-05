@@ -1,9 +1,7 @@
 ﻿using CommandLine;
 using Fabu.Wiktionary.FuzzySearch;
 using Fabu.Wiktionary.TermProcessing;
-using Fabu.Wiktionary.TextConverters;
 using Fabu.Wiktionary.TextConverters.Wiki;
-using Fabu.Wiktionary.TextConverters.WikiMup;
 using Fabu.Wiktionary.Transform;
 using System;
 using System.Collections.Generic;
@@ -44,10 +42,11 @@ namespace Fabu.Wiktionary.Commands
             if (onProgress != null)
                 analyzer.PageProcessed += (sender, e) => { pagesProcessed = e.Index; e.Abort = onProgress(e.Index, args); };
             analyzer.Compute();
-            DumpTool.SaveDump(args.DumpDir, "empty-pages.json", extractor.EmptyResults);
 
-            DumpTool.SaveDump(args.DumpDir, "templates.json", TemplateConverter.ConvertedTemplates.CutOff(0.1).OrderByDescending(kvp => kvp.Value));
-            DumpTool.SaveDump(args.DumpDir, "nodes.json", BaseNodeConverter.ConvertedNodes.CutOff(0.1).OrderByDescending(kvp => kvp.Value));
+            DumpTool.SaveDump(args.DumpDir, "empty-pages.json", extractor.EmptyResults);
+            DumpTool.SaveDump(args.DumpDir, "templates.json", TemplateConverter.ConvertedTemplates.OrderByDescending(kvp => kvp.Value));
+            DumpTool.SaveDump(args.DumpDir, "nodes.json", BaseNodeConverter.ConvertedNodes.OrderByDescending(kvp => kvp.Value));
+
             Console.WriteLine();
             Console.WriteLine($"Pages processed: {pagesProcessed}");
             Console.WriteLine($"Words defined: {extractor.DefinedWords.Count}");

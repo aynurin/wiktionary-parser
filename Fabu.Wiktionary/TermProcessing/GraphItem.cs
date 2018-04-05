@@ -97,40 +97,36 @@ namespace Fabu.Wiktionary.TermProcessing
         /// </remarks>
         internal void DefineTerm()
         {
-            if (_term?.Status == Term.TermStatus.Finalized)
+            if (_term.Status == Term.TermStatus.Finalized)
                 throw new InvalidOperationException("A term has already been created");
             if (_hasDefinedATerm)
                 throw new InvalidOperationException("This item has already defined a term");
             if (!CanDefineTerm)
                 throw new InvalidOperationException("This item cannot define a term");
-            
-            // we will need to redefine the term
-            // to do this, we must mark the original term as void,
-            // so that duplicated terms are not created.
-            // Only the finally defined and never voided terms 
-            // should be saved.
-            _term.Status = Term.TermStatus.Void;
-            _term = _term.Clone();
-            _term.Language = Language;
-            _createdTerms.Add(_term);
 
-            if (_parent != null && !IsLanguage)
+            // If this node can define a term, we need to:
+            _term.Status = Term.TermStatus.Void; // trash the already defined term
+            _term = _term.Clone(); // but inherit all its properties
+            _term.Language = Language;
+            _createdTerms.Add(_term); // and store the new term
+
+            if (_parent != null && !IsLanguage) // languages are all twins
             {
                 foreach (var sibling in _parent._children)
                 {
-                    if (sibling != this && sibling.ItemTitle != this.ItemTitle)
+                    if (sibling != this && sibling.ItemTitle != this.ItemTitle) // not twins
                     {
-                        sibling._term = _term;
+                        sibling._term = _term; // inherit this term
                         ForEachChild(sibling, (p, nephew) => nephew._term = _term);
                     }
                 }
             }
-            ForEachChild(this, (p, child) => child._term = _term);
-            _term.Status = Term.TermStatus.Defined;
+            ForEachChild(this, (p, child) => child._term = _term); // children inherit this term
+            _term.Status = Term.TermStatus.Defined; // redefine the term
             _hasDefinedATerm = true;
 
             if (!IsLanguage)
-                AddMember(_term, this);
+                AddMember(_term, this); // save content of this node to the defined term
         }
 
         internal Term CreateTerm()

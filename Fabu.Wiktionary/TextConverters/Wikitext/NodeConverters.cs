@@ -1,5 +1,6 @@
 ﻿using MwParserFromScratch.Nodes;
 using System;
+using System.Diagnostics;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki
 {
@@ -28,7 +29,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
     {
         private readonly string[] _okTemplates = new string[]
         {
-            //"wikipedia"
+            "wikipedia"
         };
 
         public readonly static Stats<string> ConvertedTemplates = new Stats<string>();
@@ -48,6 +49,25 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         {
             var template = (node as Template).Name.ToPlainText();
             return char.ToUpperInvariant(template[0]).ToString() + template.Substring(1) + "Template";
+        }
+    }
+
+    class ListItemConverter : BaseNodeConverter
+    {
+        public override ConversionResult Convert(Node node, ConversionContext context)
+        {
+            var result = new ConversionResult();
+            var li = node as ListItem;
+            var tag = li.Prefix == "*" ? "ul" : "ol";
+            if (li.PreviousNode == null || li.PreviousNode.GetType() != typeof(ListItem))
+                result.Write($"<{tag}>");
+            result.Write("<li>");
+            if (li.NextNode == null || li.NextNode.GetType() != typeof(ListItem))
+                result.WriteTail($"</li></{tag}>");
+            else
+                result.WriteTail("</li>");
+            result.Node = new Run(li.Inlines);
+            return result;
         }
     }
 

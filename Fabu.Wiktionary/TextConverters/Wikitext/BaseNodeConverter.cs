@@ -20,11 +20,11 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
         public virtual ConversionResult Convert(Node node, ConversionContext context)
         {
-            //if (!_okNodes.Any(type => type == node.GetType()))
-            //    Debugger.Break();
-
-            ConvertedNodes.Add(node.GetType().Name);
-
+            if (!_okNodes.Any(type => type == node.GetType()))
+            {
+                Debugger.Break();
+                ConvertedNodes.Add(node.GetType().Name);
+            }
             return new ConversionResult();
         }
 

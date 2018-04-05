@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Fabu.Wiktionary.Commands
 {
@@ -74,5 +75,5 @@ namespace Fabu.Wiktionary.Commands
             var result = converter.ConvertToStructured(creole);
             Debug.Assert(html == result.ToHtml());
         }
-    }
+    } 
 }

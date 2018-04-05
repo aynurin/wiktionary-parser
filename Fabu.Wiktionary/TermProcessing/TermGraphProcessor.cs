@@ -129,17 +129,17 @@ namespace Fabu.Wiktionary.TermProcessing
 
         public void ProcessGraph(GraphItem item)
         {
-            if (item.CanDefineTerm)
-                item.DefineTerm();
+            if (item.CanDefineTerm) // a fixed subset of sections
+                item.DefineTerm(); // creates an instance of a term
             foreach (var child in item.Children)
             {
                 if (child.IsLanguage)
-                    child.SetLanguage();
-                else if (item.AllowsMember(child))
+                    child.SetLanguage(); // updates this and dependent nodes
+                else if (item.AllowsMember(child)) // subset of sections
                     item.UpdateMember(child);
-                else child.UpdateTerm();
+                else child.UpdateTerm(); // update an existing term
 
-                ProcessGraph(child);
+                ProcessGraph(child); // repeat for the child
             }
         }
 
