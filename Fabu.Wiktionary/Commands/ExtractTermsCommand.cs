@@ -46,6 +46,7 @@ namespace Fabu.Wiktionary.Commands
             DumpTool.SaveDump(args.DumpDir, "empty-pages.json", extractor.EmptyResults);
             DumpTool.SaveDump(args.DumpDir, "templates.json", TemplateConverter.ConvertedTemplates.OrderByDescending(kvp => kvp.Value));
             DumpTool.SaveDump(args.DumpDir, "nodes.json", BaseNodeConverter.ConvertedNodes.OrderByDescending(kvp => kvp.Value));
+            DumpTool.SaveDump(args.DumpDir, "parserTags.json", ParserTagConverter.ConvertedParserTags.OrderByDescending(kvp => kvp.Value));
 
             Console.WriteLine();
             Console.WriteLine($"Pages processed: {pagesProcessed}");

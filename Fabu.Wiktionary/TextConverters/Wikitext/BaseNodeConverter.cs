@@ -22,7 +22,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         {
             if (!_okNodes.Any(type => type == node.GetType()))
             {
-                //Debugger.Break();
+                Debugger.Break();
                 ConvertedNodes.Add(node.GetType().Name);
             }
             return new ConversionResult();

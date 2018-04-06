@@ -19,9 +19,57 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
                 result.Write($"<{tag.Name}>");
             if (tag.Content != null)
                 result.Node = MaybeARun(tag.Content);
+            else result.Node = new PlainText(); // e.g. <br />
             if (writeTags)
                 result.WriteTail($"</{tag.Name}>");
             return result;
+        }
+    }
+
+    class HeadingConverter : BaseNodeConverter
+    {
+        public override ConversionResult Convert(Node node, ConversionContext context)
+        {
+            var heading = node as Heading;
+            var result = new ConversionResult();
+            result.Write($"<h{heading.Level}>");
+            result.Node = heading.Inlines.ToRun();
+            result.WriteTail($"</h{heading.Level}>");
+            return result;
+        }
+    }
+
+    class CommentConverter : BaseNodeConverter
+    {
+        public override ConversionResult Convert(Node node, ConversionContext context)
+        {
+            var result = new ConversionResult();
+            result.Node = new PlainText();
+            return result;
+        }
+    }
+
+    class ParserTagConverter : BaseNodeConverter
+    {
+        public readonly static Stats<string> ConvertedParserTags = new Stats<string>();
+
+        public override ConversionResult Convert(Node node, ConversionContext context)
+        {
+            var parserTag = node as ParserTag;
+            if (parserTag == null)
+                throw new ArgumentException("Node must be an instance of ParserTag");
+            ConvertedParserTags.Add(parserTag.Name);
+
+            var result = new ConversionResult();
+            result.Node = new PlainText(parserTag.Content);
+
+            return result;
+        }
+
+        public override string GetSubstitute(Node node)
+        {
+            var parserTag = (node as ParserTag).Name;
+            return char.ToUpperInvariant(parserTag[0]).ToString() + parserTag.Substring(1) + "ParserTag";
         }
     }
 
@@ -49,6 +97,23 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         {
             var template = (node as Template).Name.ToPlainText();
             return char.ToUpperInvariant(template[0]).ToString() + template.Substring(1) + "Template";
+        }
+    }
+
+    class ExternalLinkConverter : BaseNodeConverter
+    {
+        private const bool WriteExternalLinks = true;
+        public override ConversionResult Convert(Node node, ConversionContext context)
+        {
+            var result = new ConversionResult();
+            var link = node as ExternalLink;
+            if (WriteExternalLinks)
+            {
+                result.Write($"<a href=\"{link.Target.ToPlainText()}\">");
+                result.WriteTail($"</a>");
+            }
+            result.Node = link.Text;
+            return result;
         }
     }
 
