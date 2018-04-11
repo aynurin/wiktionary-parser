@@ -36,12 +36,17 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         {
             var converter = _converterFactory.GetConverter(node);
             var result = converter.Convert(node, context);
-            result.WriteData(writer);
-            node = result.Node ?? node;
-            foreach (var child in node.EnumChildren())
-                BuildAst(child, writer, context);
-            if (!String.IsNullOrEmpty(result.Tail))
-                writer.Write(result.Tail);
+            foreach (var item in result)
+            {
+                var nodeItem = item as Node;
+                if (nodeItem != null)
+                {
+                    foreach (var child in nodeItem.EnumChildren())
+                        BuildAst(child, writer, context);
+                }
+                else
+                    writer.Write(item);
+            }
         }
 
         private static string Escapse(string expr)

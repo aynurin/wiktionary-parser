@@ -60,8 +60,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             var template = node as Template;
             var result = new ConversionResult();
             result.Write("<span class=\"defdate\">");
-            result.WriteTail("</span>");
-            result.Node = template.Arguments.ToRun();
+            result.Write(template.Arguments.ToRun());
+            result.Write("</span>");
             return result;
         }
     }

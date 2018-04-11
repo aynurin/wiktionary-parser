@@ -25,7 +25,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
                 Debugger.Break();
                 ConvertedNodes.Add(node.GetType().Name);
             }
-            return new ConversionResult();
+            var result = new ConversionResult();
+            result.Write(node);
+            return result;
         }
 
         public virtual string GetSubstitute(Node node) => null;
@@ -48,15 +50,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         public bool BoldSwitched { get; set; }
     }
 
-    public class ConversionResult
+    public class ConversionResult : List<object>
     {
-        private readonly List<string> _data = new List<string>();
-
-        public string Tail { get; private set; }
-        public Node Node { get; internal set; }
-
-        public void WriteTail(string tail) => Tail = tail;
-        public void Write(string data) => _data.Add(data);
-        public void WriteData(TextWriter writer) => _data.ForEach(d => writer.Write(d));
+        public void Write(string data) => Add(data);
+        public void Write(Node node) => Add(node);
     }
 }
