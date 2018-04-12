@@ -2,7 +2,7 @@
   "profiles": {
     "Fabu.Wiktionary": {
       "commandName": "Project",
-      "commandLineArgs": "extract --in enwiktionary-20180120-pages-articles.xml --limit 100000"
+      "commandLineArgs": "extract --in enwiktionary-20180120-pages-articles.xml --limit 1000"
     }
   }
 }

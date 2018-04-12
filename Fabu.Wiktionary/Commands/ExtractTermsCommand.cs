@@ -30,11 +30,12 @@ namespace Fabu.Wiktionary.Commands
             var sectionsSearch = new ReverseLevenshteinSearch(sections);
             var languageNames = DumpTool.LoadDump<List<SectionName>>(args.DumpDir, DumpTool.LanguagesDump);
             var languageSearch = new IgnoreCaseSearch<SectionName>(languageNames, _ => _.Name, new SectionNameComparer());
+            var lagnuageCodes = DumpTool.LoadLanguageCodes(args.DumpDir);
 
             var transform = new FixTyposSectionName(languageSearch, sectionsSearch, true);
 
             var wiktionaryDump = DumpTool.LoadWikimediaDump(args.DumpDir, args.WiktionaryDumpFile);
-            var textConverter = new WikitextConverter();
+            var textConverter = new WikitextProcessor(lagnuageCodes);
             var processor = new TermGraphProcessor(transform);
             var extractor = new WiktionaryTermExtractor(processor, textConverter, args.Term);
             var analyzer = new WiktionaryAnalyzer(extractor, wiktionaryDump);
@@ -45,6 +46,7 @@ namespace Fabu.Wiktionary.Commands
 
             DumpTool.SaveDump(args.DumpDir, "empty-pages.json", extractor.EmptyResults);
             DumpTool.SaveDump(args.DumpDir, "templates.json", TemplateConverter.ConvertedTemplates.OrderByDescending(kvp => kvp.Value));
+            DumpTool.SaveDump(args.DumpDir, "template-examples.json", TemplateConverter.TemplatesExamples.Select(kvp => new KeyValuePair<string,IEnumerable<string>>(kvp.Key, kvp.Value.Take(5))));
             DumpTool.SaveDump(args.DumpDir, "nodes.json", BaseNodeConverter.ConvertedNodes.OrderByDescending(kvp => kvp.Value));
             DumpTool.SaveDump(args.DumpDir, "parserTags.json", ParserTagConverter.ConvertedParserTags.OrderByDescending(kvp => kvp.Value));
 

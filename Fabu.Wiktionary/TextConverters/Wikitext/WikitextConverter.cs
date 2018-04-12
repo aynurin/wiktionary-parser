@@ -8,9 +8,17 @@ using System.Text;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki
 {
-    public class WikitextConverter : ITextConverter
+    public class WikitextProcessor : ITextConverter
     {
         private static readonly ConverterFactory _converterFactory = new ConverterFactory();
+        private Dictionary<string, string> _lagnuageCodes;
+
+        public WikitextProcessor(Dictionary<string, string> lagnuageCodes)
+        {
+            _lagnuageCodes = lagnuageCodes;
+        }
+
+        public string Meta { get; set; }
 
         public FormattedString ConvertToStructured(string wikitext)
         {
@@ -26,7 +34,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
             var buffer = new StringBuilder();
             using (var writer = new StringWriter(buffer))
-                BuildAst(ast, writer, new ConversionContext());
+                BuildAst(ast, writer, new ConversionContext() { Meta = Meta, LanguageCodes = _lagnuageCodes });
 
             return new FormattedString(buffer.ToString());
         }

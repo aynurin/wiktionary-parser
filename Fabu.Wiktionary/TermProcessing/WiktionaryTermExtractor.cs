@@ -35,6 +35,9 @@ namespace Fabu.Wiktionary.TermProcessing
             if (!String.IsNullOrWhiteSpace(_onlyTheTerm) && page.Title != _onlyTheTerm)
                 return;
 
+            if (_textConverter is TextConverters.Wiki.WikitextProcessor)
+                ((TextConverters.Wiki.WikitextProcessor)_textConverter).Meta = page.Title;
+
             page.Text = StripHtml.Comments(page.Text);
 
             var graph = _graphProcessor.CreateGraph(page);

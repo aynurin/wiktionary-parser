@@ -48,6 +48,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
     {
         public bool ItalicsSwitched { get; set; }
         public bool BoldSwitched { get; set; }
+
+        public string Meta { get; set; }
+        public Dictionary<string, string> LanguageCodes { get; internal set; }
     }
 
     public class ConversionResult : List<object>

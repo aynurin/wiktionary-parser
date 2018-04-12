@@ -7,6 +7,37 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
     static class WikiNodesExtensions
     {
         /// <summary>
+        /// If the given argument exists and is not empty
+        /// </summary>
+        /// <returns></returns>
+        public static bool ContainsNotEmpty(this TemplateArgumentCollection args, string name)
+            => args != null && args.Contains(name) && !args[name].Value.IsEmpty();
+        /// <summary>
+        /// If the given argument exists and is not empty
+        /// </summary>
+        public static bool ContainsNotEmpty(this TemplateArgumentCollection args, int name)
+            => args != null && args.Contains(name) && !args[name].Value.IsEmpty();
+        /// <summary>
+        /// If wikitext contains more than one like returns wikitext, otherwise returns a run
+        /// </summary>
+        /// <param name="wikitext"></param>
+        /// <returns></returns>
+        public static Node TooSmart(this Wikitext wikitext)
+        {
+            if (wikitext.Lines.Count == 1)
+                return wikitext.Lines.First().Inlines.ToRun();
+            else return wikitext;
+        }
+        /// <summary>
+        /// If wikitext contains anything
+        /// </summary>
+        /// <param name="wikitext"></param>
+        /// <returns></returns>
+        public static bool IsEmpty(this Wikitext wikitext)
+        {
+            return wikitext == null || wikitext.Lines.Count == 0;
+        }
+        /// <summary>
         /// This is a dirty hack to convert all templates if specific converters are not implemented.
         /// </summary>
         /// <remarks>

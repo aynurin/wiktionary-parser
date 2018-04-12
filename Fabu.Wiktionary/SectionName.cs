@@ -55,6 +55,16 @@ namespace Fabu.Wiktionary
         public int Compare(SectionName x, SectionName y) => x.Weight.CompareTo(y.Weight);
     }
 
+    public class Examples : Dictionary<string,List<string>>
+    {
+        public void Add(string key, string example)
+        {
+            if (this.ContainsKey(key))
+                this[key].Add(example);
+            else this.Add(key, new List<string>() { example });
+        }
+    }
+
     public class Stats<TKey> : Dictionary<TKey, double>
     {
         public Stats(IEnumerable<KeyValuePair<TKey, double>> initialData)

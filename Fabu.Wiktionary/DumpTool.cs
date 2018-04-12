@@ -9,6 +9,7 @@ namespace Fabu.Wiktionary
     static class DumpTool
     {
         public const string LanguagesDump = "languages";
+        public const string LanguageCodes = "language_codes.csv";
         public const string SectionsDump = "sections";
         public const string SectionsDictDump = "sections_dict";
         public const string SectionsGraph = "wiktionary_graph";
@@ -45,6 +46,26 @@ namespace Fabu.Wiktionary
             using (var file = File.OpenText(dumpDir))
             using (var reader = new JsonTextReader(file))
                 return _jsonSerializer.Deserialize<T>(reader);
+        }
+
+        // Languages here: https://en.wiktionary.org/wiki/Wiktionary:List_of_languages,_csv_format
+        internal static Dictionary<string,string> LoadLanguageCodes(string dumpDir)
+        {
+            dumpDir = String.IsNullOrWhiteSpace(dumpDir) ? Environment.CurrentDirectory : dumpDir;
+            dumpDir = Path.Combine(dumpDir, LanguageCodes);
+            if (!File.Exists(dumpDir))
+                throw new FileNotFoundException(LanguageCodes);
+            using (var file = File.OpenText(dumpDir))
+            {
+                var line = file.ReadLine();
+                var codes = new Dictionary<string, string>();
+                while ((line = file.ReadLine()) != null)
+                {
+                    var parts = line.Split(';');
+                    codes.Add(parts[1], parts[2]);
+                }
+                return codes;
+            }
         }
 
         private static string FixExtension(string fileName)
