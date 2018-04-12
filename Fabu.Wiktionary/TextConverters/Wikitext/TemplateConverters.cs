@@ -1,55 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using MwParserFromScratch.Nodes;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki
 {
-    static class TemplateArgumentsExtensions
+
+    class TemplateConverter : BaseNodeConverter
     {
-        /// <summary>
-        /// This is a dirty hack to convert all templates if specific converters are not implemented.
-        /// </summary>
-        /// <remarks>
-        /// It ignores template argument names. But for best results this shouldn't be run at all.
-        /// </remarks>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public static Run ToRun(this IEnumerable<TemplateArgument> args)
+        private readonly string[] _okTemplates = new string[]
         {
-            return args.SelectMany(
-                arg => arg.Value.Lines.SelectMany(
-                    line => line.EnumChildren().Select(
-                        n => (InlineNode)n))).ToRun();
+            "wikipedia"
+        };
+
+        public readonly static Stats<string> ConvertedTemplates = new Stats<string>();
+
+        public override ConversionResult Convert(Node node, ConversionContext context)
+        {
+            var template = node as Template;
+            if (template == null)
+                throw new ArgumentException("Node must be an instance of Template");
+            //if (Array.BinarySearch(_okTemplates, template.Name.ToPlainText()) < 0)
+            //    Debugger.Break();
+            var templateNames = GetNames(template.Name.ToPlainText());
+            foreach (var templateName in templateNames)
+                ConvertedTemplates.Add(templateName);
+            return base.Convert(template.Arguments.ToRun(), context);
         }
-        /// <summary>
-        /// This is a dirty hack to convert all templates if specific converters are not implemented.
-        /// </summary>
-        /// <remarks>
-        /// It ignores template argument names. But for best results this shouldn't be run at all.
-        /// </remarks>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public static Run ToRun(this IEnumerable<InlineNode> args)
+
+        private string[] GetNames(string v)
         {
-            return new Run(args);
+            var nameParts = v.Split('-');
+            if (nameParts.Length == 1)
+                return new[] { v };
+            var allNames = new List<string>(nameParts.Length);
+            for (var i = 0; i < nameParts.Length; i++)
+            {
+                var newParts = new string[nameParts.Length];
+                for (var j = 0; j < nameParts.Length; j++)
+                    newParts[j] = j.ToString();
+                newParts[i] = nameParts[i];
+                allNames.Add(String.Join('-', newParts));
+            }
+            return allNames.ToArray();
         }
-        /// <summary>
-        /// This is a dirty hack to convert all templates if specific converters are not implemented.
-        /// </summary>
-        /// <remarks>
-        /// It ignores template argument names. But for best results this shouldn't be run at all.
-        /// </remarks>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public static Run ToRun(this IEnumerable<TagAttribute> args)
+
+        public override string GetSubstitute(Node node)
         {
-            return args.SelectMany(
-                arg => arg.Value.Lines.SelectMany(
-                    line => line.EnumChildren().Select(
-                        n => (InlineNode)n))).ToRun();
+            var template = (node as Template).Name.ToPlainText();
+            return char.ToUpperInvariant(template[0]).ToString() + template.Substring(1) + "Template";
         }
     }
 
