@@ -55,7 +55,52 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
     public class ConversionResult : List<object>
     {
-        public void Write(string data) => Add(data);
-        public void Write(Node node) => Add(node);
+        public void Write(IEnumerable<object> data) => AddItem(data.ToArray());
+        public void Write(params object[] data) => AddItem(data);
+
+        private bool _writeSpaceBeforeNextItem = false;
+
+        private void AddItem(params object[] items)
+        {
+            if (!items.All(i => i is String || i is Node))
+                throw new ArgumentException("Added items must be strings or Nodes");
+
+            if (_writeSpaceBeforeNextItem)
+            {
+                Add(" ");
+                _writeSpaceBeforeNextItem = false;
+            }
+            foreach (var element in items)
+                Add(element);
+        }
+
+        internal void WriteTrailingSpace()
+        {
+            _writeSpaceBeforeNextItem = true;
+        }
+
+        internal void WriteSpaceIfNotEmpty()
+        {
+            if (Count > 0) Add(" ");
+        }
+
+        internal void WriteTemplateArgumentIfExists(Template template, string argName, string followup)
+        {
+            if (template.Arguments.ContainsNotEmpty(argName))
+            {
+                Write(template.Arguments[argName].Value.TooSmart());
+                Write(followup);
+            }
+        }
+
+        internal void WriteTemplateArgumentIfExists(Template template, string argName, string prefix, string followup)
+        {
+            if (template.Arguments.ContainsNotEmpty(argName))
+            {
+                Write(prefix);
+                Write(template.Arguments[argName].Value.TooSmart());
+                Write(followup);
+            }
+        }
     }
 }

@@ -46,7 +46,7 @@ Of feline animal";
         public void ShoudConvertMacros()
         {
             var creole = "A domesticated subspecies (Felis silvestris catus) of feline animal, commonly kept as a house pet. {{defdate|from 8th c.}}";
-            var html = "<p>A domesticated subspecies (Felis silvestris catus) of feline animal, commonly kept as a house pet. <span class=\"defdate\">from 8th c.</span></p>";
+            var html = "<p>A domesticated subspecies (Felis silvestris catus) of feline animal, commonly kept as a house pet. (from 8th c.)</p>";
             var converter = GetConverter();
             var result = converter.ConvertToStructured(creole);
             Assert.Equal(html, result.ToHtml());

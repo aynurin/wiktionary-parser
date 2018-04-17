@@ -24,14 +24,16 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
         private BaseNodeConverter GetConverter(string name)
         {
-            if (_knownConverters.TryGetValue(name, out BaseNodeConverter converter))
-                return converter;
-            else
+            if (!_knownConverters.TryGetValue(name, out BaseNodeConverter converter))
             {
-                converter = LookupConverter(name);
-                if (converter == null)
-                    converter = new BaseNodeConverter();
-                _knownConverters.Add(name, converter);
+                converter = LookupConverter(name) ?? new BaseNodeConverter();
+
+                lock (this)
+                {
+                    if (_knownConverters.TryGetValue(name, out BaseNodeConverter racingConverter))
+                        converter = racingConverter;
+                    else _knownConverters.Add(name, converter);
+                }
             }
             return converter;
         }
