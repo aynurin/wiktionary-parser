@@ -109,9 +109,11 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         {
             var link = node as WikiLink;
             var result = new ConversionResult();
-            result.Write($"<a href=\"{link.Target.ToPlainText()}\">");
+            if (context.AllowLinks)
+                result.Write($"<a href=\"{link.Target.ToPlainText()}\">");
             result.Write(link.Text ?? link.Target);
-            result.Write("</a>");
+            if (context.AllowLinks)
+                result.Write("</a>");
             return result;
         }
     }

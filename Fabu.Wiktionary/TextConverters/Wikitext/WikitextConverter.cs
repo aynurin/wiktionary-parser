@@ -10,12 +10,14 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 {
     public class WikitextProcessor : ITextConverter
     {
-        private static readonly ConverterFactory _converterFactory = new ConverterFactory();
+        private readonly ConverterFactory _converterFactory = new ConverterFactory();
         private Dictionary<string, string> _lagnuageCodes;
+        private readonly bool _allowLinks;
 
-        public WikitextProcessor(Dictionary<string, string> lagnuageCodes)
+        public WikitextProcessor(Dictionary<string, string> lagnuageCodes, bool allowLinks)
         {
             _lagnuageCodes = lagnuageCodes;
+            _allowLinks = allowLinks;
         }
 
         public string Meta { get; set; }
@@ -34,7 +36,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
             var buffer = new StringBuilder();
             using (var writer = new StringWriter(buffer))
-                BuildAst(ast, writer, new ConversionContext() { Meta = Meta, LanguageCodes = _lagnuageCodes });
+                BuildAst(ast, writer, new ConversionContext() { Meta = Meta, LanguageCodes = _lagnuageCodes, AllowLinks = _allowLinks });
 
             return new FormattedString(buffer.ToString());
         }
@@ -57,12 +59,12 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             }
         }
 
-        private static string Escapse(string expr)
+        private string Escapse(string expr)
         {
             return expr.Replace("\r", "\\r").Replace("\n", "\\n");
         }
 
-        private static void PrintAst(Node node, int level)
+        private void PrintAst(Node node, int level)
         {
             var indension = new string('.', level);
             var printText = node.ToString();

@@ -7,7 +7,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 {
     public class ConverterFactory
     {
-        private static Dictionary<string, BaseNodeConverter> _knownConverters = new Dictionary<string, BaseNodeConverter>();
+        private Dictionary<string, BaseNodeConverter> _knownConverters = new Dictionary<string, BaseNodeConverter>();
 
         public BaseNodeConverter GetConverter(Node node)
         {

@@ -51,6 +51,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
         public string Meta { get; set; }
         public Dictionary<string, string> LanguageCodes { get; internal set; }
+        public bool AllowLinks { get; internal set; }
     }
 
     public class ConversionResult : List<object>

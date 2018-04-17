@@ -35,7 +35,7 @@ namespace Fabu.Wiktionary.Commands
             var transform = new FixTyposSectionName(languageSearch, sectionsSearch, true);
 
             var wiktionaryDump = DumpTool.LoadWikimediaDump(args.DumpDir, args.WiktionaryDumpFile);
-            var textConverter = new WikitextProcessor(lagnuageCodes);
+            var textConverter = new WikitextProcessor(lagnuageCodes, false);
             var processor = new TermGraphProcessor(transform);
             var extractor = new WiktionaryTermExtractor(processor, textConverter, args.Term);
             var analyzer = new WiktionaryAnalyzer(extractor, wiktionaryDump);
