@@ -221,4 +221,25 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
         private List<object> _items = new List<object>();
     }
+    class QuoteBookTemplateConverter : QuoteTemplateConverter
+    {
+    }
+    class QuoteJournalTemplateConverter : QuoteTemplateConverter
+    {
+    }
+    class QuoteSongTemplateConverter : QuoteTemplateConverter
+    {
+    }
+    class QuoteVideoTemplateConverter : QuoteTemplateConverter
+    {
+    }
+    class QuoteWebTemplateConverter : QuoteTemplateConverter
+    {
+    }
+    class QuoteNewsgroupTemplateConverter : QuoteTemplateConverter
+    {
+    }
+    class QuoteTextTemplateConverter : QuoteTemplateConverter
+    {
+    }
 }
