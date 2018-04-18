@@ -22,7 +22,10 @@ namespace Fabu.Wiktionary.Tests.TextConverters
             { "gem-pro", "Proto-Germanic" },
             { "ine-pro", "Proto-Indo-European" },
             { "nl", "Dutch" },
-            { "osx", "Old Saxon" }
+            { "osx", "Old Saxon" },
+            { "da", "Danish" },
+            { "sv", "Swedish" },
+            { "no", "Norwegian" }
         };
 
         private string Convert(string creole, bool allowLinks = true)
@@ -164,6 +167,14 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "from {{m|la|dictus}}";
             var html = "<p>from dictus</p>";
+            Assert.Equal(html, Convert(creole));
+        }
+
+        [Fact]
+        public void ShouldConvertCog()
+        {
+            var creole = ", {{cog|da|-}}, {{cog|sv|-}} and {{cog|no|fri||free}}.";
+            var html = "<p>, Danish, Swedish and Norwegian <em>fri</em> (&ldquo;free&rdquo;).</p>";
             Assert.Equal(html, Convert(creole));
         }
     }

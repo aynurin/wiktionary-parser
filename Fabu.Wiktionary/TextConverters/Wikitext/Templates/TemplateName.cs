@@ -85,7 +85,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             { "...", "ellipsis" },
             { "quote-magazine", "quote-journal" },
             { "quote-news", "quote-journal" },
-            { "a", "accent" }
+            { "a", "accent" },
+            { "cog", "cognate" }
         };
 
         internal static string FullName(string template)
