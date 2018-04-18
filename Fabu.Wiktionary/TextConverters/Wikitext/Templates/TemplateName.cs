@@ -84,7 +84,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             { "inh", "inherited" },
             { "...", "ellipsis" },
             { "quote-magazine", "quote-journal" },
-            { "quote-news", "quote-journal" }
+            { "quote-news", "quote-journal" },
+            { "a", "accent" }
         };
 
         internal static string FullName(string template)

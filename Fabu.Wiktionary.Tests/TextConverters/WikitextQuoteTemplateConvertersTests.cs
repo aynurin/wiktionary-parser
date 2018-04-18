@@ -118,5 +118,21 @@ namespace Fabu.Wiktionary.Tests.TextConverters
             var html = "<p>1975, IPC Building & Contract Journals Ltd, <em>Highways & road construction</em>: &ldquo;To my mind, transportation engineering is similar to flying in the 1930s — it has been <strong>about</strong> for some time but it has taken the present economic jolt to shake it out of its infancy, in the same way that the war started the development of flying to its current stage.&rdquo;</p>";
             Assert.Equal(html, Convert(creole));
         }
+
+        [Fact]
+        public void ShouldConvertAccentRP()
+        {
+            var creole = "{{a|RP}} {{IPA|/ˈdɪkʃ(ə)n(ə)ɹi/|lang=en}}";
+            var html = "<p>(Received Pronunciation) IPA: /ˈdɪkʃ(ə)n(ə)ɹi/</p>";
+            Assert.Equal(html, Convert(creole));
+        }
+
+        [Fact]
+        public void ShouldConvertAccentGenAmCanada()
+        {
+            var creole = "{{a|GenAm|Canada}} {{IPA|/ˈdɪkʃənɛɹi/|lang=en}}";
+            var html = "<p>(General American, Canada) IPA: /ˈdɪkʃənɛɹi/</p>";
+            Assert.Equal(html, Convert(creole));
+        }
     }
 }
