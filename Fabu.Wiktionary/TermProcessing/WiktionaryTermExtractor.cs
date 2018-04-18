@@ -35,9 +35,6 @@ namespace Fabu.Wiktionary.TermProcessing
             if (!String.IsNullOrWhiteSpace(_onlyTheTerm) && page.Title != _onlyTheTerm)
                 return;
 
-            if (_textConverter is TextConverters.Wiki.WikitextProcessor)
-                ((TextConverters.Wiki.WikitextProcessor)_textConverter).Meta = page.Title;
-
             page.Text = StripHtml.Comments(page.Text);
 
             var graph = _graphProcessor.CreateGraph(page);
@@ -50,20 +47,21 @@ namespace Fabu.Wiktionary.TermProcessing
             var termsDefined = graph.GetItems(Term.TermStatus.Defined);
             if (termsDefined.Count == 0 && graph.AllItems.Any(i => i.Language == "English"))
                 EmptyResults.Add(page.Title);
-            ConvertContent(termsDefined);
+            ConvertContent(page.Title, null, termsDefined);
             var dictword = new DictionaryWord(page.Title, termsDefined);
             DefinedWords.Add(dictword);
         }
 
-        private void ConvertContent(IEnumerable<Term> terms)
+        private void ConvertContent(string pageTitle, string sectionName, IEnumerable<Term> terms)
         {
             if (terms == null || _textConverter == null)
                 return;
 
             foreach (var term in terms)
             {
-                term.ConvertContent(_textConverter);
-                ConvertContent(term.Properties.Values);
+                var args = new ContextArguments() { PageTitle = pageTitle, SectionName = sectionName };
+                term.ConvertContent(args, _textConverter);
+                ConvertContent(pageTitle, sectionName ?? term.Title, term.Properties.Values);
             }
         }
 

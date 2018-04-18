@@ -1,10 +1,18 @@
-﻿using Fabu.Wiktionary.TextConverters.Wiki;
-
-namespace Fabu.Wiktionary.TextConverters
+﻿namespace Fabu.Wiktionary.TextConverters
 {
     public interface ITextConverter
     {
-        FormattedString ConvertToStructured(string wikitext);
+        FormattedString ConvertToStructured(ContextArguments args, string wikitext);
+    }
+
+    public class ContextArguments
+    {
+        public ContextArguments()
+        {
+        }
+
+        public string PageTitle { get; set; }
+        public string SectionName { get; set; }
     }
 
     /// <summary>

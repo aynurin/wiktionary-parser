@@ -24,6 +24,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         private static string[] _voidTemplates = new string[]
         {
             "PIE root" // https://en.wiktionary.org/wiki/Template:PIE_root
+            ,"rhymes"
         };
 
         public readonly static Stats<string> ConvertedTemplates = new Stats<string>();
@@ -40,7 +41,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             var templateNames = name.GetNameParts();
             foreach (var templateName in templateNames)
                 ConvertedTemplates.Add(templateName);
-            TemplatesExamples.Add(name.OriginalName, context.Meta + ":" + template.ToString());
+            TemplatesExamples.Add(name.OriginalName, context.Arguments.PageTitle + ":" + template.ToString());
 
             var result = new ConversionResult();
             result.Write(template.Arguments.ToRun());

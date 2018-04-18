@@ -20,9 +20,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             _allowLinks = allowLinks;
         }
 
-        public string Meta { get; set; }
+        public string PageTitle { get; set; }
 
-        public FormattedString ConvertToStructured(string wikitext)
+        public FormattedString ConvertToStructured(ContextArguments args, string wikitext)
         {
             if (wikitext == null)
                 return null;
@@ -31,12 +31,13 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
             var parser = new WikitextParser();
             var ast = parser.Parse(wikitext.TrimEnd());
+            var context = new ConversionContext(args, _lagnuageCodes, _allowLinks);
 
             //PrintAst(ast, 0);
 
             var buffer = new StringBuilder();
             using (var writer = new StringWriter(buffer))
-                BuildAst(ast, writer, new ConversionContext() { Meta = Meta, LanguageCodes = _lagnuageCodes, AllowLinks = _allowLinks });
+                BuildAst(ast, writer, context);
 
             return new FormattedString(buffer.ToString());
         }

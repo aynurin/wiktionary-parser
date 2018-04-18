@@ -28,7 +28,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         private string Convert(string creole, bool allowLinks = false)
         {
             var converter = new WikitextProcessor(_dictionary, allowLinks);
-            return converter.ConvertToStructured(creole).ToHtml();
+            return converter.ConvertToStructured(new ContextArguments() { PageTitle = "TEST", SectionName = "TEST" }, creole).ToHtml();
         }
 
         [Fact]

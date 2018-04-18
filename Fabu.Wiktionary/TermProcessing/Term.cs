@@ -25,13 +25,13 @@ namespace Fabu.Wiktionary.TermProcessing
             Properties[key] = new Term(key) { Content = content };
         }
 
-        public void ConvertContent(ITextConverter converter)
+        public void ConvertContent(ContextArguments args, ITextConverter converter)
         {
             if (converter == null)
                 throw new ArgumentNullException("converter");
             if (String.IsNullOrEmpty(Content))
                 return;
-            Content = converter.ConvertToStructured(Content).ToHtml();
+            Content = converter.ConvertToStructured(args, Content).ToHtml();
         }
 
         internal Term Clone()

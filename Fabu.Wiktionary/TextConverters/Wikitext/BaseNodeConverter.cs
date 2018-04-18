@@ -49,9 +49,21 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         public bool ItalicsSwitched { get; set; }
         public bool BoldSwitched { get; set; }
 
-        public string Meta { get; set; }
-        public Dictionary<string, string> LanguageCodes { get; internal set; }
-        public bool AllowLinks { get; internal set; }
+        public ContextArguments Arguments { get; private set; }
+        public Dictionary<string, string> LanguageCodes { get; private set; }
+        public bool AllowLinks { get; private set; }
+
+        public ConversionContext(ContextArguments args, Dictionary<string, string> languageCodes, bool allowLinks)
+        {
+            Arguments = args;
+            LanguageCodes = languageCodes;
+            AllowLinks = allowLinks;
+        }
+
+        internal void AddPronunciation(string language, string v, Wikitext text)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class ConversionResult : List<object>

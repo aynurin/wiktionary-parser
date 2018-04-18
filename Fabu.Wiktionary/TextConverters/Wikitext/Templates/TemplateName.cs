@@ -80,6 +80,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             { "m", "mention" },
             { "l", "mention" },
             { "der", "derived" },
+            { "bor", "derived" },
+            { "borrowed", "derived" },
             { "lb", "label" },
             { "lbl", "label" },
             { "ipa", "IPA" },
@@ -89,7 +91,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             { "quote-news", "quote-journal" },
             { "a", "accent" },
             { "cog", "cognate" },
-            { "ux", "usage" }
+            { "ux", "usage" },
+            { "w", "wikipedia" }
         };
 
         internal static string FullName(string template)
