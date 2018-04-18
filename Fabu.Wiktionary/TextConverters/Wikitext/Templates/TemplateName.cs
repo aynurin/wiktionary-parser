@@ -10,7 +10,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         public string[] AllParts { get; private set; }
         public string OriginalName { get; set; }
         public string Language { get; set; }
-        public bool IsPOSTemplate { get; set; }
+        public bool IsHeadTemplate { get; set; }
 
         private static string[] _acceleratedPosTemplates = new string[]
         {
@@ -34,6 +34,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             if (nameParts.Length == 1)
             {
                 name.Name = originalName;
+                if (name.Name == "head")
+                    name.IsHeadTemplate = true;
                 return name;
             }
 
@@ -44,7 +46,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             {
                 name.Name = nameParts[1];
                 name.AllParts = nameParts;
-                name.IsPOSTemplate = true;
+                name.IsHeadTemplate = true;
                 return name;
             }
 

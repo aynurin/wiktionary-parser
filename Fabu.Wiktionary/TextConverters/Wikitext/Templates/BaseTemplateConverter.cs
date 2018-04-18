@@ -34,7 +34,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             if (Array.BinarySearch(_voidTemplates, name.Name) >= 0)
                 return new ConversionResult();
 
-            if (name.IsPOSTemplate)
+            if (name.IsHeadTemplate)
                 return new ConversionResult();
 
             var templateNames = name.GetNameParts();
