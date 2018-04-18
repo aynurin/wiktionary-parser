@@ -62,4 +62,13 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         //    QuoteListItem.Emphasis("album")
         //};
     }
+    class QuoteTextTemplateConverter : QuoteTemplateConverter
+    {
+        //protected override IEnumerable<QuoteListItem> GetAttrs() => new QuoteListItem[] {
+        //    "year",
+        //    "actor",
+        //    QuoteListItem.Quoted("title"),
+        //    QuoteListItem.Emphasis("album")
+        //};
+    }
 }

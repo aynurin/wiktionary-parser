@@ -82,7 +82,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             { "lbl", "label" },
             { "ipa", "IPA" },
             { "inh", "inherited" },
-            { "...", "ellipsis" }
+            { "...", "ellipsis" },
+            { "quote-magazine", "quote-journal" },
+            { "quote-news", "quote-journal" }
         };
 
         internal static string FullName(string template)

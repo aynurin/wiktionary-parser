@@ -110,5 +110,13 @@ namespace Fabu.Wiktionary.Tests.TextConverters
             var html = "<p>2008 March 16, Peter da Silva, &ldquo;Re:Microsoft versus Digital Equipment Corporation&rdquo;, in <em>alt.folklore.computers</em>: &ldquo;[&hellip;] otherwise the pager needs to start doing a bunch of unnecessary <strong>yak shaving</strong>.&rdquo;</p>";
             Assert.Equal(html, Convert(creole));
         }
+
+        [Fact]
+        public void ShouldConvertQuoteText()
+        {
+            var creole = "{{quote-text|year=1975|author=IPC Building & Contract Journals Ltd|title=Highways & road construction|volume=43|passage=To my mind, transportation engineering is similar to flying in the 1930s — it has been '''about''' for some time but it has taken the present economic jolt to shake it out of its infancy, in the same way that the war started the development of flying to its current stage.}}";
+            var html = "<p>1975, IPC Building & Contract Journals Ltd, <em>Highways & road construction</em>: &ldquo;To my mind, transportation engineering is similar to flying in the 1930s — it has been <strong>about</strong> for some time but it has taken the present economic jolt to shake it out of its infancy, in the same way that the war started the development of flying to its current stage.&rdquo;</p>";
+            Assert.Equal(html, Convert(creole));
+        }
     }
 }
