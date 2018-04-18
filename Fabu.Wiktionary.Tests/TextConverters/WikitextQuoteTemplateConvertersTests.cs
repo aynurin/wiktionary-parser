@@ -70,5 +70,45 @@ namespace Fabu.Wiktionary.Tests.TextConverters
             var html = "<p>1968 summer, Hayden Carruth, &ldquo;Making It New&rdquo;, in <em>The Hudson Review</em>, New York, N.Y.: Hudson Review, Inc.: &ldquo;In his [Galway Kinnell's] new book, <em>Body Rags</em>, he has brought this style to a kind of perfection, especially in two poems about the killing of animals, \"The Porcupine\" and \"The Bear.\" These are the <strong>grisliest</strong> poems I have ever read.&rdquo;</p>";
             Assert.Equal(html, Convert(creole));
         }
+
+        [Fact]
+        public void ShouldConvertQuoteJournal()
+        {
+            var creole = "{{quote-journal|title=Art VIII.—Who are the True Conservatives?|journal=The Quarterly Christian Spectator|location=New Haven, Conn.|publisher=Published for the proprietor by Hezekiah Howe [...]|month=November|year=1838|volume=X|issue=IV|page=608|pageurl=https://books.google.com/books?id=S7MAAAAAMAAJ&pg=PA608|oclc=5090641|passage=They have guarded a few minds against '''sciolism''' and pretension in philosophy, and they have given a new and more imposing air to '''sciolism''' itself, and placed in the hands of the charlatan enchantments and magical arts, which hold fast its victims with a potency never granted to an inferior spell. There is no '''sciolism''' now which is more dangerous than that which is so very careful to inform us of its entire freedom from all that is superficial, {{...}}}}";
+            var html = "<p>1838 November, &ldquo;Art VIII.—Who are the True Conservatives?&rdquo;, in <em>The Quarterly Christian Spectator</em>, New Haven, Conn.: Published for the proprietor by Hezekiah Howe [...]: &ldquo;They have guarded a few minds against <strong>sciolism</strong> and pretension in philosophy, and they have given a new and more imposing air to <strong>sciolism</strong> itself, and placed in the hands of the charlatan enchantments and magical arts, which hold fast its victims with a potency never granted to an inferior spell. There is no <strong>sciolism</strong> now which is more dangerous than that which is so very careful to inform us of its entire freedom from all that is superficial, [&hellip;]&rdquo;</p>";
+            Assert.Equal(html, Convert(creole));
+        }
+
+        [Fact]
+        public void ShouldConvertQuoteSong()
+        {
+            var creole = "{{quote-song|author=[[w:Madonna (entertainer)|Madonna]]; {{w|Stephen Bray}}; {{w|Patrick Leonard}}|artist=Madonna|title=Where's the Party|album=[[w:True Blue (Madonna album)|True Blue]]|year=1986|note=track 5|passage=Don't want to grow old too fast / Don't want to let the '''system''' get me down / I've got to find a way to make the good times last / And if you'll show me how, I'm ready now}}";
+            var html = "<p>1986, Madonna; Stephen Bray; Patrick Leonard, &ldquo;Where's the Party&rdquo;, in <em>True Blue</em>, performed by Madonna: &ldquo;Don't want to grow old too fast / Don't want to let the <strong>system</strong> get me down / I've got to find a way to make the good times last / And if you'll show me how, I'm ready now&rdquo;</p>";
+            Assert.Equal(html, Convert(creole));
+        }
+
+        [Fact]
+        public void ShouldConvertQuoteVideo()
+        {
+            var creole = "{{quote-video|actor={{w|Jay Mohr}}|role=Bob Sugar|title={{w|Jerry Maguire}}|writer={{w|Cameron Crowe}}|location=Culver City, Calif.|publisher={{w|TriStar Pictures}}; distributed by [[w:Sony Pictures Home Entertainment|Columbia TriStar Home Video]]|year=1996|year_published=1997|isbn=978-0-8001-4174-5|passage=It's also my job to take care of the '''skanks''' on the road that you bang.}}";
+            var html = "<p>1996, Jay Mohr as Bob Sugar, <em>Jerry Maguire</em>, written by Cameron Crowe, Culver City, Calif.: TriStar Pictures; distributed by Columbia TriStar Home Video: &ldquo;It's also my job to take care of the <strong>skanks</strong> on the road that you bang.&rdquo;</p>";
+            Assert.Equal(html, Convert(creole));
+        }
+
+        [Fact]
+        public void ShouldConvertQuoteWeb()
+        {
+            var creole = "{{quote-web|title=Why you should read the Madicken (Mardie) books|url=http://kattahj.tumblr.com/post/72567245752/i-made-a-presentation-on-madicken-because|work=Market Chipping|format=blog|date=7 January 2014|accessdate=8 March 2016|passage=Let me tell you about Madicken. (Mardie in English. Or Meg, but that’s in the American translation and that’s '''bowdlerized''' and you should never read it.)}}";
+            var html = "<p>2014 January 7, &ldquo;Why you should read the Madicken (Mardie) books&rdquo;, in <em>Market Chipping</em>, retrieved 8 March 2016: &ldquo;Let me tell you about Madicken. (Mardie in English. Or Meg, but that’s in the American translation and that’s <strong>bowdlerized</strong> and you should never read it.)&rdquo;</p>";
+            Assert.Equal(html, Convert(creole));
+        }
+
+        [Fact]
+        public void ShouldConvertQuoteNewsgroup()
+        {
+            var creole = "{{quote-newsgroup|author=Peter da Silva|title=Re:Microsoft versus Digital Equipment Corporation|newsgroup=alt.folklore.computers|id=g0hq1u$2hkn$3@monolith.in.taronga.com|url=http://groups.google.com/group/alt.folklore.computers/msg/032c30495567b213|date=16 March 2008|passage={{...}} otherwise the pager needs to start doing a bunch of unnecessary '''yak shaving'''.}}";
+            var html = "<p>2008 March 16, Peter da Silva, &ldquo;Re:Microsoft versus Digital Equipment Corporation&rdquo;, in <em>alt.folklore.computers</em>: &ldquo;[&hellip;] otherwise the pager needs to start doing a bunch of unnecessary <strong>yak shaving</strong>.&rdquo;</p>";
+            Assert.Equal(html, Convert(creole));
+        }
     }
 }

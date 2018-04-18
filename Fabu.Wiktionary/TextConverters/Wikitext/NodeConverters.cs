@@ -55,7 +55,10 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             var link = node as ExternalLink;
             if (WriteExternalLinks)
                 result.Write($"<a href=\"{link.Target.ToPlainText()}\">");
-            result.Write(link.Text);
+            if (link.Text != null)
+                result.Write(link.Text);
+            else if (WriteExternalLinks)
+                result.Write(link.Target);
             if (WriteExternalLinks)
                 result.Write($"</a>");
             return result;
