@@ -23,7 +23,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
     {
         private static string[] _voidTemplates = new string[]
         {
-            "PIE root" // https://en.wiktionary.org/wiki/Template:PIE_root
+            "hyphenation"
+            , "PIE root" // https://en.wiktionary.org/wiki/Template:PIE_root
             ,"rhymes"
         };
 

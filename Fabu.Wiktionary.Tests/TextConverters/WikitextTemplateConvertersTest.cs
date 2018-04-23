@@ -2,6 +2,7 @@
 using Fabu.Wiktionary.TextConverters.Wiki;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -28,10 +29,11 @@ namespace Fabu.Wiktionary.Tests.TextConverters
             { "no", "Norwegian" }
         };
 
-        private string Convert(string creole, bool allowLinks = true)
+        private FormattedString Convert(string creole, bool allowLinks = true, string sectionName = "TEST")
         {
             var converter = new WikitextProcessor(_dictionary, allowLinks);
-            return converter.ConvertToStructured(new ContextArguments() { PageTitle = "TEST", SectionName = "TEST" }, creole).ToHtml();
+            var formatted = converter.ConvertToStructured(new ContextArguments() { PageTitle = "TEST", SectionName = sectionName }, creole);
+            return formatted;
         }
 
         [Fact]
@@ -39,7 +41,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "{{ipa|/boːk/|lang=li}}";
             var html = "<p>IPA: /boːk/</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -47,7 +49,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "{{ipa|/boːk/|[boːk]|lang=li}}";
             var html = "<p>IPA: /boːk/, [boːk]</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -55,7 +57,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "blabla {{lb|en|here we are}} albalb";
             var html = "<p>blabla (English, here we are) albalb</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -63,7 +65,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "blabla {{lb|en|one|or|another}} albalb";
             var html = "<p>blabla (English, one or another) albalb</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -71,7 +73,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "blabla {{lb|en|one|_|another}} albalb";
             var html = "<p>blabla (English, one another) albalb</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -79,7 +81,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "blabla {{lb|en|one|also|another}} albalb";
             var html = "<p>blabla (English, one, also another) albalb</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -87,7 +89,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "blabla {{lb|en|one|&|another}} albalb";
             var html = "<p>blabla (English, one and another) albalb</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -95,7 +97,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "blabla {{lb|en|one|;|another}} albalb";
             var html = "<p>blabla (English, one; another) albalb</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -103,7 +105,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "blabla {{lb|en|one|extremely|another}} albalb";
             var html = "<p>blabla (English, one, extremely another) albalb</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -111,7 +113,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "blabla {{lb|en|one|humorously|another}} albalb";
             var html = "<p>blabla (English, one, humorously another) albalb</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -119,7 +121,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "From {{inh|nds|gml|vrîe}}, variant";
             var html = "<p>From Middle Low German <em>vrîe</em>, variant</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -127,7 +129,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "From {{inh|de|gmh}}, {{inh|de|goh|frī}}, from {{inh|de|gem-pro|*frijaz}}, From {{inh|pdc|goh|frī}}";
             var html = "<p>From Middle High German, Old High German <em>frī</em>, from Proto-Germanic <em>*frijaz</em>, From Old High German <em>frī</em></p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -135,7 +137,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "From {{inh|nds|gml|vrîe}}, variant of {{m|gml|vrî}}, from {{der|nds|osx|frī}}, from {{der|nds|gem-pro|*frijaz}}, from {{der|nds|ine-pro|*prey||new}}. Compare Dutch {{m|nl|vrij}}, West Frisian {{m|fy|frij}}, English {{m|en|free}}, German {{m|de|frei}}.";
             var html = "<p>From Middle Low German <em>vrîe</em>, variant of vrî, from Old Saxon <em>frī</em>, from Proto-Germanic <em>*frijaz</em>, from Proto-Indo-European <em>*prey</em> (&ldquo;new&rdquo;). Compare Dutch vrij, West Frisian frij, English free, German frei.</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -143,7 +145,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "from {{der|en|la|dictionarius}}, ";
             var html = "<p>from Latin <em>dictionarius</em>,</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -151,7 +153,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "from {{der|en|ang|frēo||free}}, ";
             var html = "<p>from Old English <em>frēo</em> (&ldquo;free&rdquo;),</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -159,7 +161,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "from {{m|la|dictio||speaking}},";
             var html = "<p>from dictio (&ldquo;speaking&rdquo;),</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -167,7 +169,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = "from {{m|la|dictus}}";
             var html = "<p>from dictus</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -175,7 +177,28 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             var creole = ", {{cog|da|-}}, {{cog|sv|-}} and {{cog|no|fri||free}}.";
             var html = "<p>, Danish, Swedish and Norwegian <em>fri</em> (&ldquo;free&rdquo;).</p>";
-            Assert.Equal(html, Convert(creole));
+            Assert.Equal(html, Convert(creole).ToHtml());
+        }
+
+        [Fact]
+        public void ShouldConvertAudio()
+        {
+            /*
+      "dictionary:{{audio|en-us-dictionary.ogg|Audio (US)|lang=en}}",
+      "dictionary:{{audio|en-uk-dictionary.ogg|Audio (UK)|lang=en}}",
+      "free:{{audio|en-us-free.ogg|Audio (US)|lang=en}}",
+      "free:{{audio|En-uk-free.ogg|Audio (UK)|lang=en}}",
+      "encyclopedia:{{audio|en-us-encyclopedia.ogg|Audio (US)|lang=en}}"*/
+
+            var creole = ", {{audio|en-us-dictionary.ogg|Audio (US)|lang=en}}.";
+            var html = "<p>, .</p>";
+            var formatted = Convert(creole, sectionName: "Pronunciation");
+            Assert.Equal(html, formatted.ToHtml());
+            Assert.Single(formatted.Proninciations);
+            var pron = formatted.Proninciations.First();
+            Assert.Equal("Audio (US)", pron.Label);
+            Assert.Equal("English", pron.Language);
+            Assert.Equal("en-us-dictionary.ogg", pron.FileName);
         }
     }
 }

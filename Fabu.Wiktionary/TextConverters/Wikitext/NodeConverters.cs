@@ -1,6 +1,8 @@
 ﻿using MwParserFromScratch.Nodes;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki
 {
@@ -74,13 +76,32 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             var tag = li.Prefix == "*" ? "ul" : "ol";
             if (li.PreviousNode == null || li.PreviousNode.GetType() != typeof(ListItem))
                 result.Write($"<{tag}>");
-            result.Write("<li>");
-            result.Write(new Run(li.Inlines));
-            if (li.NextNode == null || li.NextNode.GetType() != typeof(ListItem))
-                result.Write($"</li></{tag}>");
-            else
+
+            List<InlineNode> inlines = GetInlines(li.Inlines);
+
+            if (inlines.Count > 0)
+            {
+                result.Write("<li>");
+                result.Write(new Run(inlines));
                 result.Write("</li>");
+            }
+
+            if (li.NextNode == null || li.NextNode.GetType() != typeof(ListItem))
+                result.Write($"</{tag}>");
+
             return result;
+        }
+
+        private static List<InlineNode> GetInlines(IEnumerable<InlineNode> rawinlines)
+        {
+            var inlines = new List<InlineNode>(rawinlines);
+            // the first node can be the space that goes after list item specifier (*_blabla), which we should avoid
+            if (inlines[0].GetType() == typeof(PlainText) && String.IsNullOrWhiteSpace(inlines[0].ToString()))
+                inlines.RemoveAt(0);
+            var lastIndex = inlines.Count-1;
+            if (lastIndex > 0 && inlines[lastIndex].GetType() == typeof(PlainText) && String.IsNullOrWhiteSpace(inlines[lastIndex].ToString()))
+                inlines.RemoveAt(lastIndex);
+            return inlines;
         }
     }
 
@@ -89,9 +110,12 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         public override ConversionResult Convert(Node node, ConversionContext context)
         {
             var result = new ConversionResult();
-            result.Write("<p>");
-            result.Write(node);
-            result.Write("</p>");
+            if (node.ToString().Trim().Length > 0)
+            {
+                result.Write("<p>");
+                result.Write(node);
+                result.Write("</p>");
+            }
             return result;
         }
     }

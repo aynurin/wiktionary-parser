@@ -89,6 +89,15 @@ Balala!";
             Assert.Equal(html, result);
         }
 
+        [Fact]
+        public void ShoudConvertEmptyLinebreak()
+        {
+            var creole = "\r\n";
+            var html = "";
+            var result = Convert(creole);
+            Assert.Equal(html, result);
+        }
+
         // todo: paragraphs
     }
 }

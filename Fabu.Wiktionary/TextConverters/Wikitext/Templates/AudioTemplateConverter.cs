@@ -21,12 +21,12 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
                 fileName = (template.Arguments[1].Value);
             if (template.Arguments.ContainsNotEmpty("lang"))
             {
-                if (!context.LanguageCodes.TryGetValue(template.Arguments["lang"].ToString(), out language))
-                    language = null;
+                if (!context.LanguageCodes.TryGetValue(template.Arguments["lang"].Value.ToString(), out language))
+                    language = template.Arguments["lang"].Value.ToString();
             }
 
             if (context.Arguments.SectionName == "Pronunciation")
-                context.AddPronunciation(language, fileName.ToString(), text);
+                context.AddPronunciation(language, fileName.ToString(), text.ToString());
 
             if (template.Name.ToString() == "audio-IPA" && text != null)
             {

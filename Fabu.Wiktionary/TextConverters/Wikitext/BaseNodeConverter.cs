@@ -53,6 +53,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         public Dictionary<string, string> LanguageCodes { get; private set; }
         public bool AllowLinks { get; private set; }
 
+        public List<Proninciation> Proninciations { get; private set; } = new List<Proninciation>();
+
         public ConversionContext(ContextArguments args, Dictionary<string, string> languageCodes, bool allowLinks)
         {
             Arguments = args;
@@ -60,9 +62,23 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             AllowLinks = allowLinks;
         }
 
-        internal void AddPronunciation(string language, string v, Wikitext text)
+        internal void AddPronunciation(string language, string fileName, string label)
         {
-            throw new NotImplementedException();
+            Proninciations.Add(new Proninciation(language, fileName, label));
+        }
+    }
+
+    public class Proninciation
+    {
+        public string Language { get; }
+        public string FileName { get; }
+        public string Label { get; }
+
+        public Proninciation(string language, string fileName, string label)
+        {
+            Language = language;
+            FileName = fileName;
+            Label = label;
         }
     }
 

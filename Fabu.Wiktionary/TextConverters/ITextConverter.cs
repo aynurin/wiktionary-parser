@@ -1,4 +1,7 @@
-﻿namespace Fabu.Wiktionary.TextConverters
+﻿using System.Collections.Generic;
+using Fabu.Wiktionary.TextConverters.Wiki;
+
+namespace Fabu.Wiktionary.TextConverters
 {
     public interface ITextConverter
     {
@@ -21,16 +24,19 @@
     public class FormattedString
     {
         private readonly string _data;
+        private readonly List<Wiki.Proninciation> _proninciations;
 
-        public FormattedString(string data)
+        public FormattedString(string data, List<Wiki.Proninciation> proninciations)
         {
             _data = data;
+            _proninciations = proninciations;
         }
+
+        public List<Proninciation> Proninciations => _proninciations;
 
         public string ToHtml()
         {
             return _data;
-            ;
         }
     }
 }

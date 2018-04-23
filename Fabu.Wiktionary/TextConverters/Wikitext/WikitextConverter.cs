@@ -39,7 +39,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             using (var writer = new StringWriter(buffer))
                 BuildAst(ast, writer, context);
 
-            return new FormattedString(buffer.ToString());
+            return new FormattedString(buffer.ToString(), context.Proninciations);
         }
 
 
@@ -49,8 +49,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             var result = converter.Convert(node, context);
             foreach (var item in result)
             {
-                var nodeItem = item as Node;
-                if (nodeItem != null)
+                if (item is Node nodeItem)
                 {
                     foreach (var child in nodeItem.EnumChildren())
                         BuildAst(child, writer, context);
