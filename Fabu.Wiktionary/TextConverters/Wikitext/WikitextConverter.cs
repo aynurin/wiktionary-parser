@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki
 {
@@ -39,9 +40,36 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             using (var writer = new StringWriter(buffer))
                 BuildAst(ast, writer, context);
 
-            return new FormattedString(buffer.ToString(), context.Proninciations);
+            var result = buffer.ToString();
+
+            result = Cleanup(result);
+
+            return new FormattedString(result, context.Proninciations);
         }
 
+        /// <summary>
+        /// Cleanup unnecessary HTML formatting
+        /// </summary>
+        /// <remarks>
+        /// This method is a way to avoid a week or more of coding to implement a more proper handling of difficult cases. 
+        /// For example, when converter produces empty tags, such as &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;, this method will 
+        /// remove this pointless markup.
+        /// The challenge is that when writing a document on the go it is difficult to predict whether a tag will have a value, when writing
+        /// that tag, and even more it is difficult to predict if inner HTML tree will have any test data associated.
+        /// </remarks>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        private string Cleanup(string result)
+        {
+            var newResult = result;
+            do
+            {
+                result = newResult;
+                newResult = Regex.Replace(result, @"<[^/>]+>\s*</[^>]+>", String.Empty);
+            }
+            while (result != newResult);
+            return newResult;
+        }
 
         private void BuildAst(Node node, TextWriter writer, ConversionContext context)
         {
