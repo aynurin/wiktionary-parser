@@ -18,6 +18,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             "adj",
             "adv",
             "noun",
+            "proper noun",
             "verb"
         };
 
@@ -40,17 +41,19 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             }
 
             if (isLanguage(nameParts[0]))
+            {
                 name.Language = nameParts[0];
 
-            if (Array.BinarySearch(_acceleratedPosTemplates, nameParts[1]) >= 0 && name.Language != null)
-            {
-                name.Name = nameParts[1];
-                name.AllParts = nameParts;
-                name.IsHeadTemplate = true;
-                return name;
+                if (Array.BinarySearch(_acceleratedPosTemplates, nameParts[1]) >= 0 && name.Language != null)
+                {
+                    name.Name = nameParts[1];
+                    name.AllParts = nameParts;
+                    name.IsHeadTemplate = true;
+                    return name;
+                }
             }
 
-            Debugger.Break();
+            name.Name = name.OriginalName;
 
             return name;
         }
@@ -92,7 +95,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             { "a", "accent" },
             { "cog", "cognate" },
             { "ux", "usage" },
-            { "w", "wikipedia" }
+            { "w", "wikipedia" },
+            { "def-date", "defdate" },
+            { "non-gloss definition", "non-gloss" }
         };
 
         internal static string FullName(string template)
@@ -100,6 +105,11 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             if (_fullNames.TryGetValue(template, out string fullname))
                 return fullname;
             return template;
+        }
+
+        public override string ToString()
+        {
+            return OriginalName ?? Name ?? base.ToString();
         }
     }
 }

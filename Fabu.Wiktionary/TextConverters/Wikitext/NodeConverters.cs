@@ -95,12 +95,15 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         private static List<InlineNode> GetInlines(IEnumerable<InlineNode> rawinlines)
         {
             var inlines = new List<InlineNode>(rawinlines);
-            // the first node can be the space that goes after list item specifier (*_blabla), which we should avoid
-            if (inlines[0].GetType() == typeof(PlainText) && String.IsNullOrWhiteSpace(inlines[0].ToString()))
-                inlines.RemoveAt(0);
-            var lastIndex = inlines.Count-1;
-            if (lastIndex > 0 && inlines[lastIndex].GetType() == typeof(PlainText) && String.IsNullOrWhiteSpace(inlines[lastIndex].ToString()))
-                inlines.RemoveAt(lastIndex);
+            if (inlines.Count > 0)
+            {
+                // the first node can be the space that goes after list item specifier (*_blabla), which we should avoid
+                if (inlines[0].GetType() == typeof(PlainText) && String.IsNullOrWhiteSpace(inlines[0].ToString()))
+                    inlines.RemoveAt(0);
+                var lastIndex = inlines.Count - 1;
+                if (lastIndex > 0 && inlines[lastIndex].GetType() == typeof(PlainText) && String.IsNullOrWhiteSpace(inlines[lastIndex].ToString()))
+                    inlines.RemoveAt(lastIndex);
+            }
             return inlines;
         }
     }

@@ -8,10 +8,13 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         {
             var result = new ConversionResult();
             
-            if (template.Arguments.Contains(3) && !template.Arguments[3].Value.IsEmpty())
+            if (template.Arguments.ContainsNotEmpty(3))
                 result.Write(template.Arguments[3].Value.TooSmart());
-            else
+            else if (template.Arguments.ContainsNotEmpty(2))
                 result.Write(template.Arguments[2].Value.TooSmart());
+
+            if (template.Arguments.ContainsNotEmpty("tr"))
+                result.Write("(<em>", template.Arguments["tr"].Value.TooSmart(), "</em>)");
 
             Wikitext translation = null;
             if (template.Arguments.Contains("t"))
@@ -22,7 +25,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
                 translation = template.Arguments[4].Value;
             if (translation != null)
             {
-                result.Write(" (&ldquo;");
+                result.WriteSpaceIfNotEmpty();
+                result.Write("(&ldquo;");
                 result.Write(translation.TooSmart());
                 result.Write("&rdquo;)");
             }

@@ -1,21 +1,9 @@
-﻿using Fabu.Wiktionary.TextConverters;
-using Fabu.Wiktionary.TextConverters.Wiki;
-using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
 
 namespace Fabu.Wiktionary.Tests.TextConverters
 {
-    public class WikitextConverterTest
+    public class WikitextConverterTest : TestConverterFactory
     {
-        private string Convert(string creole, bool allowLinks = false)
-        {
-            var converter = new WikitextProcessor(new Dictionary<string, string>()
-                {
-                    { "en", "English" }
-                }, allowLinks);
-            return converter.ConvertToStructured(new ContextArguments() { PageTitle = "TEST", SectionName = "TEST" }, creole).ToHtml();
-        }
-
         [Fact]
         public void ShouldProcessMultiline()
         {
@@ -26,8 +14,7 @@ Felis silvestris catus
 
 Of feline animal";
             var html = "<p>\r\nA domesticated subspecies\r\n\r</p><p>Felis silvestris catus\r\n\r</p><p>Of feline animal</p>";
-            var result = Convert(creole);
-            Assert.Equal(html, result);
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -35,8 +22,7 @@ Of feline animal";
         {
             var creole = "A domesticated subspecies (''Felis silvestris catus'') of feline animal";
             var html = "<p>A domesticated subspecies (<em>Felis silvestris catus</em>) of feline animal</p>";
-            var result = Convert(creole);
-            Assert.Equal(html, result);
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -44,8 +30,7 @@ Of feline animal";
         {
             var creole = "A domesticated [[subspecies]] ([[Felis silvestris catus]]) of [[feline]] animal, commonly kept as a house [[pet]]";
             var html = "<p>A domesticated <a href=\"subspecies\">subspecies</a> (<a href=\"Felis silvestris catus\">Felis silvestris catus</a>) of <a href=\"feline\">feline</a> animal, commonly kept as a house <a href=\"pet\">pet</a></p>";
-            var result = Convert(creole, true);
-            Assert.Equal(html, result);
+            Assert.Equal(html, Convert(creole, true).ToHtml());
         }
 
         [Fact]
@@ -53,8 +38,7 @@ Of feline animal";
         {
             var creole = "A domesticated subspecies (Felis silvestris catus) of feline animal, commonly kept as a house pet. {{defdate|from 8th c.}}";
             var html = "<p>A domesticated subspecies (Felis silvestris catus) of feline animal, commonly kept as a house pet. (from 8th c.)</p>";
-            var result = Convert(creole);
-            Assert.Equal(html, result);
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -62,8 +46,7 @@ Of feline animal";
         {
             var creole = "<hr />from 8<sup>th</sup>c.";
             var html = "<p>from 8<sup>th</sup>c.</p>";
-            var result = Convert(creole);
-            Assert.Equal(html, result);
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -71,8 +54,7 @@ Of feline animal";
         {
             var creole = "A domesticated subspecies (Felis silvestris catus) of feline animal, commonly kept as a house pet.";
             var html = "<p>A domesticated subspecies (Felis silvestris catus) of feline animal, commonly kept as a house pet.</p>";
-            var result = Convert(creole);
-            Assert.Equal(html, result);
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -85,8 +67,7 @@ Of feline animal";
 
 Balala!";
             var html = "<p>Blabla!\r</p><ul><li> first item\r</li><li> second item\r</li><li> third item\r</li></ul><p>\r\nBalala!</p>";
-            var result = Convert(creole);
-            Assert.Equal(html, result);
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         [Fact]
@@ -94,8 +75,7 @@ Balala!";
         {
             var creole = "\r\n";
             var html = "";
-            var result = Convert(creole);
-            Assert.Equal(html, result);
+            Assert.Equal(html, Convert(creole).ToHtml());
         }
 
         // todo: paragraphs

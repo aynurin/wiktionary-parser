@@ -1,27 +1,9 @@
-﻿using Fabu.Wiktionary.TextConverters;
-using Fabu.Wiktionary.TextConverters.Wiki;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xunit;
+﻿using Xunit;
 
 namespace Fabu.Wiktionary.Tests.TextConverters
 {
-    public class PronunciationConversionTests
+    public class PronunciationConversionTests : TestConverterFactory
     {
-        private Dictionary<string, string> _dictionary = new Dictionary<string, string>()
-        {
-            { "en", "English" }
-        };
-
-        private FormattedString Convert(string creole, bool allowLinks = true, string sectionName = "TEST")
-        {
-            var converter = new WikitextProcessor(_dictionary, allowLinks);
-            var formatted = converter.ConvertToStructured(new ContextArguments() { PageTitle = "TEST", SectionName = sectionName }, creole);
-            return formatted;
-        }
-
         [Fact]
         public void ShouldConvertPronunciation()
         {

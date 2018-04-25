@@ -18,10 +18,10 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
                 value = (template.Arguments["alt"].Value);
             if (template.Arguments.ContainsNotEmpty(3))
                 value = (template.Arguments[3].Value);
-            else
+            if (template.Arguments.ContainsNotEmpty(2))
                 value = (template.Arguments[2].Value);
 
-            if (value.ToString() != "-")
+            if (value != null && value.ToString() != "-")
             {
                 result.Write(" <em>");
                 result.Write(value.TooSmart());
@@ -37,7 +37,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
                 translation = template.Arguments[4].Value;
             if (translation != null)
             {
-                result.Write(" (&ldquo;");
+                result.WriteSpaceIfNotEmpty();
+                result.Write("(&ldquo;");
                 result.Write(translation.TooSmart());
                 result.Write("&rdquo;)");
             }

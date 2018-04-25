@@ -13,18 +13,23 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             context.LanguageCodes.TryGetValue(template.Arguments[1].ToString(), out string sourceLanguageName);
 
             bool skipComma = true;
+            bool anyArgsWritten = false;
 
             if (template.Arguments.Count > 0)
                 result.Write("(");
 
-            if (!String.IsNullOrEmpty(sourceLanguageName))
-            {
-                result.Write(sourceLanguageName);
-                skipComma = false;
-            }
+            //if (!String.IsNullOrEmpty(sourceLanguageName))
+            //{
+            //    result.Write(sourceLanguageName);
+            //    skipComma = false;
+            //    anyArgsWritten = true;
+            //}
 
             for (var i = 2; i <= template.Arguments.Count; i++)
             {
+                if (!template.Arguments.ContainsNotEmpty(i))
+                    continue;
+
                 var value = template.Arguments[i].ToString();
                 _controlLabels.TryGetValue(value, out LabelControl control);
                 if (control == null)
@@ -33,10 +38,12 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
                     result.Write(",");
                 skipComma = control.omit_postComma;
                 var actualValue = control.display ?? value;
-                if (!control.omit_preSpace && !String.IsNullOrWhiteSpace(actualValue))
+                if (!control.omit_preSpace && !String.IsNullOrWhiteSpace(actualValue) && anyArgsWritten)
                     result.Write(" ");
 
                 result.Write(actualValue);
+                if (!String.IsNullOrWhiteSpace(actualValue))
+                    anyArgsWritten = true;
             }
 
             if (template.Arguments.Count > 0)

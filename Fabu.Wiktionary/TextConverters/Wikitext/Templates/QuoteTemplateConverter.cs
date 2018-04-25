@@ -40,186 +40,185 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
         protected override ConversionResult ConvertTemplate(TemplateName name, Template template, ConversionContext context)
         {
+            var items = new List<object>();
             if (template.Arguments.ContainsNotEmpty("year") && template.Arguments.ContainsNotEmpty("month"))
             {
-                _items.Add(template.Arguments["year"].Value.TooSmart());
-                _items.Add(" ");
-                _items.Add(template.Arguments["month"].Value.TooSmart());
+                items.Add(template.Arguments["year"].Value.TooSmart());
+                items.Add(" ");
+                items.Add(template.Arguments["month"].Value.TooSmart());
             }
             else if (template.Arguments.ContainsNotEmpty("year"))
             {
-                _items.Add(template.Arguments["year"].Value.TooSmart());
+                items.Add(template.Arguments["year"].Value.TooSmart());
             }
             else if (template.Arguments.ContainsNotEmpty("date"))
             {
                 if (DateTime.TryParseExact(template.Arguments["date"].Value.ToString(), "d MMMM yyyy", USCulture.DateTimeFormat, DateTimeStyles.AssumeUniversal, out DateTime date))
                 {
                     date = date.ToUniversalTime();
-                    _items.Add(date.Year.ToString());
-                    _items.Add(" ");
-                    _items.Add(USCulture.DateTimeFormat.GetMonthName(date.Month));
-                    _items.Add(" ");
-                    _items.Add(date.Day.ToString());
+                    items.Add(date.Year.ToString());
+                    items.Add(" ");
+                    items.Add(USCulture.DateTimeFormat.GetMonthName(date.Month));
+                    items.Add(" ");
+                    items.Add(date.Day.ToString());
                 }
                 else 
-                    _items.Add(template.Arguments["date"].Value.TooSmart());
+                    items.Add(template.Arguments["date"].Value.TooSmart());
             }
             if (template.Arguments.ContainsNotEmpty("author"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add(template.Arguments["author"].Value.TooSmart());
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add(template.Arguments["author"].Value.TooSmart());
             }
             if (template.Arguments.ContainsNotEmpty("quotee"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", quoting ");
-                _items.Add(template.Arguments["quotee"].Value.TooSmart());
+                if (items.Count > 0)
+                    items.Add(", quoting ");
+                items.Add(template.Arguments["quotee"].Value.TooSmart());
             }
             if (template.Arguments.ContainsNotEmpty("actor") && template.Arguments.ContainsNotEmpty("role"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add(template.Arguments["actor"].Value.TooSmart());
-                _items.Add(" as ");
-                _items.Add(template.Arguments["role"].Value.TooSmart());
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add(template.Arguments["actor"].Value.TooSmart());
+                items.Add(" as ");
+                items.Add(template.Arguments["role"].Value.TooSmart());
             }
             else if (template.Arguments.ContainsNotEmpty("actor"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add(template.Arguments["actor"].Value.TooSmart());
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add(template.Arguments["actor"].Value.TooSmart());
             }
             if (template.Arguments.ContainsNotEmpty("chapter") && template.Arguments.ContainsNotEmpty("title"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add("&ldquo;");
-                _items.Add(template.Arguments["chapter"].Value.TooSmart());
-                _items.Add("&rdquo;, in <em>");
-                _items.Add(template.Arguments["title"].Value.TooSmart());
-                _items.Add("</em>");
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add("&ldquo;");
+                items.Add(template.Arguments["chapter"].Value.TooSmart());
+                items.Add("&rdquo;, in <em>");
+                items.Add(template.Arguments["title"].Value.TooSmart());
+                items.Add("</em>");
             }
             else if (template.Arguments.ContainsNotEmpty("title") && template.Arguments.ContainsNotEmpty("journal"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add("&ldquo;");
-                _items.Add(template.Arguments["title"].Value.TooSmart());
-                _items.Add("&rdquo;, in <em>");
-                _items.Add(template.Arguments["journal"].Value.TooSmart());
-                _items.Add("</em>");
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add("&ldquo;");
+                items.Add(template.Arguments["title"].Value.TooSmart());
+                items.Add("&rdquo;, in <em>");
+                items.Add(template.Arguments["journal"].Value.TooSmart());
+                items.Add("</em>");
             }
             else if (template.Arguments.ContainsNotEmpty("title") && template.Arguments.ContainsNotEmpty("work"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add("&ldquo;");
-                _items.Add(template.Arguments["title"].Value.TooSmart());
-                _items.Add("&rdquo;, in <em>");
-                _items.Add(template.Arguments["work"].Value.TooSmart());
-                _items.Add("</em>");
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add("&ldquo;");
+                items.Add(template.Arguments["title"].Value.TooSmart());
+                items.Add("&rdquo;, in <em>");
+                items.Add(template.Arguments["work"].Value.TooSmart());
+                items.Add("</em>");
             }
             else if (template.Arguments.ContainsNotEmpty("title") && template.Arguments.ContainsNotEmpty("album"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add("&ldquo;");
-                _items.Add(template.Arguments["title"].Value.TooSmart());
-                _items.Add("&rdquo;, in <em>");
-                _items.Add(template.Arguments["album"].Value.TooSmart());
-                _items.Add("</em>");
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add("&ldquo;");
+                items.Add(template.Arguments["title"].Value.TooSmart());
+                items.Add("&rdquo;, in <em>");
+                items.Add(template.Arguments["album"].Value.TooSmart());
+                items.Add("</em>");
             }
             else if (template.Arguments.ContainsNotEmpty("title") && template.Arguments.ContainsNotEmpty("writer"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add("<em>");
-                _items.Add(template.Arguments["title"].Value.TooSmart());
-                _items.Add("</em>, written by ");
-                _items.Add(template.Arguments["writer"].Value.TooSmart());
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add("<em>");
+                items.Add(template.Arguments["title"].Value.TooSmart());
+                items.Add("</em>, written by ");
+                items.Add(template.Arguments["writer"].Value.TooSmart());
             }
             else if (template.Arguments.ContainsNotEmpty("title") && template.Arguments.ContainsNotEmpty("newsgroup"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add("&ldquo;");
-                _items.Add(template.Arguments["title"].Value.TooSmart());
-                _items.Add("&rdquo;, in <em>");
-                _items.Add(template.Arguments["newsgroup"].Value.TooSmart());
-                _items.Add("</em>");
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add("&ldquo;");
+                items.Add(template.Arguments["title"].Value.TooSmart());
+                items.Add("&rdquo;, in <em>");
+                items.Add(template.Arguments["newsgroup"].Value.TooSmart());
+                items.Add("</em>");
             }
             else if (template.Arguments.ContainsNotEmpty("title"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add("<em>");
-                _items.Add(template.Arguments["title"].Value.TooSmart());
-                _items.Add("</em>");
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add("<em>");
+                items.Add(template.Arguments["title"].Value.TooSmart());
+                items.Add("</em>");
             }
             else if (template.Arguments.ContainsNotEmpty("journal"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add(template.Arguments["journal"].Value.TooSmart());
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add(template.Arguments["journal"].Value.TooSmart());
             }
             else if (template.Arguments.ContainsNotEmpty("album"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add(template.Arguments["album"].Value.TooSmart());
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add(template.Arguments["album"].Value.TooSmart());
             }
             if (template.Arguments.ContainsNotEmpty("quoted_in"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", quoted in ");
-                _items.Add(template.Arguments["quoted_in"].Value.TooSmart());
+                if (items.Count > 0)
+                    items.Add(", quoted in ");
+                items.Add(template.Arguments["quoted_in"].Value.TooSmart());
             }
             if (template.Arguments.ContainsNotEmpty("artist"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", performed by ");
-                _items.Add(template.Arguments["artist"].Value.TooSmart());
+                if (items.Count > 0)
+                    items.Add(", performed by ");
+                items.Add(template.Arguments["artist"].Value.TooSmart());
             }
             if (template.Arguments.ContainsNotEmpty("accessdate"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", retrieved ");
-                _items.Add(template.Arguments["accessdate"].Value.TooSmart());
+                if (items.Count > 0)
+                    items.Add(", retrieved ");
+                items.Add(template.Arguments["accessdate"].Value.TooSmart());
             }
             if (template.Arguments.ContainsNotEmpty("location") && template.Arguments.ContainsNotEmpty("publisher"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add(template.Arguments["location"].Value.TooSmart());
-                _items.Add(": ");
-                _items.Add(template.Arguments["publisher"].Value.TooSmart());
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add(template.Arguments["location"].Value.TooSmart());
+                items.Add(": ");
+                items.Add(template.Arguments["publisher"].Value.TooSmart());
             }
             else if (template.Arguments.ContainsNotEmpty("location"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add(template.Arguments["location"].Value.TooSmart());
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add(template.Arguments["location"].Value.TooSmart());
             }
             else if (template.Arguments.ContainsNotEmpty("publisher"))
             {
-                if (_items.Count > 0)
-                    _items.Add(", ");
-                _items.Add(template.Arguments["publisher"].Value.TooSmart());
+                if (items.Count > 0)
+                    items.Add(", ");
+                items.Add(template.Arguments["publisher"].Value.TooSmart());
             }
-            if (_items.Count > 0 && template.Arguments.ContainsNotEmpty("passage"))
+            if (items.Count > 0 && template.Arguments.ContainsNotEmpty("passage"))
             {
-                _items.Add(": &ldquo;");
-                _items.Add(template.Arguments["passage"].Value.TooSmart());
-                _items.Add("&rdquo;");
+                items.Add(": &ldquo;");
+                items.Add(template.Arguments["passage"].Value.TooSmart());
+                items.Add("&rdquo;");
             }
 
             var result = new ConversionResult();
-            result.Write(_items);
+            result.Write(items);
             return result;
         }
-
-        private List<object> _items = new List<object>();
     }
     class QuoteBookTemplateConverter : QuoteTemplateConverter
     {

@@ -47,6 +47,8 @@ namespace Fabu.Wiktionary.TermProcessing
             var termsDefined = graph.GetItems(Term.TermStatus.Defined);
             if (termsDefined.Count == 0 && graph.AllItems.Any(i => i.Language == "English"))
                 EmptyResults.Add(page.Title);
+            // now get rid of non-English definitions, because parsing wikitext to HTML is simply impossible for all languages at the moment.
+            termsDefined = termsDefined.Where(term => term.Language == "English").ToList();
             ConvertContent(page.Title, null, termsDefined);
             var dictword = new DictionaryWord(page.Title, termsDefined);
             DefinedWords.Add(dictword);
@@ -61,7 +63,9 @@ namespace Fabu.Wiktionary.TermProcessing
             {
                 var args = new ContextArguments() { PageTitle = pageTitle, SectionName = sectionName };
                 term.ConvertContent(args, _textConverter);
-                ConvertContent(pageTitle, sectionName ?? term.Title, term.Properties.Values);
+                if (sectionName == null && term.Title != pageTitle)
+                    sectionName = term.Title;
+                ConvertContent(pageTitle, sectionName, term.Properties.Values);
             }
         }
 

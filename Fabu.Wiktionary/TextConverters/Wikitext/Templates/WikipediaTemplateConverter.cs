@@ -3,9 +3,6 @@ using System;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki
 {
-    /// <summary>
-    /// This template is discontinued.
-    /// </summary>
     class WikipediaTemplateConverter : BaseTemplateConverter
     {
         protected override ConversionResult ConvertTemplate(TemplateName name, Template template, ConversionContext context)
