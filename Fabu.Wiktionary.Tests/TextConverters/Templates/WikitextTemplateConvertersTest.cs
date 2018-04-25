@@ -86,6 +86,30 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
+        public void ShouldConvertISBN()
+        {
+            var creole = "{{ISBN|1841692336}}";
+            var html = "<p>ISBN 1841692336</p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
+        public void ShouldConvertInitialismOf()
+        {
+            var creole = "{{initialism of|{{pedlink|GNU Free Documentation License}}|lang=en}}";
+            var html = "<p><em>Initialism of</em> GNU Free Documentation License.</p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
+        public void ShouldConvertInitialismOfNoCapNoDot()
+        {
+            var creole = "{{initialism of|{{pedlink|GNU Free Documentation License}}|lang=en|nocap=1|nodot=1}}";
+            var html = "<p><em>initialism of</em> GNU Free Documentation License</p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
         public void ShouldConvertAudio()
         {
             /*

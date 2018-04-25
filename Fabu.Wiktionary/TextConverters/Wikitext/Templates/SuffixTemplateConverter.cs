@@ -20,36 +20,14 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
                 {
                     var value = arg.Value.TooSmart();
                     var argNum = (i + 1).ToString();
-                    Node tr = null;
-                    if (template.Arguments.ContainsNotEmpty("tr" + argNum))
-                        tr = template.Arguments["tr" + argNum].Value.TooSmart();
-                    Node gloss = null;
-                    if (template.Arguments.ContainsNotEmpty("gloss" + argNum))
-                        gloss = template.Arguments["gloss" + argNum].Value.TooSmart();
-                    else if (template.Arguments.ContainsNotEmpty("t" + argNum))
-                        gloss = template.Arguments["t" + argNum].Value.TooSmart();
 
                     if (argsWritten > 0)
                     {
                         result.Write(" + -");
                     }
                     result.Write(value);
-                    if (tr != null || gloss != null)
-                    {
-                        result.Write(" ");
-                        result.Write("(");
-                        if (tr != null)
-                        {
-                            result.Write("<em>", tr, "</em>");
-                            if (gloss != null)
-                                result.Write(", ");
-                        }
-                        if (gloss != null)
-                        {
-                            result.Write("&ldquo;", gloss, "&rdquo;");
-                        }
-                        result.Write(")");
-                    }
+                    if (GetTrAndGloss(template, argNum, out Node tr, out Node gloss))
+                        WriteTrAndGloss(result, tr, gloss);
                     argsWritten++;
                 }
             }
@@ -76,14 +54,6 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
                 {
                     var value = arg.Value.TooSmart();
                     var argNum = (i + 1).ToString();
-                    Node tr = null;
-                    if (template.Arguments.ContainsNotEmpty("tr" + argNum))
-                        tr = template.Arguments["tr" + argNum].Value.TooSmart();
-                    Node gloss = null;
-                    if (template.Arguments.ContainsNotEmpty("gloss" + argNum))
-                        gloss = template.Arguments["gloss" + argNum].Value.TooSmart();
-                    else if (template.Arguments.ContainsNotEmpty("t" + argNum))
-                        gloss = template.Arguments["t" + argNum].Value.TooSmart();
 
                     if (argsWritten > 0)
                     {
@@ -94,22 +64,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
                     {
                         result.Write("-");
                     }
-                    if (tr != null || gloss != null)
-                    {
-                        result.Write(" ");
-                        result.Write("(");
-                        if (tr != null)
-                        {
-                            result.Write("<em>", tr, "</em>");
-                            if (gloss != null)
-                                result.Write(", ");
-                        }
-                        if (gloss != null)
-                        {
-                            result.Write("&ldquo;", gloss, "&rdquo;");
-                        }
-                        result.Write(")");
-                    }
+                    if (GetTrAndGloss(template, argNum, out Node tr, out Node gloss))
+                        WriteTrAndGloss(result, tr, gloss);
                     argsWritten++;
                 }
             }

@@ -34,4 +34,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
     {
         protected override string GetPrefix() => "<em>p.</em> ";
     }
+
+    class ISBNTemplateConverter : BaseCircaTemplateConverter
+    {
+        protected override string GetPrefix() => "ISBN ";
+    }
 }

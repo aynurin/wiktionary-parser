@@ -19,6 +19,37 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         }
 
         protected abstract ConversionResult ConvertTemplate(TemplateName name, Template template, ConversionContext context);
+
+        protected bool GetTrAndGloss(Template template, out Node tr, out Node gloss) => GetTrAndGloss(template, "", out tr, out gloss);
+        protected bool GetTrAndGloss(Template template, string suffix, out Node tr, out Node gloss)
+        {
+            if (template.Arguments.ContainsNotEmpty("tr" + suffix))
+                tr = template.Arguments["tr" + suffix].Value.TooSmart();
+            else tr = null;
+            if (template.Arguments.ContainsNotEmpty("gloss" + suffix))
+                gloss = template.Arguments["gloss" + suffix].Value.TooSmart();
+            else if (template.Arguments.ContainsNotEmpty("t" + suffix))
+                gloss = template.Arguments["t" + suffix].Value.TooSmart();
+            else gloss = null;
+
+            return tr != null || gloss != null;
+        }
+        protected void WriteTrAndGloss(ConversionResult result, Node tr, Node gloss)
+        {
+            result.WriteSpaceIfNotEmpty();
+            result.Write("(");
+            if (tr != null)
+            {
+                result.Write("<em>", tr, "</em>");
+                if (gloss != null)
+                    result.Write(", ");
+            }
+            if (gloss != null)
+            {
+                result.Write("&ldquo;", gloss, "&rdquo;");
+            }
+            result.Write(")");
+        }
     }
     class TemplateConverter : BaseTemplateConverter
     {
