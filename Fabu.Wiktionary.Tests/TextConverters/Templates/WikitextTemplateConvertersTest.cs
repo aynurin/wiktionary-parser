@@ -78,6 +78,14 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
+        public void ShouldConvertCircaAntePost()
+        {
+            var creole = "{{circa|2002}} {{ante|abc}} {{post|1988}}";
+            var html = "<p><em>c.</em> 2002 <em>a.</em> abc <em>p.</em> 1988</p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
         public void ShouldConvertAudio()
         {
             /*
