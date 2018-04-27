@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using MwParserFromScratch.Nodes;
 
-namespace Fabu.Wiktionary.TextConverters.Wiki
+namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
     abstract class BaseTemplateConverter : BaseNodeConverter
     {
@@ -19,18 +19,24 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         }
 
         protected abstract ConversionResult ConvertTemplate(TemplateName name, Template template, ConversionContext context);
-
-        protected bool GetTrAndGloss(Template template, out Node tr, out Node gloss) => GetTrAndGloss(template, "", out tr, out gloss);
-        protected bool GetTrAndGloss(Template template, string suffix, out Node tr, out Node gloss)
+        
+        protected bool GetTrAndGloss(Template template, out Node tr, out Node gloss)
         {
-            if (template.Arguments.ContainsNotEmpty("tr" + suffix))
-                tr = template.Arguments["tr" + suffix].Value.TooSmart();
-            else tr = null;
-            if (template.Arguments.ContainsNotEmpty("gloss" + suffix))
-                gloss = template.Arguments["gloss" + suffix].Value.TooSmart();
-            else if (template.Arguments.ContainsNotEmpty("t" + suffix))
-                gloss = template.Arguments["t" + suffix].Value.TooSmart();
-            else gloss = null;
+            template.Arguments.TryGet(out Wikitext trwkt, "tr");
+            template.Arguments.TryGetOneOf(out Wikitext glosswkt, "gloss", "t");
+
+            tr = trwkt == null ? null : trwkt.TooSmart();
+            gloss = glosswkt == null ? null : glosswkt.TooSmart();
+
+            return tr != null || gloss != null;
+        }
+        protected bool GetTrAndGloss(Template template, int index, out Node tr, out Node gloss)
+        {
+            template.Arguments.TryGet(out Wikitext trwkt, index, "tr");
+            template.Arguments.TryGetOneOf(out Wikitext glosswkt, index, "gloss", "t");
+
+            tr = trwkt == null ? null : trwkt.TooSmart();
+            gloss = glosswkt == null ? null : glosswkt.TooSmart();
 
             return tr != null || gloss != null;
         }

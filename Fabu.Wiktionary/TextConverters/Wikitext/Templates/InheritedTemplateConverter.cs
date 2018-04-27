@@ -1,4 +1,4 @@
-﻿namespace Fabu.Wiktionary.TextConverters.Wiki
+﻿namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
     class InheritedTemplateConverter : DerivedTemplateConverter
     {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Fabu.Wiktionary.TextConverters.Wiki
+namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
     class QuoteTemplateConverter : BaseTemplateConverter
     {

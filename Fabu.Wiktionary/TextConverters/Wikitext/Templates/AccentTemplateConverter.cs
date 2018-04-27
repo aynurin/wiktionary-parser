@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using MwParserFromScratch.Nodes;
 
-namespace Fabu.Wiktionary.TextConverters.Wiki
+namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
     class AccentTemplateConverter : BaseNodeConverter
     {

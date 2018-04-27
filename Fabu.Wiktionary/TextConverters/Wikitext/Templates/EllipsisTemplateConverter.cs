@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Fabu.Wiktionary.TextConverters.Wiki
+namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
     class EllipsisTemplateConverter : TemplateConverter
     {

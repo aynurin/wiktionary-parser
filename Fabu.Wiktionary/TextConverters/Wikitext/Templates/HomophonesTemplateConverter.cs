@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Fabu.Wiktionary.TextConverters.Wiki
+namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
     /// <summary>
     /// Suffix template works very strange in Wiktionary, sometimes some parts are italic, sometimes quoted, sometimes other parts are italic and quoted.

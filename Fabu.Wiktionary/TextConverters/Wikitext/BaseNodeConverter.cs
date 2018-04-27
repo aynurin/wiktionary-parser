@@ -1,4 +1,5 @@
-﻿using MwParserFromScratch.Nodes;
+﻿using Fabu.Wiktionary.TextConverters.Wiki.Templates;
+using MwParserFromScratch.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

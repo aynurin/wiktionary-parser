@@ -2,6 +2,7 @@
 using Fabu.Wiktionary.FuzzySearch;
 using Fabu.Wiktionary.TermProcessing;
 using Fabu.Wiktionary.TextConverters.Wiki;
+using Fabu.Wiktionary.TextConverters.Wiki.Templates;
 using Fabu.Wiktionary.Transform;
 using System;
 using System.Collections.Generic;

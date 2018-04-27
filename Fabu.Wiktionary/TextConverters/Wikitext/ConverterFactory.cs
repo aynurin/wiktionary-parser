@@ -43,6 +43,11 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             var typeName = "Fabu.Wiktionary.TextConverters.Wiki." + name + "Converter";
             var type = Type.GetType(typeName);
             if (type == null)
+            {
+                typeName = "Fabu.Wiktionary.TextConverters.Wiki.Templates." + name + "Converter";
+                type = Type.GetType(typeName);
+            }
+            if (type == null)
                 return null;
             return Activator.CreateInstance(type) as BaseNodeConverter;
         }

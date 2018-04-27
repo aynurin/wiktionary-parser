@@ -4,6 +4,37 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
 {
     public class SuffixTemplateConverterTests : TestConverterFactory
     {
+        [Fact]
+        public void ShouldConvertCompound()
+        {
+            var creole = "{{der|en|la|-}} {{compound|la|floccus|t1=a wisp|naucum|t2=a trifle|nihilum|t3=nothing|pilus|t4=a hair|nocat=1}} + {{m|en|-fication}}";
+            var html = "<p>Latin <em>floccus</em> (&ldquo;a wisp&rdquo;) + <em>naucum</em> (&ldquo;a trifle&rdquo;) + <em>nihilum</em> (&ldquo;nothing&rdquo;) + <em>pilus</em> (&ldquo;a hair&rdquo;) + -fication</p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
+        public void ShouldConvertCompoundSimple()
+        {
+            var creole = "{{compound|en|above|deck}}";
+            var html = "<p><em>above</em> + <em>deck</em></p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
+        public void ShouldConvertConfixSimple()
+        {
+            var creole = "{{confix|en|neuro|genic}}";
+            var html = "<p><em>neuro</em>- + -<em>genic</em></p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
+        public void ShouldConvertConfixLang()
+        {
+            var creole = "{{confix|anti|disestablishmentarian|ism|lang=en}}";
+            var html = "<p><em>anti</em>- + -<em>disestablishmentarian</em>- + -<em>ism</em></p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
 
         [Fact]
         public void ShouldConvertPrefix1()

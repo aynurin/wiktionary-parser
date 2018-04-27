@@ -2,7 +2,7 @@
 using System.Linq;
 using MwParserFromScratch.Nodes;
 
-namespace Fabu.Wiktionary.TextConverters.Wiki
+namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
     class DerivedTemplateConverter : BaseTemplateConverter
     {
@@ -18,27 +18,17 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
                 result.WriteTrailingSpace();
             }
 
-            if (template.Arguments.ContainsNotEmpty("alt"))
-                result.Write("<em>", template.Arguments["alt"].Value.TooSmart(), "</em>");
-            if (template.Arguments.ContainsNotEmpty(4))
-                result.Write("<em>", template.Arguments[4].Value.TooSmart(), "</em>");
-            else if (template.Arguments.ContainsNotEmpty(3))
-                result.Write("<em>", template.Arguments[3].Value.TooSmart(), "</em>");
-
-            Wikitext translation = null;
-            if (template.Arguments.ContainsNotEmpty("t"))
-                translation = template.Arguments["t"].Value;
-            else if (template.Arguments.ContainsNotEmpty("gloss"))
-                translation = template.Arguments["gloss"].Value;
-            else if (template.Arguments.ContainsNotEmpty(5))
-                translation = template.Arguments[5].Value;
-            if (translation != null)
+            if (template.Arguments.TryGetOneOf(out Wikitext value, "alt", 4, 3))
             {
-                result.WriteSpaceIfNotEmpty();
-                result.Write("(&ldquo;");
-                result.Write(translation.TooSmart());
-                result.Write("&rdquo;)");
+                if (value.ToString() != "-")
+                    result.Write("<em>", value.TooSmart(), "</em>");
             }
+
+            GetTrAndGloss(template, out Node tr, out Node gloss);
+            if (gloss == null && template.Arguments.ContainsNotEmpty(5))
+                gloss = template.Arguments[5].Value.TooSmart();
+            if (tr != null || gloss != null)
+                WriteTrAndGloss(result, tr, gloss);
 
             return result;
         }

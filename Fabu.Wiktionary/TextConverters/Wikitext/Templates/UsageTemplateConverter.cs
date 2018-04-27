@@ -1,6 +1,6 @@
 ﻿using MwParserFromScratch.Nodes;
 
-namespace Fabu.Wiktionary.TextConverters.Wiki
+namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
     class UsageTemplateConverter : BaseTemplateConverter
     {
