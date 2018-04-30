@@ -12,6 +12,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             var result = new ConversionResult();
             var argsWritten = 0;
 
+            WriteStart(result, template);
+
             var tmpArgs = template.Arguments.Where(a => a.Name == null);
             if (!template.Arguments.Contains("lang"))
                 tmpArgs = tmpArgs.Skip(1);
@@ -19,25 +21,57 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             for (var i = 0; i < indexedArgs.Count; i++)
             {
                 var argNum = (i + 1);
-                var arg = indexedArgs[i];
-                if (template.Arguments.ContainsNotEmpty("alt" + argNum.ToString()))
-                    arg = template.Arguments["alt" + argNum.ToString()];
-                if (!arg.Value.IsEmpty())
+                var arg = indexedArgs[i].Value;
+                if (template.Arguments.TryGet(out Wikitext alt, argNum, "alt"))
+                    arg = alt;
+                if (!arg.IsEmpty())
                 {
-                    WriteSplitterAndValue(result, arg.Value, argsWritten, i, indexedArgs.Count);
+                    WriteSplitterAndValue(result, arg, argsWritten, i, indexedArgs.Count);
                     if (GetTrAndGloss(template, argNum, out Node tr, out Node gloss))
                         WriteTrAndGloss(result, tr, gloss);
                     argsWritten++;
                 }
             }
+            WriteEnd(result, template, argsWritten);
 
             return result;
+        }
+
+        protected virtual void WriteStart(ConversionResult result, Template template)
+        {
+            // no heading is necessary in most cases
+        }
+
+        protected virtual void WriteEnd(ConversionResult result, Template template, int argsWritten)
+        {
+            // no heading is necessary in most cases
         }
 
         protected virtual void WriteSplitterAndValue(ConversionResult result, Wikitext value, int argsWritten, int i, int count)
         {
             if (argsWritten > 0)
                 result.Write(" + -");
+            result.Write(value.TooSmart());
+        }
+    }
+
+    class BlendTemplateConverter : SuffixTemplateConverter
+    {
+        protected override void WriteStart(ConversionResult result, Template template)
+        {
+            if (!template.Arguments.IsSet("notext"))
+            {
+                if (template.Arguments.IsSet("nocap"))
+                    result.Write("blend of ");
+                else
+                    result.Write("Blend of ");
+            }
+        }
+
+        protected override void WriteSplitterAndValue(ConversionResult result, Wikitext value, int argsWritten, int i, int count)
+        {
+            if (argsWritten > 0)
+                result.Write(" + ");
             result.Write(value.TooSmart());
         }
     }

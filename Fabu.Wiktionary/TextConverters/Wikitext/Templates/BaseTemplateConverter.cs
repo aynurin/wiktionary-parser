@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using MwParserFromScratch.Nodes;
 
@@ -40,21 +39,31 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 
             return tr != null || gloss != null;
         }
+        protected void WriteEmphasised(ConversionResult result, Node value)
+        {
+            if (value != null)
+                result.Write("<em>", value, "</em>");
+        }
+        protected void WriteQuoted(ConversionResult result, Node value)
+        {
+            if (value != null)
+                result.Write("&ldquo;", value, "&rdquo;");
+        }
         protected void WriteTrAndGloss(ConversionResult result, Node tr, Node gloss)
         {
-            result.WriteSpaceIfNotEmpty();
-            result.Write("(");
+            if (tr != null || gloss != null)
+            {
+                result.WriteSpaceIfNotEmpty();
+                result.Write("(");
+            }
             if (tr != null)
-            {
-                result.Write("<em>", tr, "</em>");
-                if (gloss != null)
-                    result.Write(", ");
-            }
+                WriteEmphasised(result, tr);
+            if (tr != null && gloss != null)
+                result.Write(", ");
             if (gloss != null)
-            {
-                result.Write("&ldquo;", gloss, "&rdquo;");
-            }
-            result.Write(")");
+                WriteQuoted(result, gloss);
+            if (tr != null || gloss != null)
+                result.Write(")");
         }
     }
     class TemplateConverter : BaseTemplateConverter

@@ -21,6 +21,38 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         }
 
         [Fact]
+        public void ShouldConvertCompoundAlt()
+        {
+            var creole = "{{compound|en|above|deck|alt2=peck}}";
+            var html = "<p><em>above</em> + <em>peck</em></p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
+        public void ShouldConvertBlend()
+        {
+            var creole = "{{blend|he|תַּשְׁבֵּץ|tr1=tashbéts|t1=crossword puzzle|חֵץ|t2=arrow|tr2=chets}}";
+            var html = "<p>Blend of תַּשְׁבֵּץ (<em>tashbéts</em>, &ldquo;crossword puzzle&rdquo;) + חֵץ (<em>chets</em>, &ldquo;arrow&rdquo;)</p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
+        public void ShouldConvertBlendNoCap()
+        {
+            var creole = "{{blend|lang=en|mouse|couch potato|nocap=1}}";
+            var html = "<p>blend of mouse + couch potato</p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
+        public void ShouldConvertBlendNoText()
+        {
+            var creole = "{{blend|abscond|squat|perambulate|lang=en|notext=1}}";
+            var html = "<p>abscond + squat + perambulate</p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
         public void ShouldConvertConfixSimple()
         {
             var creole = "{{confix|en|neuro|genic}}";

@@ -104,6 +104,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
                 Add(element);
         }
 
+        // It's a good question whether we can blindly convert all Wikitext to Runs
+        //new public void Add(object item) => base.Add((item as Wikitext)?.TooSmart() ?? item);
+
         internal void WriteTrailingSpace()
         {
             _writeSpaceBeforeNextItem = true;

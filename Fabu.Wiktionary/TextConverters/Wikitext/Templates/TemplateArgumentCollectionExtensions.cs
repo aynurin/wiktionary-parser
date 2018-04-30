@@ -1,4 +1,6 @@
 ﻿using MwParserFromScratch.Nodes;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
@@ -109,5 +111,49 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         /// <returns><code>true</code> if the argument was found, otherwise <code>false</code></returns>
         public static bool TryGetOneOf(this TemplateArgumentCollection args, out Wikitext value, int argArrayIndex, params string[] argNames) => 
             args.TryGetOneOf(out value, argNames.Select(argName => argName + argArrayIndex).ToArray());
+
+        public static bool TryGetArray(this TemplateArgumentCollection args, string arrayName, out Wikitext[] values)
+        {
+            var buffer = new Dictionary<int,TemplateArgument>();
+            int anonymousCounter = 0;
+            foreach (var arg in args)
+            {
+                if (arg.Name == null)
+                {
+                    if (arrayName != null)
+                        continue;
+
+                    buffer.Add(anonymousCounter, arg);
+                    anonymousCounter++;
+                }
+                else if (arrayName != null)
+                {
+                    var argName = arg.Name.ToString();
+                    var argNumStr = argName.Replace(arrayName, "");
+                    int argNum = 1;
+                    if (argName.StartsWith(arrayName) && (argNumStr == "" || Int32.TryParse(argNumStr, out argNum)))
+                    {
+                        argNum -= 1;
+                        if (buffer.ContainsKey(argNum))
+                            buffer[argNum] = arg;
+                        else
+                            buffer.Add(argNum, arg);
+                    }
+                }
+            }
+            if (buffer.Count == 0)
+            {
+                values = null;
+                return false;
+            }
+            else
+            {
+                var maxIndex = buffer.Keys.Max();
+                values = new Wikitext[maxIndex + 1];
+                foreach (var item in buffer)
+                    values[item.Key] = item.Value.Value;
+                return true;
+            }
+        }
     }
 }
