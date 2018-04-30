@@ -97,7 +97,11 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             { "ux", "usage" },
             { "w", "wikipedia" },
             { "def-date", "defdate" },
-            { "non-gloss definition", "non-gloss" }
+            { "non-gloss definition", "non-gloss" },
+            { "t", "translation" },
+            { "t+", "translation" },
+            { "t-check", "translation" },
+            { "t+check", "translation" }
         };
 
         internal static string FullName(string template)
