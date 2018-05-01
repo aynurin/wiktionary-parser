@@ -3,10 +3,10 @@ using Xunit;
 
 namespace Fabu.Wiktionary.Tests.TextConverters
 {
-    public class WikitextTemplateConverterTest : TestConverterFactory
+    public class OtherTest : TestConverterFactory
     {
         [Fact]
-        public void ShouldConvertSimpleIPA()
+        public void SimpleIPA()
         {
             var creole = "{{ipa|/boːk/|lang=li}}";
             var html = "<p>IPA: /boːk/</p>";
@@ -14,7 +14,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
-        public void ShouldConvertMultiIPA()
+        public void MultiIPA()
         {
             var creole = "{{ipa|/boːk/|[boːk]|lang=li}}";
             var html = "<p>IPA: /boːk/, [boːk]</p>";
@@ -22,7 +22,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
-        public void ShouldConvertNonGlossDefinition()
+        public void NonGlossDefinition()
         {
             var creole = "{{lb|en|chiefly|nautical}} {{non-gloss definition|Short form of}} [[cat-o'-nine-tails]]";
             var html = "<p>(chiefly nautical) <em>Short form of</em> cat-o'-nine-tails</p>";
@@ -30,7 +30,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
-        public void ShouldConvertSense()
+        public void Sense()
         {
             var creole = "{{sense|sense}}";
             var html = "<p>(<em>sense</em>):</p>";
@@ -38,7 +38,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
-        public void ShouldConvertGloss()
+        public void Gloss()
         {
             var creole = "{{gloss|gloss}}";
             var html = "<p>(gloss)</p>";
@@ -46,7 +46,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
-        public void ShouldConvertNonGloss()
+        public void NonGloss()
         {
             var creole = "{{non-gloss|non-gloss}}";
             var html = "<p><em>non-gloss</em></p>";
@@ -54,7 +54,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
-        public void ShouldConvertQualifier()
+        public void Qualifier()
         {
             var creole = "{{qualifier|qualifier}}";
             var html = "<p>(<em>qualifier</em>)</p>";
@@ -62,7 +62,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
-        public void ShouldConvertHomophones()
+        public void Homophones()
         {
             var creole = "{{homophones|broach|lang=en}}";
             var html = "<p>Homophone: broach</p>";
@@ -70,7 +70,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
-        public void ShouldConvertHomophonesMoreThanOne()
+        public void HomophonesMoreThanOne()
         {
             var creole = "{{homophones|bous|bout|lang=fr}}";
             var html = "<p>Homophones: bous, bout</p>";
@@ -78,7 +78,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
-        public void ShouldConvertCircaAntePost()
+        public void CircaAntePost()
         {
             var creole = "{{circa|2002}} {{ante|abc}} {{post|1988}}";
             var html = "<p><em>c.</em> 2002 <em>a.</em> abc <em>p.</em> 1988</p>";
@@ -86,7 +86,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
-        public void ShouldConvertISBN()
+        public void ISBN()
         {
             var creole = "{{ISBN|1841692336}}";
             var html = "<p>ISBN 1841692336</p>";
@@ -94,7 +94,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
-        public void ShouldConvertInitialismOf()
+        public void InitialismOf()
         {
             var creole = "{{initialism of|{{pedlink|GNU Free Documentation License}}|lang=en}}";
             var html = "<p><em>Initialism of</em> GNU Free Documentation License.</p>";
@@ -102,7 +102,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
-        public void ShouldConvertInitialismOfNoCapNoDot()
+        public void InitialismOfNoCapNoDot()
         {
             var creole = "{{initialism of|{{pedlink|GNU Free Documentation License}}|lang=en|nocap=1|nodot=1}}";
             var html = "<p><em>initialism of</em> GNU Free Documentation License</p>";
@@ -110,7 +110,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
-        public void ShouldConvertAudio()
+        public void Audio()
         {
             /*
       "dictionary:{{audio|en-us-dictionary.ogg|Audio (US)|lang=en}}",

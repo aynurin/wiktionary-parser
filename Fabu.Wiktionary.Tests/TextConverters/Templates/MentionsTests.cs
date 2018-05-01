@@ -2,10 +2,10 @@
 
 namespace Fabu.Wiktionary.Tests.TextConverters.Templates
 {
-    public class MentionsTemplateConverterTests : TestConverterFactory
+    public class MentionsTests : TestConverterFactory
     {
         [Fact]
-        public void ShouldConvertInheritedWithoutTranslation()
+        public void InheritedWithoutTranslation()
         {
             var creole = "From {{inh|nds|gml|vrîe}}, variant";
             var html = "<p>From Middle Low German <em>vrîe</em>, variant</p>";
@@ -13,7 +13,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         }
 
         [Fact]
-        public void ShouldConvertInheritedWithTranslation()
+        public void InheritedWithTranslation()
         {
             var creole = "From {{inh|de|gmh}}, {{inh|de|goh|frī}}, from {{inh|de|gem-pro|*frijaz}}, From {{inh|pdc|goh|frī}}";
             var html = "<p>From Middle High German, Old High German <em>frī</em>, from Proto-Germanic <em>*frijaz</em>, From Old High German <em>frī</em></p>";
@@ -21,7 +21,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         }
 
         [Fact]
-        public void ShouldConvertMixedMentions()
+        public void MixedMentions()
         {
             var creole = "From {{inh|nds|gml|vrîe}}, variant of {{m|gml|vrî}}, from {{der|nds|osx|frī}}, from {{der|nds|gem-pro|*frijaz}}, from {{der|nds|ine-pro|*prey||new}}. Compare Dutch {{m|nl|vrij}}, West Frisian {{m|fy|frij}}, English {{m|en|free}}, German {{m|de|frei}}.";
             var html = "<p>From Middle Low German <em>vrîe</em>, variant of vrî, from Old Saxon <em>frī</em>, from Proto-Germanic <em>*frijaz</em>, from Proto-Indo-European <em>*prey</em> (&ldquo;new&rdquo;). Compare Dutch vrij, West Frisian frij, English free, German frei.</p>";
@@ -29,7 +29,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         }
 
         [Fact]
-        public void ShouldConvertEmptyMentionsWithTranscript()
+        public void EmptyMentionsWithTranscript()
         {
             var creole = "\"Nubian {{m|onw|tr=kadīs}}\"";
             var html = "<p>\"Nubian (<em>kadīs</em>)\"</p>";
@@ -44,7 +44,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         /// <remarks>Wiktionary itself does render '[Term?]' token for empty mentions, just as it does something similar in all other similar
         /// cases, but I don't think that's what we want.</remarks>
         [Fact]
-        public void ShouldConvertEmptyMentions()
+        public void EmptyMentions()
         {
             var creole = "\"Nubian {{m|onw}}\"";
             var html = "<p>\"Nubian \"</p>";
@@ -52,7 +52,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         }
 
         [Fact]
-        public void ShouldConvertMentionsOnlyGloss()
+        public void MentionsOnlyGloss()
         {
             var creole = "\"Nubian {{m|onw|gloss=kadis}}\"";
             var html = "<p>\"Nubian (&ldquo;kadis&rdquo;)\"</p>";
@@ -60,7 +60,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         }
 
         [Fact]
-        public void ShouldConvertDerivedWithoutTranslation()
+        public void DerivedWithoutTranslation()
         {
             var creole = "from {{der|en|la|dictionarius}}, ";
             var html = "<p>from Latin <em>dictionarius</em>,</p>";
@@ -68,7 +68,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         }
 
         [Fact]
-        public void ShouldConvertDerivedWithTranslation()
+        public void DerivedWithTranslation()
         {
             var creole = "from {{der|en|ang|frēo||free}}, ";
             var html = "<p>from Old English <em>frēo</em> (&ldquo;free&rdquo;),</p>";
@@ -76,7 +76,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         }
 
         [Fact]
-        public void ShouldConvertMentionWithTranslation()
+        public void MentionWithTranslation()
         {
             var creole = "from {{m|la|dictio||speaking}},";
             var html = "<p>from dictio (&ldquo;speaking&rdquo;),</p>";
@@ -84,7 +84,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         }
 
         [Fact]
-        public void ShouldConvertMentionWithoutTranslation()
+        public void MentionWithoutTranslation()
         {
             var creole = "from {{m|la|dictus}}";
             var html = "<p>from dictus</p>";
@@ -92,7 +92,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         }
 
         [Fact]
-        public void ShouldConvertCog()
+        public void Cog()
         {
             var creole = ", {{cog|da|-}}, {{cog|sv|-}} and {{cog|no|fri||free}}.";
             var html = "<p>, Danish, Swedish and Norwegian <em>fri</em> (&ldquo;free&rdquo;).</p>";
@@ -100,7 +100,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         }
 
         [Fact]
-        public void ShouldConvertCogOnlyLanguage()
+        public void CogOnlyLanguage()
         {
             var creole = "Its pronominal use is of {{cog|gem}} origin.";
             var html = "<p>Its pronominal use is of Germanic origin.</p>";
