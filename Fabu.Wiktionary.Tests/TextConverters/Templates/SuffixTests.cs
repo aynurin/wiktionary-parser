@@ -131,5 +131,37 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
             var html = "<p>Einheit (&ldquo;unity&rdquo;) + -lich (&ldquo;-ly&rdquo;) + -pich (<em>pic</em>, &ldquo;-my&rdquo;)</p>";
             Assert.Equal(html, Convert(creole).ToHtml());
         }
+
+        [Fact]
+        public void AffixComplex()
+        {
+            var creole = "{{affix|en|hypo-|gloss1=under|-onym|gloss2=name; word|lit1=XxX}}";
+            var html = "<p><em>hypo-</em> (&ldquo;under&rdquo;, literally &ldquo;XxX&rdquo;) + <em>-onym</em> (&ldquo;name; word&rdquo;)</p>";
+            Assert.Equal(html, Convert(creole).ToHtml());
+        }
+
+        [Fact]
+        public void CircumfixTrGloss()
+        {
+            var creole = "{{circumfix|em|bold|en|lang=en|tr2=XXX|t3=YYY|gloss=ZZZ|gloss1=ASA|alt2=sss}}";
+            var html = "<p><em>em-</em> (&ldquo;ASA&rdquo;) + <em>sss</em> (<em>XXX</em>) + <em>-en</em> (&ldquo;YYY&rdquo;)</p>";
+            Assert.Equal(html, Convert(creole).ToHtml());
+        }
+
+        [Fact]
+        public void Circumfix()
+        {
+            var creole = "{{circumfix|en|en|grave|en}}";
+            var html = "<p><em>en-</em> + <em>grave</em> + <em>-en</em></p>";
+            Assert.Equal(html, Convert(creole).ToHtml());
+        }
+
+        [Fact]
+        public void CircumfixLang()
+        {
+            var creole = "{{circumfix|em|bold|en|lang=en}}";
+            var html = "<p><em>em-</em> + <em>bold</em> + <em>-en</em></p>";
+            Assert.Equal(html, Convert(creole).ToHtml());
+        }
     }
 }

@@ -28,7 +28,31 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
                 {
                     WriteSplitterAndValue(result, arg, argsWritten, i, indexedArgs.Count);
                     if (GetTrAndGloss(template, argNum, out Node tr, out Node gloss))
-                        WriteTrAndGloss(result, tr, gloss);
+                    {
+                        template.Arguments.TryGet(out Wikitext lit, argNum, "lit");
+                        if (tr != null || gloss != null || lit != null)
+                        {
+                            result.WriteSpaceIfNotEmpty();
+                            result.Write("(");
+                        }
+
+                        if (tr != null)
+                            WriteEmphasised(result, tr);
+                        if (tr != null && gloss != null)
+                            result.Write(", ");
+                        if (gloss != null)
+                            WriteQuoted(result, gloss);
+                        if (lit != null && gloss != null)
+                            result.Write(", ");
+                        if (lit != null)
+                        {
+                            result.Write("literally ");
+                            WriteQuoted(result, lit.TooSmart());
+                        }
+
+                        if (tr != null || gloss != null || lit != null)
+                            result.Write(")");
+                    }
                     argsWritten++;
                 }
             }
@@ -86,6 +110,10 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         }
     }
 
+    class AffixTemplateConverter : CompoundTemplateConverter
+    {
+    }
+
     class ConfixTemplateConverter : SuffixTemplateConverter
     {
         protected override void WriteSplitterAndValue(ConversionResult result, Wikitext value, int argsWritten, int i, int count)
@@ -95,7 +123,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             result.Write("<em>", value.TooSmart(), "</em>");
         }
     }
-    
+
     class PrefixTemplateConverter : SuffixTemplateConverter
     {
         protected override void WriteSplitterAndValue(ConversionResult result, Wikitext value, int argsWritten, int i, int count)
@@ -107,6 +135,23 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             {
                 result.Write("-");
             }
+        }
+    }
+
+    class CircumfixTemplateConverter : SuffixTemplateConverter
+    {
+        protected override void WriteSplitterAndValue(ConversionResult result, Wikitext value, int argsWritten, int i, int count)
+        {
+            if (argsWritten > 0)
+                result.Write(" + ");
+
+            result.Write("<em>");
+            if (i == 2)
+                result.Write("-");
+            result.Write(value.TooSmart());
+            if (i == 0)
+                result.Write("-");
+            result.Write("</em>");
         }
     }
 }
