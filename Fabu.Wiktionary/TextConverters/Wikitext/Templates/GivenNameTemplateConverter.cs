@@ -10,15 +10,33 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         protected override ConversionResult ConvertTemplate(TemplateName name, Template template, ConversionContext context)
         {
             var result = new ConversionResult();
+            var keywords = GetKeywords();
+
             result.Write("<em>");
 
-            template.Arguments.TryGetOneOf(out Wikitext from, "from", 1);
-            if (Array.BinarySearch(_deniedFroms, from.ToString()) >= 0)
-                from = null;
+            template.Arguments.TryGet(out Wikitext firstArg, 1);
+            template.Arguments.TryGet(out Wikitext from, "from");
+            template.Arguments.TryGet(out Wikitext gender1, "gender");
+
+            if (firstArg != null && Array.BinarySearch(_deniedFroms, firstArg.ToString()) >= 0)
+            {
+                gender1 = firstArg;
+                firstArg = null;
+            }
+            if (from != null && Array.BinarySearch(_deniedFroms, from.ToString()) >= 0)
+            {
+                from = firstArg;
+                firstArg = null;
+            }
 
             template.Arguments.TryGetArray("dim", out Wikitext[] dimValues);
 
-            var startsWithAVowel = dimValues == null && from != null && Array.BinarySearch(_vowels, Char.ToLowerInvariant(from.ToString()[0])) >= 0;
+            var openingString = dimValues != null ? "diminutive"
+                : from != null ? from.ToString()
+                : firstArg != null ? firstArg.ToString()
+                : keywords[0];
+
+            var startsWithAVowel = Array.BinarySearch(_vowels, Char.ToLowerInvariant(openingString[0])) >= 0;
 
             if (template.Arguments.TryGet(out Wikitext a, "A"))
             {
@@ -40,8 +58,10 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             if (from != null)
                 result.Write(from.TooSmart(), " ");
 
+            if (firstArg != null)
+                result.Write(firstArg.TooSmart(), " ");
 
-            template.Arguments.TryGetOneOf(out Wikitext gender1, "gender", 1);
+
             template.Arguments.TryGet(out Wikitext gender2, "or");
 
             if (gender1 != null && Array.BinarySearch(_deniedFroms, gender1.ToString()) >= 0)
@@ -50,9 +70,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
                 result.Write("or ", gender2.TooSmart(), " ");
 
             if (dimValues == null || dimValues.Length <= 1)
-                result.Write("given name");
+                result.Write(keywords[0]);
             else
-                result.Write("given names");
+                result.Write(keywords[1]);
 
             if (name.OriginalName == "historical given name")
                 result.Write(" of historical usage");
@@ -114,9 +134,18 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             if (name.OriginalName == "historical given name" && template.Arguments.TryGet(out Wikitext bore, 2))
                 result.Write(", notably borne by ", bore.TooSmart());
 
+            WriteDot(result, template);
+
             result.Write("</em>");
 
             return result;
         }
+
+        protected virtual string[] GetKeywords() => new string[] { "given name", "given names" };
+    }
+
+    class SurnameTemplateConverter : GivenNameTemplateConverter
+    {
+        protected override string[] GetKeywords() => new string[] { "surname", "surnames" };
     }
 }

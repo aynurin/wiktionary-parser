@@ -65,6 +65,15 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             if (tr != null || gloss != null)
                 result.Write(")");
         }
+        protected void WriteDot(ConversionResult result, Template template)
+        {
+            if (!template.Arguments.IsSet("nodot"))
+            {
+                if (template.Arguments.TryGet(out Wikitext dot, "dot"))
+                    result.Write(dot.TooSmart());
+                else result.Write(".");
+            }
+        }
     }
     class TemplateConverter : BaseTemplateConverter
     {
