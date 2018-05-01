@@ -101,7 +101,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             { "t", "translation" },
             { "t+", "translation" },
             { "t-check", "translation" },
-            { "t+check", "translation" }
+            { "t+check", "translation" },
+            { "en-irregular plural of", "plural of" },
+            { "alternative plural of", "plural of" }
         };
 
         internal static string FullName(string template)

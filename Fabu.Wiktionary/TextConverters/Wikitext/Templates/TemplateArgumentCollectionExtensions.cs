@@ -103,8 +103,15 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         }
 
         /// <summary>
-        /// Tries to get a value of the first of arguments found by the given set of argument names, given array index, e.g. t1, gloss2, etc.
+        /// Tries to get a value of the first of arguments found by the given set of argument names, given array index.
         /// </summary>
+        /// <remarks>
+        /// For example, for both following examples:
+        /// {{name|value1|value2|gloss2=xxx}}
+        /// {{name|value1|value2|t2=xxx}}
+        /// the code: args.TryGetOneOf(out Wikitext value, 2, "gloss", "t") would return "xxx".
+        /// Which is handy because in most cases "gloss" and "t" are alternative names of the same argument, and there are more similar examples.
+        /// </remarks>
         /// <param name="value">The value of the given argument, or <code>null</code> if argument not found.</param>
         /// <param name="argArrayIndex">Array index of the given argument.</param>
         /// <param name="argNames">name of the argument</param>
