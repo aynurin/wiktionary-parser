@@ -9,10 +9,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         {
             var result = new ConversionResult();
 
-            if (template.Arguments.ContainsNotEmpty(2))
-                result.Write(template.Arguments[2].Value.TooSmart());
-            else if (template.Arguments.ContainsNotEmpty(1))
-                result.Write(template.Arguments[1].Value.TooSmart());
+            if (template.Arguments.TryGetOneOf(out Wikitext value, 2, 1))
+                result.Write(value.TooSmart());
 
             return result;
         }

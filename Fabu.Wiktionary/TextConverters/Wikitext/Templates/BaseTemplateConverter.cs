@@ -65,6 +65,14 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             if (tr != null || gloss != null)
                 result.Write(")");
         }
+        protected void WriteCap(ConversionResult result, Template template, string defaultCap, string defaultNoCap)
+        {
+            if (template.Arguments.TryGet(out Wikitext cap, "cap"))
+                result.Write(cap.TooSmart());
+            else if (template.Arguments.IsSet("nocap"))
+                result.Write(defaultNoCap);
+            else result.Write(defaultCap);
+        }
         protected void WriteDot(ConversionResult result, Template template)
         {
             if (!template.Arguments.IsSet("nodot"))
@@ -124,6 +132,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             , "top4"
             , "top5"
             , "User:DCDuring/testtaxlink"
+            , "Webster 1913"
         };
 
         public readonly static Stats<string> ConvertedTemplates = new Stats<string>();
