@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using MwParserFromScratch.Nodes;
+﻿using MwParserFromScratch.Nodes;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
@@ -10,10 +8,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         {
             var result = new ConversionResult();
 
-            if (template.Arguments.ContainsNotEmpty("disp"))
-                result.Write(template.Arguments["disp"].Value.TooSmart());
-            else
-                result.Write(template.Arguments[1].Value.TooSmart());
+            template.Arguments.TryGetOneOf(out Wikitext value, "disp", 1);
+            result.Write(value.TooSmart());
 
             return result;
         }

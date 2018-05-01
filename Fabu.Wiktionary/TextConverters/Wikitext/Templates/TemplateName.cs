@@ -103,7 +103,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             { "t-check", "translation" },
             { "t+check", "translation" },
             { "en-irregular plural of", "plural of" },
-            { "alternative plural of", "plural of" }
+            { "alternative plural of", "plural of" },
+            { "taxlink", "pedlink" }
         };
 
         internal static string FullName(string template)

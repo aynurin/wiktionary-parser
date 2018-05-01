@@ -32,5 +32,12 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
             var html = "<p><em>Simple past of</em> weave.</p>";
             Assert.Equal(html, Convert(creole).ToHtml());
         }
+        [Fact]
+        public void PresentParticipleOf()
+        {
+            var creole = "{{present participle of|absorb|lang=en|nocat=1}}";
+            var html = "<p><em>Present participle of</em> absorb.</p>";
+            Assert.Equal(html, Convert(creole).ToHtml());
+        }
     }
 }

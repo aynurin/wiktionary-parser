@@ -32,7 +32,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         protected bool GetTrAndGloss(Template template, int index, out Node tr, out Node gloss)
         {
             template.Arguments.TryGet(out Wikitext trwkt, index, "tr");
-            template.Arguments.TryGetOneOf(out Wikitext glosswkt, index, "gloss", "t");
+            template.Arguments.TryGetOneOfAt(out Wikitext glosswkt, index, "gloss", "t");
 
             tr = trwkt == null ? null : trwkt.TooSmart();
             gloss = glosswkt == null ? null : glosswkt.TooSmart();
@@ -114,6 +114,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             , "top3"
             , "top4"
             , "top5"
+            , "User:DCDuring/testtaxlink"
         };
 
         public readonly static Stats<string> ConvertedTemplates = new Stats<string>();

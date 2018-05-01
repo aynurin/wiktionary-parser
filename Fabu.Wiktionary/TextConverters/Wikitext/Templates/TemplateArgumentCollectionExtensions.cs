@@ -116,7 +116,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         /// <param name="argArrayIndex">Array index of the given argument.</param>
         /// <param name="argNames">name of the argument</param>
         /// <returns><code>true</code> if the argument was found, otherwise <code>false</code></returns>
-        public static bool TryGetOneOf(this TemplateArgumentCollection args, out Wikitext value, int argArrayIndex, params string[] argNames) => 
+        public static bool TryGetOneOfAt(this TemplateArgumentCollection args, out Wikitext value, int argArrayIndex, params string[] argNames) => 
             args.TryGetOneOf(out value, argNames.Select(argName => argName + argArrayIndex).ToArray());
 
         public static bool TryGetArray(this TemplateArgumentCollection args, string arrayName, out Wikitext[] values)

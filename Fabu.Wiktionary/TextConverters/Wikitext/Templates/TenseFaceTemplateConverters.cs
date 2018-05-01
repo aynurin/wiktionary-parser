@@ -1,9 +1,4 @@
-﻿using MwParserFromScratch.Nodes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
+﻿namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
     class EnThirdPersonSingularOfTemplateConverter : BaseFormOfTemplatesConverter
     {
@@ -30,6 +25,15 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
                 "simple past and past participle of",
                 "simple past and past participle of",
                 "Simple past and past participle of"
+            };
+    }
+    class PresentParticipleOfTemplateConverter : BaseFormOfTemplatesConverter
+    {
+        protected override string[] GetPhrases() => new[]
+            {
+                "present participle of",
+                "present participle of",
+                "Present participle of"
             };
     }
     class EnSimplePastOfTemplateConverter : BaseFormOfTemplatesConverter
