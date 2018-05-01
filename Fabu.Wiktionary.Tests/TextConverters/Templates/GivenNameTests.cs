@@ -88,5 +88,12 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
             var html = "<p><em>A female given name, equivalent to English Sweet, Sweeta or Svetlana</em></p>";
             Assert.Equal(html, Convert(creole).ToHtml());
         }
+        [Fact]
+        public void Historical()
+        {
+            var creole = "{{historical given name|male|{{w|Saint Abundius}}, an early Christian bishop|lang=en}}";
+            var html = "<p><em>A male given name of historical usage, notably borne by Saint Abundius, an early Christian bishop</em></p>";
+            Assert.Equal(html, Convert(creole).ToHtml());
+        }
     }
 }

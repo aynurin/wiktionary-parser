@@ -1,7 +1,5 @@
 ﻿using MwParserFromScratch.Nodes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
@@ -56,6 +54,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             else
                 result.Write("given names");
 
+            if (name.OriginalName == "historical given name")
+                result.Write(" of historical usage");
+
             if (dimValues != null)
             {
                 for (var i = 0; i < dimValues.Length; i++)
@@ -109,6 +110,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
                     result.Write(eqValues[i].TooSmart());
                 }
             }
+
+            if (name.OriginalName == "historical given name" && template.Arguments.TryGet(out Wikitext bore, 2))
+                result.Write(", notably borne by ", bore.TooSmart());
 
             result.Write("</em>");
 
