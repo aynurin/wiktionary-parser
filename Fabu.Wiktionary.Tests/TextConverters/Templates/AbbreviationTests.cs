@@ -25,5 +25,19 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
             var html = "<p><em>abbreviation of</em> caterpillar.</p>";
             Assert.Equal(html, Convert(creole).ToHtml());
         }
+        [Fact]
+        public void Superlative()
+        {
+            var creole = "{{en-superlative of|many}}";
+            var html = "<p><em>Superlative form of</em> many.</p>";
+            Assert.Equal(html, Convert(creole).ToHtml());
+        }
+        [Fact]
+        public void Comparative()
+        {
+            var creole = "{{comparative of|lang=en|difficult}}";
+            var html = "<p><em>Comparative form of</em> difficult.</p>";
+            Assert.Equal(html, Convert(creole).ToHtml());
+        }
     }
 }

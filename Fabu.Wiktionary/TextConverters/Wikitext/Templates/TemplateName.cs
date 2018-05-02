@@ -20,7 +20,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             "noun",
             "proper noun",
             "verb",
-            "interj"
+            "interj",
+            "plural noun"
         };
 
         public TemplateName(string originalName)
@@ -96,6 +97,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             { "a", "accent" },
             { "cog", "cognate" },
             { "ux", "usage" },
+            { "usex", "usage" },
             { "w", "wikipedia" },
             { "def-date", "defdate" },
             { "non-gloss definition", "non-gloss" },
@@ -111,7 +113,10 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             { "syn", "synonyms" },
             { "hyper", "hypernyms" },
             { "hypo", "hyponyms" },
-            { "ant", "antonyms" }
+            { "ant", "antonyms" },
+            { "af", "affix" },
+            { "comparative of", "en-comparative of" },
+            { "superlative of", "en-superlative of" }
         };
 
         internal static string FullName(string template)

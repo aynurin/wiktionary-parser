@@ -9,7 +9,7 @@ namespace Fabu.Wiktionary
     public static class DumpTool
     {
         public const string LanguagesDump = "languages";
-        public const string IgnoredTemplatesDump = "ignore-templates";
+        public const string IgnoredTemplatesDump = "templates-ignore";
         public const string LanguageCodes = "language_codes.csv";
         public const string SectionsDump = "sections";
         public const string SectionsDictDump = "sections_dict";

@@ -2,6 +2,9 @@
 
 namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
+    /// <summary>
+    /// <see cref="BaseFormOfTemplatesConverter"/> for a very similar one. Maybe merge?
+    /// </summary>
     class AbbreviationOfTemplateConverter : BaseTemplateConverter
     {
         protected override ConversionResult ConvertTemplate(TemplateName name, Template template, ConversionContext context)
@@ -44,5 +47,17 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
     {
         protected override string DefaultCap => "Initialism of";
         protected override string DefaultNoCap => "initialism of";
+    }
+
+    class EnComparativeOfTemplateConverter : AbbreviationOfTemplateConverter
+    {
+        protected override string DefaultCap => "Comparative form of";
+        protected override string DefaultNoCap => "comparative form of";
+    }
+
+    class EnSuperlativeOfTemplateConverter : AbbreviationOfTemplateConverter
+    {
+        protected override string DefaultCap => "Superlative form of";
+        protected override string DefaultNoCap => "superlative form of";
     }
 }
