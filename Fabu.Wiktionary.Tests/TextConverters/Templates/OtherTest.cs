@@ -110,6 +110,14 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
+        public void Ignored()
+        {
+            var creole = "{{commons|blabla}}";
+            var html = "";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
         public void Audio()
         {
             /*

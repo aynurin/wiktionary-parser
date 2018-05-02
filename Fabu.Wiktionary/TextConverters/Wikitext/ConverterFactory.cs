@@ -1,13 +1,21 @@
-﻿using MwParserFromScratch.Nodes;
+﻿using Fabu.Wiktionary.TextConverters.Wiki.Templates;
+using MwParserFromScratch.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki
 {
     public class ConverterFactory
     {
         private Dictionary<string, BaseNodeConverter> _knownConverters = new Dictionary<string, BaseNodeConverter>();
+        private string[] _ignoredTemplates;
+
+        public ConverterFactory(IEnumerable<string> ignoredTemplates)
+        {
+            _ignoredTemplates = ignoredTemplates.OrderBy(_ => _).ToArray();
+        }
 
         public BaseNodeConverter GetConverter(Node node)
         {
@@ -34,6 +42,10 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
                         converter = racingConverter;
                     else _knownConverters.Add(name, converter);
                 }
+            }
+            if (converter is TemplateConverter templateConverter)
+            {
+                templateConverter.IgnoredTemplates = _ignoredTemplates;
             }
             return converter;
         }

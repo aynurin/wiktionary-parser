@@ -1,4 +1,5 @@
-﻿using Fabu.Wiktionary.TextConverters;
+﻿using Fabu.Wiktionary.Commands;
+using Fabu.Wiktionary.TextConverters;
 using Fabu.Wiktionary.TextConverters.Wiki;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,8 @@ namespace Fabu.Wiktionary.Tests.TextConverters
 
         protected FormattedString Convert(string creole, bool allowLinks = false, string sectionName = "TEST")
         {
-            var converter = new WikitextProcessor(_dictionary, allowLinks);
+            var ignoredTemplates = DumpTool.LoadDump<List<string>>(BaseArgs.DefaultDumpDir, DumpTool.IgnoredTemplatesDump);
+            var converter = new WikitextProcessor(_dictionary, ignoredTemplates, allowLinks);
             var formatted = converter.ConvertToStructured(new ContextArguments() { PageTitle = "TEST", SectionName = sectionName }, creole);
             return formatted;
         }

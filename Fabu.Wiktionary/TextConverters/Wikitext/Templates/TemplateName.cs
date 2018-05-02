@@ -19,7 +19,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             "adv",
             "noun",
             "proper noun",
-            "verb"
+            "verb",
+            "interj"
         };
 
         public TemplateName(string originalName)

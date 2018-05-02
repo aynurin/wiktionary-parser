@@ -2,11 +2,13 @@
 
 namespace Fabu.Wiktionary.Commands
 {
-    internal class BaseArgs
+    public class BaseArgs
     {
+        public const string DefaultDumpDir = @"c:\repos\data\fabu\";
+
         [Option("in", Required = false, HelpText = "Wiktionary dump to be processed.")]
         public string WiktionaryDumpFile { get; set; }
-        [Option("dumps", Required = false, Default = @"c:\repos\data\fabu\", HelpText = "Output directory name")]
+        [Option("dumps", Required = false, Default = DefaultDumpDir, HelpText = "Output directory name")]
         public string DumpDir { get; set; }
         [Option("limit", Required = false, HelpText = "Limit number of processed pages.", Default = -1)]
         public int LimitPages { get; internal set; }

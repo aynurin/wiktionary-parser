@@ -83,64 +83,17 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             }
         }
     }
+
     class TemplateConverter : BaseTemplateConverter
     {
-        private static string[] _voidTemplates = new string[]
-        {
-            "bottom"
-            , "col-bottom"
-            , "col-top"
-            , "der-bottom"
-            , "der-bottom3"
-            , "der-bottom4"
-            , "der-bottom5"
-            , "der-mid"
-            , "der-mid3"
-            , "der-mid4"
-            , "der-mid5"
-            , "der-top"
-            , "der-top3"
-            , "der-top4"
-            , "der-top5"
-            , "hyphenation"
-            , "mid2"
-            , "mid3"
-            , "mid4"
-            , "mid5"
-            , "PIE root" // https://en.wiktionary.org/wiki/Template:PIE_root
-            , "rel-bottom"
-            , "rel-bottom3"
-            , "rel-bottom4"
-            , "rel-bottom5"
-            , "rel-mid"
-            , "rel-mid3"
-            , "rel-mid4"
-            , "rel-mid5"
-            , "rel-top"
-            , "rel-top3"
-            , "rel-top4"
-            , "rel-top5"
-            , "rfc-auto"
-            , "rfc-header"
-            , "rfc-level"
-            , "rfc-subst"
-            , "rfc-tsort"
-            , "rfquotek"
-            , "rhymes"
-            , "top2"
-            , "top3"
-            , "top4"
-            , "top5"
-            , "User:DCDuring/testtaxlink"
-            , "Webster 1913"
-        };
-
         public readonly static Stats<string> ConvertedTemplates = new Stats<string>();
         public readonly static Examples TemplatesExamples = new Examples();
 
+        public string[] IgnoredTemplates { get; set; }
+
         protected override ConversionResult ConvertTemplate(TemplateName name, Template template, ConversionContext context)
         {
-            if (Array.BinarySearch(_voidTemplates, name.Name) >= 0)
+            if (Array.BinarySearch(IgnoredTemplates, name.Name) >= 0)
                 return new ConversionResult();
 
             if (name.IsHeadTemplate)

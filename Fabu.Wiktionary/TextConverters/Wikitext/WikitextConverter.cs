@@ -11,14 +11,15 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 {
     public class WikitextProcessor : ITextConverter
     {
-        private readonly ConverterFactory _converterFactory = new ConverterFactory();
+        private readonly ConverterFactory _converterFactory;
         private Dictionary<string, string> _lagnuageCodes;
         private readonly bool _allowLinks;
 
-        public WikitextProcessor(Dictionary<string, string> lagnuageCodes, bool allowLinks)
+        public WikitextProcessor(Dictionary<string, string> lagnuageCodes, IEnumerable<string> ignoredTemplates, bool allowLinks)
         {
             _lagnuageCodes = lagnuageCodes;
             _allowLinks = allowLinks;
+            _converterFactory = new ConverterFactory(ignoredTemplates);
         }
 
         public string PageTitle { get; set; }

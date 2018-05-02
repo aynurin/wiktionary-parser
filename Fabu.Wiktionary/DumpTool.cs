@@ -6,9 +6,10 @@ using WikimediaProcessing;
 
 namespace Fabu.Wiktionary
 {
-    static class DumpTool
+    public static class DumpTool
     {
         public const string LanguagesDump = "languages";
+        public const string IgnoredTemplatesDump = "ignore-templates";
         public const string LanguageCodes = "language_codes.csv";
         public const string SectionsDump = "sections";
         public const string SectionsDictDump = "sections_dict";
@@ -37,7 +38,7 @@ namespace Fabu.Wiktionary
                 _jsonSerializer.Serialize(file, data);
         }
 
-        internal static T LoadDump<T>(string dumpDir, string dumpName)
+        public static T LoadDump<T>(string dumpDir, string dumpName)
         {
             dumpDir = String.IsNullOrWhiteSpace(dumpDir) ? Environment.CurrentDirectory : dumpDir;
             dumpDir = Path.Combine(dumpDir, dumpName);
