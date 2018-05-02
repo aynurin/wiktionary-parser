@@ -74,20 +74,24 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             var result = new ConversionResult();
             var li = node as ListItem;
             var tag = li.Prefix == "*" ? "ul" : "ol";
+
             if (li.PreviousNode == null || li.PreviousNode.GetType() != typeof(ListItem))
-                result.Write($"<{tag}>");
+                result.Write($"<{tag}><li>");
+
+            if (li.Prefix.Length == 1 && li.PreviousNode != null && li.PreviousNode.GetType() == typeof(ListItem))
+                result.Write("</li><li>");
 
             List<InlineNode> inlines = GetInlines(li.Inlines);
 
             if (inlines.Count > 0)
             {
-                result.Write("<li>");
+                result.Write("<p>");
                 result.Write(new Run(inlines));
-                result.Write("</li>");
+                result.Write("</p>");
             }
 
             if (li.NextNode == null || li.NextNode.GetType() != typeof(ListItem))
-                result.Write($"</{tag}>");
+                result.Write($"</li></{tag}>");
 
             return result;
         }

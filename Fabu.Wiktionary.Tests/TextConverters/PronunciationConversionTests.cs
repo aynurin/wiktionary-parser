@@ -16,8 +16,8 @@ namespace Fabu.Wiktionary.Tests.TextConverters
 ";
             var html = "" +
 "<ul>" +
-"<li>(Received Pronunciation) IPA: /ˈdɪkʃ(ə)n(ə)ɹi/</li>" +
-"<li>(General American, Canada) enPR: dĭk'shə-nĕr-ē, IPA: /ˈdɪkʃənɛɹi/</li>" +
+"<li><p>(Received Pronunciation) IPA: /ˈdɪkʃ(ə)n(ə)ɹi/</p></li>" +
+"<li><p>(General American, Canada) enPR: dĭk'shə-nĕr-ē, IPA: /ˈdɪkʃənɛɹi/</p></li>" +
 "</ul>" +
 "";
             var formatted = Convert(creole, sectionName: "Pronunciation");

@@ -62,11 +62,14 @@ Of feline animal";
         {
             var creole = @"Blabla!
 * first item
+*: first sub item
 * second item
+** second sub item 1
+** second sub item 2
 * third item
 
 Balala!";
-            var html = "<p>Blabla!\r</p><ul><li> first item\r</li><li> second item\r</li><li> third item\r</li></ul><p>\r\nBalala!</p>";
+            var html = "<p>Blabla!\r</p><ul><li><p> first item\r</p><p> first sub item\r</p></li><li><p> second item\r</p><p> second sub item 1\r</p><p> second sub item 2\r</p></li><li><p> third item\r</p></li></ul><p>\r\nBalala!</p>";
             Assert.Equal(html, Convert(creole).ToHtml());
         }
 

@@ -150,6 +150,14 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
+        public void ColorPanel()
+        {
+            var creole = "{{color panel|413633}}";
+            var html = "<p><span color=\"413633\" style=\"background-color:#413633; display:inline-block; width:80px;\">&nbsp;</span></p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
         public void Audio()
         {
             /*
