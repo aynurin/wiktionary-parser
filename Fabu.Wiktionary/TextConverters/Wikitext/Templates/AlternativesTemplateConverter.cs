@@ -61,6 +61,30 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         protected abstract string DefaultNoCap { get; }
     }
 
+    class FormOfTemplateConverter : BaseTemplateConverter
+    {
+        protected override ConversionResult ConvertTemplate(TemplateName name, Template template, ConversionContext context)
+        {
+            var result = new ConversionResult();
+
+            if (template.Arguments.TryGet(out Wikitext definition, 1))
+            {
+                result.Write(definition.TooSmart());
+            }
+            if (template.Arguments.TryGetOneOf(out Wikitext value, 3, 2))
+            {
+                if (result.Count > 0)
+                    result.Write(" of ");
+                result.Write("<em>", value.TooSmart(), "</em>");
+            }
+            template.Arguments.TryGetOneOf(out Wikitext gloss, "gloss", 4, "t");
+            template.Arguments.TryGetOneOf(out Wikitext tr, "tr");
+            WriteTrAndGloss(result, tr, gloss);
+
+            return result;
+        }
+    }
+
     class AlternativeSpellingOfTemplateConverter : BaseFormOfTemplatesConverter
     {
         protected override string DefaultCap => "Alternative spelling of";

@@ -132,7 +132,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             { "superlative of", "en-superlative of" },
             { "attributive of", "attributive form of" },
             { ";", "template-name" },
-            { ",", "template-name" }
+            { ",", "template-name" },
+            { "IPAchar", "template-value" }
         };
 
         internal static bool IgnoreName(string originalName)

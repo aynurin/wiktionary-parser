@@ -30,6 +30,7 @@ namespace Fabu.Wiktionary.TermProcessing
             { "Description", ProcessingMode.ChildSection },
 
             { "Verb", ProcessingMode.PosOrSimilar },
+            { "Article", ProcessingMode.PosOrSimilar },
             { "Acronym", ProcessingMode.PosOrSimilar },
             { "Noun", ProcessingMode.PosOrSimilar },
             { "Adjective", ProcessingMode.PosOrSimilar },

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
@@ -95,9 +96,18 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             {
                 if (items.Count > 0)
                     items.Add(", ");
-                items.Add("&ldquo;");
-                items.Add(template.Arguments["chapter"].Value.TooSmart());
-                items.Add("&rdquo;, in <em>");
+                if (Regex.IsMatch(template.Arguments["chapter"].Value.ToString().Trim(), @"^\d+$"))
+                {
+                    items.Add("chapter ");
+                    items.Add(template.Arguments["chapter"].Value.TooSmart());
+                }
+                else
+                {
+                    items.Add("&ldquo;");
+                    items.Add(template.Arguments["chapter"].Value.TooSmart());
+                    items.Add("&rdquo;");
+                }
+                items.Add(", in <em>");
                 items.Add(template.Arguments["title"].Value.TooSmart());
                 items.Add("</em>");
             }
@@ -214,6 +224,8 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
                 items.Add(template.Arguments["passage"].Value.TooSmart());
                 items.Add("&rdquo;");
             }
+            else if (name.OriginalName == "quote" && template.Arguments.TryGet(out Wikitext value, 1))
+                items.Add(value.TooSmart());
 
             var result = new ConversionResult();
             result.Write(items);
