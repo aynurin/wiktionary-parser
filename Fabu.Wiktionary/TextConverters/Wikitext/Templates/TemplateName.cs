@@ -121,7 +121,6 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             { "alt form", "alternative form of" },
             { "altform", "alternative form of" },
             { "alt form of", "alternative form of" },
-            { "taxlink", "pedlink" },
             { "historical given name", "given name" },
             { "vern", "wikipedia" },
             { "syn", "synonyms" },

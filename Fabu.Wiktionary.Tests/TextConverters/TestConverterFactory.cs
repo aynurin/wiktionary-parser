@@ -13,6 +13,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         {
             { "en", "English" },
             { "de", "German" },
+            { "es", "Spanish" },
             { "fy", "West Frisian" },
             { "la", "Latin" },
             { "ang", "Old English" },

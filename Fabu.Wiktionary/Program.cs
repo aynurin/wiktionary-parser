@@ -17,11 +17,13 @@ namespace Fabu.Wiktionary
                 PrepDictsCommand.Args,
                 StandardSectionsCommand.Args,
                 ExtractTermsCommand.Args,
+                CreoleCommand.Args,
                 SectionGraphCommand.Args>(args)
               .MapResult(
                     (PrepDictsCommand.Args opts) => new PrepDictsCommand().Run(opts, Progress),
                     (StandardSectionsCommand.Args opts) => new StandardSectionsCommand().Run(opts, Progress),
                     (ExtractTermsCommand.Args opts) => new ExtractTermsCommand().Run(opts, Progress),
+                    (CreoleCommand.Args opts) => new CreoleCommand().Run(opts, Progress),
                     (SectionGraphCommand.Args opts) => new SectionGraphCommand().Run(opts, Progress),
                     errs => 1);
         }

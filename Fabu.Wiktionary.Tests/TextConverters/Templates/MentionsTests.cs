@@ -24,7 +24,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         public void MixedMentions()
         {
             var creole = "From {{inh|nds|gml|vrîe}}, variant of {{m|gml|vrî}}, from {{der|nds|osx|frī}}, from {{der|nds|gem-pro|*frijaz}}, from {{der|nds|ine-pro|*prey||new}}. Compare Dutch {{m|nl|vrij}}, West Frisian {{m|fy|frij}}, English {{m|en|free}}, German {{m|de|frei}}.";
-            var html = "<p>From Middle Low German <em>vrîe</em>, variant of vrî, from Old Saxon <em>frī</em>, from Proto-Germanic <em>*frijaz</em>, from Proto-Indo-European <em>*prey</em> (&ldquo;new&rdquo;). Compare Dutch vrij, West Frisian frij, English free, German frei.</p>";
+            var html = "<p>From Middle Low German <em>vrîe</em>, variant of <em>vrî</em>, from Old Saxon <em>frī</em>, from Proto-Germanic <em>*frijaz</em>, from Proto-Indo-European <em>*prey</em> (&ldquo;new&rdquo;). Compare Dutch <em>vrij</em>, West Frisian <em>frij</em>, English <em>free</em>, German <em>frei</em>.</p>";
             Assert.Equal(html, Convert(creole).ToHtml());
         }
 
@@ -79,7 +79,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         public void MentionWithTranslation()
         {
             var creole = "from {{m|la|dictio||speaking}},";
-            var html = "<p>from dictio (&ldquo;speaking&rdquo;),</p>";
+            var html = "<p>from <em>dictio</em> (&ldquo;speaking&rdquo;),</p>";
             Assert.Equal(html, Convert(creole).ToHtml());
         }
 
@@ -87,7 +87,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         public void MentionWithoutTranslation()
         {
             var creole = "from {{m|la|dictus}}";
-            var html = "<p>from dictus</p>";
+            var html = "<p>from <em>dictus</em></p>";
             Assert.Equal(html, Convert(creole).ToHtml());
         }
 
@@ -104,6 +104,22 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         {
             var creole = "Its pronominal use is of {{cog|gem}} origin.";
             var html = "<p>Its pronominal use is of Germanic origin.</p>";
+            Assert.Equal(html, Convert(creole).ToHtml());
+        }
+
+        [Fact]
+        public void Bor()
+        {
+            var creole = "{{bor|en|es|abacá}}";
+            var html = "<p>Spanish <em>abacá</em></p>";
+            Assert.Equal(html, Convert(creole).ToHtml());
+        }
+
+        [Fact]
+        public void MentionAlt()
+        {
+            var creole = "{{m|tl|abaka|abaká}}";
+            var html = "<p><em>abaká</em></p>";
             Assert.Equal(html, Convert(creole).ToHtml());
         }
     }

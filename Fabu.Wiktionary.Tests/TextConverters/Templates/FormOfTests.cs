@@ -25,5 +25,12 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
             var html = "<p><em>US and Canada spelling of</em> kilometre.</p>";
             Assert.Equal(html, Convert(creole).ToHtml());
         }
+        [Fact]
+        public void DoubletNoText()
+        {
+            var creole = "{{doublet|lang=en|notext=1}}";
+            var html = "";
+            Assert.Equal(html, Convert(creole).ToHtml());
+        }
     }
 }

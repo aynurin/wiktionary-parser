@@ -6,6 +6,7 @@ using Fabu.Wiktionary.TextConverters.Wiki.Templates;
 using Fabu.Wiktionary.Transform;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -39,7 +40,8 @@ namespace Fabu.Wiktionary.Commands
             var wiktionaryDump = DumpTool.LoadWikimediaDump(args.DumpDir, args.WiktionaryDumpFile);
             var textConverter = new WikitextProcessor(lagnuageCodes, ignoredTemplates, false);
             var processor = new TermGraphProcessor(transform);
-            var extractor = new WiktionaryTermExtractor(processor, textConverter, args.Term);
+            var writer = new FileWordWriter(Path.Combine(args.DumpDir, "output"));
+            var extractor = new WiktionaryTermExtractor(processor, textConverter, args.Term, writer);
             var analyzer = new WiktionaryAnalyzer(extractor, wiktionaryDump);
             var pagesProcessed = 0;
             if (onProgress != null)
@@ -54,8 +56,8 @@ namespace Fabu.Wiktionary.Commands
 
             Console.WriteLine();
             Console.WriteLine($"Pages processed: {pagesProcessed}");
-            Console.WriteLine($"Words defined: {extractor.DefinedWords.Count}");
-            Console.WriteLine($"Total terms: {extractor.DefinedWords.Sum(w => w.Terms.Count)}");
+            Console.WriteLine($"Words defined: {extractor.WordsCount}");
+            Console.WriteLine($"Total terms: {extractor.TermsCount}");
         }
     }
 }

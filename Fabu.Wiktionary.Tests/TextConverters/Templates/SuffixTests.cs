@@ -8,7 +8,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         public void Compound()
         {
             var creole = "{{der|en|la|-}} {{compound|la|floccus|t1=a wisp|naucum|t2=a trifle|nihilum|t3=nothing|pilus|t4=a hair|nocat=1}} + {{m|en|-fication}}";
-            var html = "<p>Latin <em>floccus</em> (&ldquo;a wisp&rdquo;) + <em>naucum</em> (&ldquo;a trifle&rdquo;) + <em>nihilum</em> (&ldquo;nothing&rdquo;) + <em>pilus</em> (&ldquo;a hair&rdquo;) + -fication</p>";
+            var html = "<p>Latin <em>floccus</em> (&ldquo;a wisp&rdquo;) + <em>naucum</em> (&ldquo;a trifle&rdquo;) + <em>nihilum</em> (&ldquo;nothing&rdquo;) + <em>pilus</em> (&ldquo;a hair&rdquo;) + <em>-fication</em></p>";
             Assert.Equal(html, Convert(creole, false).ToHtml());
         }
 

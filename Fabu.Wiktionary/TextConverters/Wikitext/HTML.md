@@ -5,3 +5,4 @@
 <ol></ol>
 <em></em>
 <strong></strong>
+<sup></sup>

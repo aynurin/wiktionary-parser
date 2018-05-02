@@ -14,5 +14,7 @@ namespace Fabu.Wiktionary.TermProcessing
         }
 
         public List<Term> Terms => _terms;
+
+        public string Title => _title;
     }
 }

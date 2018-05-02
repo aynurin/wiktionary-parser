@@ -10,7 +10,12 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         protected override ConversionResult ConvertTemplate(TemplateName name, Template template, ConversionContext context)
         {
             var result = new ConversionResult();
-            
+
+            template.Arguments.TryGetOneOf(out Wikitext value, 2, 1);
+
+            if (value == null || template.Arguments.IsSet("notext"))
+                return result;
+
             result.Write("<em>");
             if (template.Arguments.TryGetArray("from", out Wikitext[] items))
             {
@@ -36,13 +41,13 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
                 else
                     result.Write(DefaultCap);
             }
-            result.Write("</em> ");
+            result.Write("</em>");
 
-            template.Arguments.TryGetOneOf(out Wikitext value, 2, 1);
+            result.WriteSpaceIfNotEmpty();
+            result.Write(value.TooSmart());
+
             template.Arguments.TryGetOneOf(out Wikitext gloss, 3);
             template.Arguments.TryGetOneOf(out Wikitext tr, "tr");
-
-            result.Write(value.TooSmart());
 
             WriteTrAndGloss(result, tr, gloss);
 
@@ -94,6 +99,12 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
     {
         protected override string DefaultCap => "Archaic form of";
         protected override string DefaultNoCap => "archaic form of";
+    }
+
+    class ArchaicSpellingOfTemplateConverter : BaseFormOfTemplatesConverter
+    {
+        protected override string DefaultCap => "Archaic spelling of";
+        protected override string DefaultNoCap => "archaic spelling of";
     }
 
     class DatedFormOfTemplateConverter : BaseFormOfTemplatesConverter

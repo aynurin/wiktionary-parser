@@ -10,7 +10,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             var result = new ConversionResult();
 
             if (template.Arguments.TryGetOneOf(out Wikitext value, 3, 2))
-                result.Write(value.TooSmart());
+                result.Write("<em>", value.TooSmart(), "</em>");
 
             GetTrAndGloss(template, out Node tr, out Node gloss);
             if (gloss == null && template.Arguments.ContainsNotEmpty(4))

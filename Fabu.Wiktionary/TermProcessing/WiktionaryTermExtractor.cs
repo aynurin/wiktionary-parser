@@ -16,15 +16,18 @@ namespace Fabu.Wiktionary.TermProcessing
         /// Process only this given term
         /// </summary>
         private readonly string _onlyTheTerm;
+        private readonly IWordWriter _wordWriter;
 
-        public List<DictionaryWord> DefinedWords { get; } = new List<DictionaryWord>();
+        public int WordsCount { get; set; }
+        public int TermsCount { get; set; }
         public List<string> EmptyResults { get; } = new List<string>();
 
-        public WiktionaryTermExtractor(TermGraphProcessor processor, ITextConverter contentConverter, string onlyTheTerm)
+        public WiktionaryTermExtractor(TermGraphProcessor processor, ITextConverter contentConverter, string onlyTheTerm, IWordWriter writer)
         {
             _graphProcessor = processor;
             _textConverter = contentConverter;
             _onlyTheTerm = onlyTheTerm;
+            _wordWriter = writer;
         }
 
         public void AddPage(WikimediaPage page)
@@ -49,9 +52,14 @@ namespace Fabu.Wiktionary.TermProcessing
                 EmptyResults.Add(page.Title);
             // now get rid of non-English definitions, because parsing wikitext to HTML is simply impossible for all languages at the moment.
             termsDefined = termsDefined.Where(term => term.Language == "English").ToList();
-            ConvertContent(page.Title, null, termsDefined);
-            var dictword = new DictionaryWord(page.Title, termsDefined);
-            DefinedWords.Add(dictword);
+            if (termsDefined.Count > 0)
+            {
+                ConvertContent(page.Title, null, termsDefined);
+                var dictword = new DictionaryWord(page.Title, termsDefined);
+                _wordWriter.Write(dictword);
+                WordsCount += 1;
+                TermsCount += dictword.Terms.Count;
+            }
         }
 
         private void ConvertContent(string pageTitle, string sectionName, IEnumerable<Term> terms)
