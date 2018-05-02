@@ -107,7 +107,11 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             { "alternative plural of", "plural of" },
             { "taxlink", "pedlink" },
             { "historical given name", "given name" },
-            { "vern", "wikipedia" }
+            { "vern", "wikipedia" },
+            { "syn", "synonyms" },
+            { "hyper", "hypernyms" },
+            { "hypo", "hyponyms" },
+            { "ant", "antonyms" }
         };
 
         internal static string FullName(string template)
