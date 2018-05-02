@@ -118,6 +118,22 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
+        public void Ellipsis()
+        {
+            var creole = "{{...}}";
+            var html = "<p> [&hellip;] </p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
+        public void EllipsisNb()
+        {
+            var creole = "{{nb...}}";
+            var html = "<p>&nbsp;[&hellip;]</p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
         public void Audio()
         {
             /*

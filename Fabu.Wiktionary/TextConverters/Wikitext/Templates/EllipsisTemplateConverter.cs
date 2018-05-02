@@ -11,7 +11,12 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         protected override ConversionResult ConvertTemplate(TemplateName name, Template template, ConversionContext context)
         {
             var result = new ConversionResult();
+            if (name.OriginalName == "nb...")
+                result.Add("&nbsp;");
+            else result.Add(" ");
             result.Add("[&hellip;]");
+            if (name.OriginalName != "nb...")
+                result.Add(" ");
             return result;
         }
     }

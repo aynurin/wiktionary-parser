@@ -92,6 +92,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             { "ipa", "IPA" },
             { "inh", "inherited" },
             { "...", "ellipsis" },
+            { "nb...", "ellipsis" },
             { "quote-magazine", "quote-journal" },
             { "quote-news", "quote-journal" },
             { "a", "accent" },

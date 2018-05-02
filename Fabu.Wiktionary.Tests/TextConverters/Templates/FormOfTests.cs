@@ -15,7 +15,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters.Templates
         public void AlternativeSpellingOfNoCapNoDot()
         {
             var creole = "{{alternative spelling of|swap|lang=en|nocap=1|nodot=1}}";
-            var html = "<p><em>alternative spelling of</em> swap</p>";
+            var html = "<p><em>spelling of</em> swap</p>";
             Assert.Equal(html, Convert(creole).ToHtml());
         }
         [Fact]

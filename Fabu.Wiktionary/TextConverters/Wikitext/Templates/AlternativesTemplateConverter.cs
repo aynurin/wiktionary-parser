@@ -10,8 +10,6 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         protected override ConversionResult ConvertTemplate(TemplateName name, Template template, ConversionContext context)
         {
             var result = new ConversionResult();
-
-            var phrases = GetPhrases();
             
             result.Write("<em>");
             if (template.Arguments.TryGetArray("from", out Wikitext[] items))
@@ -28,15 +26,15 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
                     result.Write(items[i].TooSmart());
                 }
                 result.WriteSpaceIfNotEmpty();
-                result.Write(phrases[0]);
+                result.Write(DefaultNoCap);
             }
             else
             {
 
                 if (template.Arguments.IsSet("nocap"))
-                    result.Write(phrases[1]);
+                    result.Write(DefaultNoCap);
                 else
-                    result.Write(phrases[2]);
+                    result.Write(DefaultCap);
             }
             result.Write("</em> ");
 
@@ -54,96 +52,65 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             return result;
         }
 
-        protected abstract string[] GetPhrases();
+        protected abstract string DefaultCap { get; }
+        protected abstract string DefaultNoCap { get; }
     }
 
     class AlternativeSpellingOfTemplateConverter : BaseFormOfTemplatesConverter
     {
-        protected override string[] GetPhrases() => new[]
-            {
-                "spelling of",
-                "alternative spelling of",
-                "Alternative spelling of"
-            };
+        protected override string DefaultCap => "Alternative spelling of";
+        protected override string DefaultNoCap => "spelling of";
+    }
+
+    class ObsoleteSpellingOfTemplateConverter : BaseFormOfTemplatesConverter
+    {
+        protected override string DefaultCap => "Obsolete spelling of";
+        protected override string DefaultNoCap => "obsolete spelling of";
     }
 
     class StandardSpellingOfTemplateConverter : BaseFormOfTemplatesConverter
     {
-        protected override string[] GetPhrases() => new[]
-            {
-                "spelling of",
-                "standard spelling of",
-                "Standard spelling of"
-            };
+        protected override string DefaultCap => "Spelling of";
+        protected override string DefaultNoCap => "spelling of";
     }
 
-    class AlternativeCaseFormOfTemplateConverter : BaseFormOfTemplatesConverter
+    class AlternativeCaseFormOfTemplateConverter : AlternativeFormOfTemplateConverter
     {
-        protected override string[] GetPhrases() => new[]
-            {
-                "case form of",
-                "alternative case form of",
-                "Alternative case form of"
-            };
     }
 
     class AlternativeFormOfTemplateConverter : BaseFormOfTemplatesConverter
     {
-        protected override string[] GetPhrases() => new[]
-            {
-                "form of",
-                "alternative form of",
-                "Alternative form of"
-            };
+        protected override string DefaultCap => "Alternative of";
+        protected override string DefaultNoCap => "alternative of";
     }
 
     class ObsoleteFormOfTemplateConverter : BaseFormOfTemplatesConverter
     {
-        protected override string[] GetPhrases() => new[]
-            {
-                "obsolete form of",
-                "obsolete form of",
-                "Obsolete form of"
-            };
+        protected override string DefaultCap => "Obsolete form of";
+        protected override string DefaultNoCap => "obsolete form of";
     }
 
     class ArchaicFormOfTemplateConverter : BaseFormOfTemplatesConverter
     {
-        protected override string[] GetPhrases() => new[]
-            {
-                "archaic form of",
-                "archaic form of",
-                "Archaic form of"
-            };
+        protected override string DefaultCap => "Archaic form of";
+        protected override string DefaultNoCap => "archaic form of";
     }
 
     class DatedFormOfTemplateConverter : BaseFormOfTemplatesConverter
     {
-        protected override string[] GetPhrases() => new[]
-            {
-                "dated form of",
-                "dated form of",
-                "Dated form of"
-            };
+        protected override string DefaultCap => "Dated form of";
+        protected override string DefaultNoCap => "dated form of";
     }
 
     class LateFormOfTemplateConverter : BaseFormOfTemplatesConverter
     {
-        protected override string[] GetPhrases() => new[]
-            {
-                "late form of",
-                "late form of",
-                "Late form of"
-            };
+        protected override string DefaultCap => "Late form of";
+        protected override string DefaultNoCap => "late form of";
     }
 
     class MisspellingOfTemplateConverter : BaseFormOfTemplatesConverter
     {
-        protected override string[] GetPhrases() => new[]
-            {
-                "misspelling of",
-                "misspelling of",
-                "Misspelling of"
-            };
+        protected override string DefaultCap => "Misspelling of";
+        protected override string DefaultNoCap => "misspelling of";
     }
 }
