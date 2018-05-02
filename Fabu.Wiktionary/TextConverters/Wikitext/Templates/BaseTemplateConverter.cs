@@ -99,6 +99,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             if (name.IsHeadTemplate)
                 return new ConversionResult();
 
+            if (TemplateName.IgnoreName(name.OriginalName))
+                return new ConversionResult();
+
             //if (name.Language != null && name.Language != "en")
             //{
             //    // TODO: zh-l, zh-m, ltc-l, och-l

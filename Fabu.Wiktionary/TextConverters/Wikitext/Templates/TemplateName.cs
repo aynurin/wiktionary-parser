@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
@@ -11,6 +12,12 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         public string OriginalName { get; set; }
         public string Language { get; set; }
         public bool IsHeadTemplate { get; set; }
+
+        private static readonly Regex[] _ignoreTemplates = new[]
+        {
+            new Regex(@"^RQ?\:", RegexOptions.IgnoreCase),
+            new Regex(@"^User\:")
+        };
 
         private static string[] _acceleratedPosTemplates = new string[]
         {
@@ -102,12 +109,16 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             { "w", "wikipedia" },
             { "def-date", "defdate" },
             { "non-gloss definition", "non-gloss" },
+            { "n-g", "non-gloss" },
             { "t", "translation" },
             { "t+", "translation" },
             { "t-check", "translation" },
             { "t+check", "translation" },
             { "en-irregular plural of", "plural of" },
             { "alternative plural of", "plural of" },
+            { "alt form", "alternative form of" },
+            { "altform", "alternative form of" },
+            { "alt form of", "alternative form of" },
             { "taxlink", "pedlink" },
             { "historical given name", "given name" },
             { "vern", "wikipedia" },
@@ -119,6 +130,16 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             { "comparative of", "en-comparative of" },
             { "superlative of", "en-superlative of" }
         };
+
+        internal static bool IgnoreName(string originalName)
+        {
+            foreach (var rx in _ignoreTemplates)
+            {
+                if (rx.IsMatch(originalName))
+                    return true;
+            }
+            return false;
+        }
 
         internal static string FullName(string template)
         {
