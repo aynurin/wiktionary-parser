@@ -28,7 +28,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             "proper noun",
             "verb",
             "interj",
-            "plural noun"
+            "plural noun",
+            "PP",
+            "prep phrase"
         };
 
         public TemplateName(string originalName)
@@ -128,7 +130,10 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             { "ant", "antonyms" },
             { "af", "affix" },
             { "comparative of", "en-comparative of" },
-            { "superlative of", "en-superlative of" }
+            { "superlative of", "en-superlative of" },
+            { "attributive of", "attributive form of" },
+            { ";", "template-name" },
+            { ",", "template-name" }
         };
 
         internal static bool IgnoreName(string originalName)

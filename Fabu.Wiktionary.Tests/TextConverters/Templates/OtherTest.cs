@@ -134,6 +134,22 @@ namespace Fabu.Wiktionary.Tests.TextConverters
         }
 
         [Fact]
+        public void CommaAndSemicolon()
+        {
+            var creole = "{{;}}{{,}}";
+            var html = "<p>;,</p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
+        public void Context()
+        {
+            var creole = "{{context|business|UK|lang=en}} {{synonym of|job center|lang=en}}";
+            var html = "<p>(<em>business</em>, <em>UK</em>) <em>Synonym of</em> job center.</p>";
+            Assert.Equal(html, Convert(creole, false).ToHtml());
+        }
+
+        [Fact]
         public void Audio()
         {
             /*

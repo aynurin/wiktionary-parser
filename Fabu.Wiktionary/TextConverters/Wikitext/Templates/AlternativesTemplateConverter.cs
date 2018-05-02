@@ -113,4 +113,19 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
         protected override string DefaultCap => "Misspelling of";
         protected override string DefaultNoCap => "misspelling of";
     }
+    class AttributiveFormOfTemplateConverter : BaseFormOfTemplatesConverter
+    {
+        protected override string DefaultCap => "Attributive form of";
+        protected override string DefaultNoCap => "attributive form of";
+    }
+    class DoubletTemplateConverter : BaseFormOfTemplatesConverter
+    {
+        protected override string DefaultCap => "Doublet of";
+        protected override string DefaultNoCap => "doublet of";
+    }
+    class SynonymOfTemplateConverter : BaseFormOfTemplatesConverter
+    {
+        protected override string DefaultCap => "Synonym of";
+        protected override string DefaultNoCap => "synonym of";
+    }
 }
