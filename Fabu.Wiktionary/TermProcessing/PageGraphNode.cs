@@ -5,10 +5,10 @@ using System.Linq;
 
 namespace Fabu.Wiktionary.TermProcessing
 {
-    public class GraphItem
+    public class PageGraphNode
     {
-        private readonly GraphItem _parent;
-        private readonly List<GraphItem> _children = new List<GraphItem>();
+        private readonly PageGraphNode _parent;
+        private readonly List<PageGraphNode> _children = new List<PageGraphNode>();
         private readonly string[] _allowedMembers;
         protected readonly List<Term> _createdTerms;
 
@@ -24,26 +24,26 @@ namespace Fabu.Wiktionary.TermProcessing
         public readonly string RelatedSectionContent;
         public readonly bool IsLanguage;
 
-        public IEnumerable<GraphItem> Children => _children;
+        public IEnumerable<PageGraphNode> Children => _children;
 
         public bool IsTermDefined { get => _term?.Status == Term.TermStatus.Defined; }
 
         public string Language { get; private set; }
 
-        public IEnumerable<Term> FinalizedTerms => _createdTerms.Where(t => t.Status == Term.TermStatus.Finalized);
         public IEnumerable<Term> AllItems => _createdTerms;
+        public IEnumerable<Term> DefinedTerms => _createdTerms.Where(_ => _.Status == Term.TermStatus.Defined && !_.IsEmpty);
 
         public bool CanDefineTerm { get => _canDefineTerm; set => _canDefineTerm = value; }
 
-        public static GraphItem CreateRoot(string pageTitle) => new GraphItem("PAGE", null, pageTitle, null, false, false, null, new List<Term>());
+        public static PageGraphNode CreateRoot(string pageTitle) => new PageGraphNode("PAGE", null, pageTitle, null, false, false, null, new List<Term>());
 
         internal List<Term> GetItems(Term.TermStatus defined) => _createdTerms.Where(i => i.Status == Term.TermStatus.Defined).ToList();
 
-        public GraphItem CreateChild(string title, string sectionContent, bool isLanguage, bool canDefineTerm, string[] allowedMembers) => 
-            new GraphItem(title, this, OwnerPageTitle, sectionContent, isLanguage, canDefineTerm, allowedMembers, _createdTerms);
+        public PageGraphNode CreateChild(string title, string sectionContent, bool isLanguage, bool canDefineTerm, string[] allowedMembers) => 
+            new PageGraphNode(title, this, OwnerPageTitle, sectionContent, isLanguage, canDefineTerm, allowedMembers, _createdTerms);
 
-        private GraphItem(string title, 
-            GraphItem parent, string pageTitle, string sectionContent, 
+        private PageGraphNode(string title, 
+            PageGraphNode parent, string pageTitle, string sectionContent, 
             bool isLanguage, bool canDefineTerm, string[] allowedMembers,
             List<Term> termsStore)
         {
@@ -58,7 +58,7 @@ namespace Fabu.Wiktionary.TermProcessing
             _term = new Term(OwnerPageTitle);
         }
 
-        private void ForEachChild(GraphItem parent, Action<GraphItem, GraphItem> p)
+        private void ForEachChild(PageGraphNode parent, Action<PageGraphNode, PageGraphNode> p)
         {
             foreach (var child in parent._children)
             {
@@ -144,20 +144,20 @@ namespace Fabu.Wiktionary.TermProcessing
             return _term;
         }
 
-        internal void UpdateMember(GraphItem child)
+        internal void UpdateMember(PageGraphNode child)
         {
             AddMember(_term.Properties[ItemTitle], child);
         }
 
-        internal bool AllowsMember(GraphItem item) => 
+        internal bool AllowsMember(PageGraphNode item) => 
             _allowedMembers != null && Array.BinarySearch(_allowedMembers, item.ItemTitle) >= 0;
 
-        private void AddMember(Term term, GraphItem graphItem)
+        private void AddMember(Term term, PageGraphNode graphItem)
         {
             term.SetProperty(graphItem.ItemTitle, graphItem.RelatedSectionContent);
         }
 
-        public void AddChild(GraphItem item)
+        public void AddChild(PageGraphNode item)
         {
             _children.Add(item);
         }

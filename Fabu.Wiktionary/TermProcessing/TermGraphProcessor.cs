@@ -47,19 +47,19 @@ namespace Fabu.Wiktionary.TermProcessing
             { "Prepositional phrase", ProcessingMode.PosOrSimilar }
         };
 
-        public GraphItem CreateGraph(WikimediaPage page) => 
+        public PageGraphNode CreateGraph(WikimediaPage page) => 
             CreateGraph(page.Title, page.Sections.Select(_ => new WikiSectionAccessor(_)));
 
-        public GraphItem CreateGraph(string title, IEnumerable<ISectionAccessor> subSections)
+        public PageGraphNode CreateGraph(string title, IEnumerable<ISectionAccessor> subSections)
         {
-            var graph = GraphItem.CreateRoot(title);
+            var graph = PageGraphNode.CreateRoot(title);
             AddSections(graph, subSections, null);
             return graph;
         }
 
         public Dictionary<string, int> SkippedSections { get; set; } = new Dictionary<string, int>();
 
-        private void AddSections(GraphItem graph, IEnumerable<ISectionAccessor> sections, Action<GraphItem> forEachItem)
+        private void AddSections(PageGraphNode graph, IEnumerable<ISectionAccessor> sections, Action<PageGraphNode> forEachItem)
         {
             foreach (var section in sections)
             {
@@ -89,16 +89,16 @@ namespace Fabu.Wiktionary.TermProcessing
 
                     if (sectionProcessingMode.AllowWiktionaryChildrenProcessing)
                     {
-                        Action<GraphItem> setContainsTermDefiners = null;
+                        Action<PageGraphNode> setContainsTermDefiners = null;
                         if (nodeName.IsLanguage)
                         {
                             if (forEachItem == null)
                             {
-                                setContainsTermDefiners = (GraphItem x) => containsTermDefiners |= x.CanDefineTerm;
+                                setContainsTermDefiners = (PageGraphNode x) => containsTermDefiners |= x.CanDefineTerm;
                             }
                             else
                             {
-                                setContainsTermDefiners = (GraphItem x) =>
+                                setContainsTermDefiners = (PageGraphNode x) =>
                                 {
                                     forEachItem(x);
                                     containsTermDefiners |= x.CanDefineTerm;
@@ -120,7 +120,7 @@ namespace Fabu.Wiktionary.TermProcessing
             }
         }
 
-        public void ProcessGraph(GraphItem item)
+        public void ProcessGraph(PageGraphNode item)
         {
             if (item.CanDefineTerm) // a fixed subset of sections
                 item.DefineTerm(); // creates an instance of a term

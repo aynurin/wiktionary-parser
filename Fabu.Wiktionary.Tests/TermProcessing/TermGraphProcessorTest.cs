@@ -248,14 +248,14 @@ namespace Fabu.Wiktionary.Tests.TermProcessing
 
     internal class TestGraphItem : ISectionAccessor
     {
-        private readonly GraphItem _innerItem;
+        private readonly PageGraphNode _innerItem;
         private readonly List<TestGraphItem> _children = new List<TestGraphItem>();
 
-        public GraphItem InnerItem => _innerItem;
+        public PageGraphNode InnerItem => _innerItem;
 
-        public static TestGraphItem TestRoot(string pageTitle) => new TestGraphItem(GraphItem.CreateRoot(pageTitle));
+        public static TestGraphItem TestRoot(string pageTitle) => new TestGraphItem(PageGraphNode.CreateRoot(pageTitle));
 
-        private TestGraphItem(GraphItem item)
+        private TestGraphItem(PageGraphNode item)
         {
             _innerItem = item;
         }

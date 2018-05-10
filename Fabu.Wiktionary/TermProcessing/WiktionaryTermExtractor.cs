@@ -44,14 +44,10 @@ namespace Fabu.Wiktionary.TermProcessing
 
             _graphProcessor.ProcessGraph(graph);
 
-            foreach (var item in graph.AllItems.Where(i => i.Status == Term.TermStatus.Defined && i.IsEmpty))
-                item.Status = Term.TermStatus.Empty;
-
-            var termsDefined = graph.GetItems(Term.TermStatus.Defined);
+            var termsDefined = graph.DefinedTerms.Where(term => term.Language == "English").ToList();
             if (termsDefined.Count == 0 && graph.AllItems.Any(i => i.Language == "English"))
                 EmptyResults.Add(page.Title);
             // now get rid of non-English definitions, because parsing wikitext to HTML is simply impossible for all languages at the moment.
-            termsDefined = termsDefined.Where(term => term.Language == "English").ToList();
             if (termsDefined.Count > 0)
             {
                 ConvertContent(page.Title, null, termsDefined);
