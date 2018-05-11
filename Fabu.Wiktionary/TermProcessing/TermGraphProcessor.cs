@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Fabu.Wiktionary.TextConverters;
 using Fabu.Wiktionary.Transform;
 using WikimediaProcessing;
 
 namespace Fabu.Wiktionary.TermProcessing
 {
-    public class TermGraphProcessor
+    public class PageGraphProcessor
     {
         private readonly SectionNameTransform _transform;
 
-        public TermGraphProcessor(SectionNameTransform transform)
+        public PageGraphProcessor(SectionNameTransform transform)
         {
             _transform = transform;
         }

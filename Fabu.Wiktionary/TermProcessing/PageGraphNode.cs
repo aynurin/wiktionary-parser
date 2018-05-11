@@ -55,7 +55,7 @@ namespace Fabu.Wiktionary.TermProcessing
             _canDefineTerm = canDefineTerm;
             _allowedMembers = allowedMembers;
             _createdTerms = termsStore;
-            _term = new Term(OwnerPageTitle);
+            _term = new Term(OwnerPageTitle, RelatedSectionContent);
         }
 
         private void ForEachChild(PageGraphNode parent, Action<PageGraphNode, PageGraphNode> p)
@@ -80,12 +80,12 @@ namespace Fabu.Wiktionary.TermProcessing
             if (_isTermUpdated)
                 throw new InvalidOperationException("A term has already been updated");
 
-            AddMember(_term, this);
+            _term.SetProperty(ItemTitle, RelatedSectionContent);
             _isTermUpdated = true;
         }
 
         /// <summary>
-        /// A term is always defined on this node, all its children, on all its siblings that have a different names, and all their children, recursively.
+        /// A term must always be defined on this node, all its children, on all its siblings that have a different names, and all their children, recursively.
         /// </summary>
         /// <remarks>
         /// This is because of the nature of how sections are structured on the page. In general, if a section can create a term, then this term relates
@@ -106,8 +106,9 @@ namespace Fabu.Wiktionary.TermProcessing
 
             // If this node can define a term, we need to:
             _term.Status = Term.TermStatus.Void; // trash the already defined term
-            _term = _term.Clone(); // but inherit all its properties
+            _term = _term.CloneTerm(); // but inherit all its properties
             _term.Language = Language;
+            _isTermUpdated = false;
             _createdTerms.Add(_term); // and store the new term
 
             if (_parent != null && !IsLanguage) // languages are all twins
@@ -125,8 +126,8 @@ namespace Fabu.Wiktionary.TermProcessing
             _term.Status = Term.TermStatus.Defined; // redefine the term
             _hasDefinedATerm = true;
 
-            if (!IsLanguage)
-                AddMember(_term, this); // save content of this node to the defined term
+            if (!IsLanguage) // Language sections do not set their values to terms as they cannot define terms
+                UpdateTerm(); // save content of this node to the defined term
         }
 
         internal Term CreateTerm()
@@ -146,16 +147,11 @@ namespace Fabu.Wiktionary.TermProcessing
 
         internal void UpdateMember(PageGraphNode child)
         {
-            AddMember(_term.Properties[ItemTitle], child);
+            _term[ItemTitle].SetProperty(child.ItemTitle, child.RelatedSectionContent);
         }
 
         internal bool AllowsMember(PageGraphNode item) => 
             _allowedMembers != null && Array.BinarySearch(_allowedMembers, item.ItemTitle) >= 0;
-
-        private void AddMember(Term term, PageGraphNode graphItem)
-        {
-            term.SetProperty(graphItem.ItemTitle, graphItem.RelatedSectionContent);
-        }
 
         public void AddChild(PageGraphNode item)
         {

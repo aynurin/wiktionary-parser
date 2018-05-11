@@ -9,8 +9,7 @@ namespace Fabu.Wiktionary.TermProcessing
 {
     internal class WiktionaryTermExtractor : IWiktionaryPageProcessor
     {
-        private readonly TermGraphProcessor _graphProcessor;
-        private readonly ITextConverter _textConverter;
+        private readonly PageGraphProcessor _graphProcessor;
 
         /// <summary>
         /// Process only this given term
@@ -22,10 +21,9 @@ namespace Fabu.Wiktionary.TermProcessing
         public int TermsCount { get; set; }
         public List<string> EmptyResults { get; } = new List<string>();
 
-        public WiktionaryTermExtractor(TermGraphProcessor processor, ITextConverter contentConverter, string onlyTheTerm, IWordWriter writer)
+        public WiktionaryTermExtractor(PageGraphProcessor processor, string onlyTheTerm, IWordWriter writer)
         {
             _graphProcessor = processor;
-            _textConverter = contentConverter;
             _onlyTheTerm = onlyTheTerm;
             _wordWriter = writer;
         }
@@ -50,26 +48,9 @@ namespace Fabu.Wiktionary.TermProcessing
             // now get rid of non-English definitions, because parsing wikitext to HTML is simply impossible for all languages at the moment.
             if (termsDefined.Count > 0)
             {
-                ConvertContent(page.Title, null, termsDefined);
-                var dictword = new DictionaryWord(page.Title, termsDefined);
-                _wordWriter.Write(dictword);
+                _wordWriter.Write(termsDefined);
                 WordsCount += 1;
-                TermsCount += dictword.Terms.Count;
-            }
-        }
-
-        private void ConvertContent(string pageTitle, string sectionName, IEnumerable<Term> terms)
-        {
-            if (terms == null || _textConverter == null)
-                return;
-
-            foreach (var term in terms)
-            {
-                var args = new ContextArguments() { PageTitle = pageTitle, SectionName = sectionName };
-                term.ConvertContent(args, _textConverter);
-                if (sectionName == null && term.Title != pageTitle)
-                    sectionName = term.Title;
-                ConvertContent(pageTitle, sectionName, term.Properties.Values);
+                TermsCount += termsDefined.Count;
             }
         }
 
