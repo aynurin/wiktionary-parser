@@ -108,7 +108,7 @@ namespace Fabu.Wiktionary.TermProcessing
             _term.Status = Term.TermStatus.Void; // trash the already defined term
             _term = _term.CloneTerm(); // but inherit all its properties
             _term.Language = Language;
-            _isTermUpdated = false;
+            _isTermUpdated = false; // the newly created term was not updated yet, so state that.
             _createdTerms.Add(_term); // and store the new term
 
             if (_parent != null && !IsLanguage) // languages are all twins
