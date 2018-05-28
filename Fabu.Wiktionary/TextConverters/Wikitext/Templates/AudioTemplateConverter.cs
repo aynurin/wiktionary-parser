@@ -22,13 +22,33 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
                     language = template.Arguments["lang"].Value.ToString();
             }
 
+            var fileNameStr = fileName.ToString();
+            var textStr = text.ToString();
+
             if (context.Arguments.SectionName == "Pronunciation")
-                context.AddPronunciation(language, fileName.ToString(), text.ToString());
+                context.AddPronunciation(language, fileNameStr, textStr);
 
             if (template.Name.ToString() == "audio-IPA" && text != null)
             {
                 result.Write("IPA: ");
                 result.Write(text.TooSmart());
+            }
+
+            if (!String.IsNullOrWhiteSpace(fileNameStr))
+            {
+                if (!String.IsNullOrWhiteSpace(textStr))
+                {
+                    result.WriteSpaceIfNotEmpty();
+                    result.Write(textStr);
+                    result.Write(": ");
+                }
+                else if (!String.IsNullOrWhiteSpace(language))
+                {
+                    result.WriteSpaceIfNotEmpty();
+                    result.Write(language);
+                    result.Write(": ");
+                }
+                result.Write($"<audio controls src='{fileNameStr}'></audio>");
             }
 
             return result;

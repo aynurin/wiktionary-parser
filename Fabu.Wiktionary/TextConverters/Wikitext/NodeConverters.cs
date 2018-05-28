@@ -12,7 +12,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
         {
             "sup"
         };
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             var tag = node as HtmlTag;
             var result = new ConversionResult();
@@ -29,7 +29,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
     class HeadingConverter : BaseNodeConverter
     {
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             var heading = node as Heading;
             var result = new ConversionResult();
@@ -42,7 +42,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
     class CommentConverter : BaseNodeConverter
     {
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             return new ConversionResult();
         }
@@ -51,7 +51,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
     class ExternalLinkConverter : BaseNodeConverter
     {
         private const bool WriteExternalLinks = true;
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             var result = new ConversionResult();
             var link = node as ExternalLink;
@@ -69,11 +69,19 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
     class ListItemConverter : BaseNodeConverter
     {
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             var result = new ConversionResult();
             var li = node as ListItem;
+            var nextLi = node.NextNode as ListItem;
+            var prevLi = node.PreviousNode as ListItem;
             var tag = li.Prefix == "*" ? "ul" : "ol";
+            var hasSubList = nextLi != null && li.Prefix.Length < nextLi.Prefix.Length;
+            var subListHasMoreThanOneItem = hasSubList && nextLi.NextNode is ListItem 
+                && ((ListItem)nextLi.NextNode).Prefix.Length >= nextLi.Prefix.Length;
+            var isSubList = li.Prefix.Length > 1;
+            var hasSiblingOrSubItems = (nextLi != null && nextLi.Prefix.Length > 1) 
+                || (prevLi != null && prevLi.Prefix.Length > 1);
 
             if (li.PreviousNode == null || li.PreviousNode.GetType() != typeof(ListItem))
                 result.Write($"<{tag}><li>");
@@ -85,8 +93,10 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
             if (inlines.Count > 0)
             {
+                //if (subListHasMoreThanOneItem || (isSubList && hasSiblingOrSubItems))
                 result.Write("<p>");
                 result.Write(new Run(inlines));
+                //if (subListHasMoreThanOneItem || (isSubList && hasSiblingOrSubItems))
                 result.Write("</p>");
             }
 
@@ -101,7 +111,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             var inlines = new List<InlineNode>(rawinlines);
             if (inlines.Count > 0)
             {
-                // the first node can be the space that goes after list item specifier (*_blabla), which we should avoid
+                // the first node can be the space that goes after list item specifier (* _blabla), which we should avoid
                 if (inlines[0].GetType() == typeof(PlainText) && String.IsNullOrWhiteSpace(inlines[0].ToString()))
                     inlines.RemoveAt(0);
                 var lastIndex = inlines.Count - 1;
@@ -114,7 +124,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
     class ParagraphConverter : BaseNodeConverter
     {
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             var result = new ConversionResult();
             if (node.ToString().Trim().Length > 0)
@@ -129,17 +139,18 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
     class PlainTextConverter : BaseNodeConverter
     {
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             var result = new ConversionResult();
-            result.Write(node.ToPlainText());
+            var value = node.ToPlainText().Replace("\r", "").Replace("\n", "").Replace("\t", " ");
+            result.Write(value);
             return result;
         }
     }
 
     class WikiLinkConverter : BaseNodeConverter
     {
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             var link = node as WikiLink;
             var result = new ConversionResult();
@@ -154,7 +165,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
     class FormatSwitchConverter : BaseNodeConverter
     {
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             var result = new ConversionResult();
             var sw = node as FormatSwitch;

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Fabu.Wiktionary.TextConverters;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace Fabu.Wiktionary.TermProcessing
 {
@@ -38,15 +39,34 @@ namespace Fabu.Wiktionary.TermProcessing
             new TermProperty(Title, Content, InternalCloneProperties());
 
         protected IEnumerable<KeyValuePair<string, TermProperty>> InternalCloneProperties() => 
-            this.Select(_ => new KeyValuePair<string, TermProperty>(_.Key, _.Value.CloneProperty()));
+            this.Select(_ => new KeyValuePair<string, TermProperty>(_.Key, _.Value));
 
         public override string ToString()
         {
             return Title;
         }
+
+        public string RecursiveContentAsHtml(ITextConverter textConverter, bool appendThisTitle, int headingLevel)
+        {
+            var buffer = new StringBuilder();
+            if (appendThisTitle && !String.IsNullOrWhiteSpace(Title))
+            {
+                buffer.Append($"<h{headingLevel}>{Title}</h{headingLevel}>");
+            }
+            buffer.Append(textConverter.ConvertText(Content));
+            foreach (var item in this)
+            {
+                buffer.Append(item.Value.RecursiveContentAsHtml(textConverter, true, headingLevel + 1));
+            }
+            return buffer.ToString();
+        }
     }
     public class Term : TermProperty
     {
+        public const string Etymology = "Etymology";
+        public const string Pronunciation = "Pronunciation";
+        public const string Divider = "Divider";
+
         public string Language { get; set; }
         public TermStatus Status { get; set; }
 

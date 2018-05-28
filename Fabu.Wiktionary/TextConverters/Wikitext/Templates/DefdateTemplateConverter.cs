@@ -4,7 +4,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 {
     class DefdateTemplateConverter : BaseNodeConverter
     {
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             var template = node as Template;
             var result = new ConversionResult();

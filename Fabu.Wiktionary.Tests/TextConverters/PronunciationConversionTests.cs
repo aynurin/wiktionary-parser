@@ -18,6 +18,8 @@ namespace Fabu.Wiktionary.Tests.TextConverters
 "<ul>" +
 "<li><p>(Received Pronunciation) IPA: /ˈdɪkʃ(ə)n(ə)ɹi/</p></li>" +
 "<li><p>(General American, Canada) enPR: dĭk'shə-nĕr-ē, IPA: /ˈdɪkʃənɛɹi/</p></li>" +
+"<li><p>Audio (US): <audio controls src='en-us-dictionary.ogg'></audio></p></li>" +
+"<li><p>Audio (UK): <audio controls src='en-uk-dictionary.ogg'></audio></p></li>" +
 "</ul>" +
 "";
             var formatted = Convert(creole, sectionName: "Pronunciation");

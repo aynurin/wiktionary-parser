@@ -1,42 +1,63 @@
 ﻿using System.Collections.Generic;
-using Fabu.Wiktionary.TextConverters.Wiki;
 
 namespace Fabu.Wiktionary.TextConverters
 {
+    public interface ITextConverterFactory
+    {
+        ITextConverter CreateConverter(ContextArguments context);
+    }
+
     public interface ITextConverter
     {
-        FormattedString ConvertToStructured(ContextArguments args, string wikitext);
+        string ConvertText(string wikitext);
+        ConversionContext Context { get; }
     }
 
     public class ContextArguments
     {
-        public ContextArguments()
+        public ContextArguments(string title, string sectionName)
         {
+            PageTitle = title;
+            SectionName = sectionName;
         }
 
         public string PageTitle { get; set; }
         public string SectionName { get; set; }
     }
 
-    /// <summary>
-    /// Contains a formatted string that is easy to render as rich text label or as HTML on mobile devices, or serialize as JSON for storage
-    /// </summary>
-    public class FormattedString
+    public class ConversionContext
     {
-        private readonly string _data;
-        private readonly List<Wiki.Proninciation> _proninciations;
+        public ContextArguments Arguments { get; private set; }
+        public Dictionary<string, string> LanguageCodes { get; set; }
+        public bool AllowLinks { get; set; }
 
-        public FormattedString(string data, List<Wiki.Proninciation> proninciations)
+        public List<Proninciation> Proninciations { get; private set; } = new List<Proninciation>();
+        public string LastResult { get; internal set; }
+
+        public ConversionContext(ContextArguments args, Dictionary<string, string> languageCodes, bool allowLinks)
         {
-            _data = data;
-            _proninciations = proninciations;
+            Arguments = args;
+            LanguageCodes = languageCodes;
+            AllowLinks = allowLinks;
         }
 
-        public List<Proninciation> Proninciations => _proninciations;
-
-        public string ToHtml()
+        internal void AddPronunciation(string language, string fileName, string label)
         {
-            return _data;
+            Proninciations.Add(new Proninciation(language, fileName, label));
+        }
+    }
+
+    public class Proninciation
+    {
+        public string Language { get; }
+        public string FileName { get; }
+        public string Label { get; }
+
+        public Proninciation(string language, string fileName, string label)
+        {
+            Language = language;
+            FileName = fileName;
+            Label = label;
         }
     }
 }

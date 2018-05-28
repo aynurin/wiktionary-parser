@@ -27,7 +27,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
         public readonly static Stats<string> ConvertedParserTags = new Stats<string>();
 
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             var parserTag = node as ParserTag;
             if (parserTag == null)
@@ -63,7 +63,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
     class GalleryParserTagConverter : BaseNodeConverter
     {
         // https://phabricator.wikimedia.org/diffusion/EHIE/browse/master/img/
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             var parserTag = node as ParserTag;
             if (parserTag == null)
@@ -86,7 +86,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
     class HieroParserTagConverter : BaseNodeConverter
     {
         // https://phabricator.wikimedia.org/diffusion/EHIE/browse/master/img/
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             var parserTag = node as ParserTag;
             if (parserTag == null)
@@ -99,7 +99,7 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
     class NowikiParserTagConverter : BaseNodeConverter
     {
-        public override ConversionResult Convert(Node node, ConversionContext context)
+        public override ConversionResult Convert(Node node, WikiConversionContext context)
         {
             var parserTag = node as ParserTag;
             if (parserTag == null)

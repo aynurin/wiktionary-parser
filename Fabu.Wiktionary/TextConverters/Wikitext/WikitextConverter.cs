@@ -1,5 +1,4 @@
-﻿using Fabu.Wiktionary.TextConverters.Wiki;
-using MwParserFromScratch;
+﻿using MwParserFromScratch;
 using MwParserFromScratch.Nodes;
 using System;
 using System.Collections.Generic;
@@ -9,22 +8,40 @@ using System.Text.RegularExpressions;
 
 namespace Fabu.Wiktionary.TextConverters.Wiki
 {
+    public class WikitextConverterFactory : ITextConverterFactory
+    {
+        public WikitextConverterFactory(Dictionary<string, string> languageCodes, IEnumerable<string> ignoredTemplates, bool allowLinks)
+        {
+            LanguageCodes = languageCodes;
+            IgnoredTemplates = ignoredTemplates;
+            AllowLinks = allowLinks;
+        }
+
+        public Dictionary<string, string> LanguageCodes { get; }
+        public IEnumerable<string> IgnoredTemplates { get; }
+        public bool AllowLinks { get; }
+
+        public ITextConverter CreateConverter(ContextArguments arguments)
+        {
+            var context = new WikiConversionContext(arguments, LanguageCodes, AllowLinks);
+            return new WikitextProcessor(IgnoredTemplates, context);
+        }
+    }
+
     public class WikitextProcessor : ITextConverter
     {
         private readonly ConverterFactory _converterFactory;
-        private Dictionary<string, string> _lagnuageCodes;
-        private readonly bool _allowLinks;
 
-        public WikitextProcessor(Dictionary<string, string> lagnuageCodes, IEnumerable<string> ignoredTemplates, bool allowLinks)
+        public WikitextProcessor(IEnumerable<string> ignoredTemplates, ConversionContext context)
         {
-            _lagnuageCodes = lagnuageCodes;
-            _allowLinks = allowLinks;
+            Context = (WikiConversionContext)context;
             _converterFactory = new ConverterFactory(ignoredTemplates);
         }
 
         public string PageTitle { get; set; }
+        public ConversionContext Context { get; }
 
-        public FormattedString ConvertToStructured(ContextArguments args, string wikitext)
+        public string ConvertText(string wikitext)
         {
             if (wikitext == null)
                 return null;
@@ -33,19 +50,20 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
 
             var parser = new WikitextParser();
             var ast = parser.Parse(wikitext.TrimEnd());
-            var context = new ConversionContext(args, _lagnuageCodes, _allowLinks);
 
             //PrintAst(ast, 0);
 
             var buffer = new StringBuilder();
             using (var writer = new StringWriter(buffer))
-                BuildAst(ast, writer, context);
+                BuildAst(ast, writer, (WikiConversionContext)Context);
 
             var result = buffer.ToString();
 
             result = Cleanup(result);
 
-            return new FormattedString(result, context.Proninciations);
+            Context.LastResult = result;
+
+            return result;
         }
 
         /// <summary>
@@ -66,13 +84,19 @@ namespace Fabu.Wiktionary.TextConverters.Wiki
             do
             {
                 result = newResult;
-                newResult = Regex.Replace(result, @"<[^/>]+>\s*</[^>]+>", String.Empty);
+                newResult = Regex.Replace(result, @"<([^/>]+)>\s*</([^>]+)>", match =>
+                {
+                    // we check the closing tag, as the opening might contain attributes and will not match name
+                    if (match.Groups[2].Value == "audio")
+                        return match.Value;
+                    return String.Empty;
+                });
             }
             while (result != newResult);
             return newResult;
         }
 
-        private void BuildAst(Node node, TextWriter writer, ConversionContext context)
+        private void BuildAst(Node node, TextWriter writer, WikiConversionContext context)
         {
             var converter = _converterFactory.GetConverter(node);
             var result = converter.Convert(node, context);

@@ -46,6 +46,7 @@ namespace Fabu.Wiktionary.TermProcessing
             if (termsDefined.Count == 0 && graph.AllItems.Any(i => i.Language == "English"))
                 EmptyResults.Add(page.Title);
             // now get rid of non-English definitions, because parsing wikitext to HTML is simply impossible for all languages at the moment.
+
             if (termsDefined.Count > 0)
             {
                 _wordWriter.Write(termsDefined);

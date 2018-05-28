@@ -24,11 +24,12 @@ namespace Fabu.Wiktionary.Commands
         // extract --in enwiktionary-20180120-pages-articles.xml
         protected override void RunCommand(Args args, Func<int, BaseArgs, bool> onProgress)
         {
-            var lagnuageCodes = DumpTool.LoadLanguageCodes(args.DumpDir);
+            var languageCodes = DumpTool.LoadLanguageCodes(args.DumpDir);
             var ignoredTemplates = DumpTool.LoadDump<List<string>>(args.DumpDir, DumpTool.IgnoredTemplatesDump);
-            var textConverter = new WikitextProcessor(lagnuageCodes, ignoredTemplates, false);
-            var output = textConverter.ConvertToStructured(new TextConverters.ContextArguments(), args.Text);
-            Console.WriteLine(output.ToHtml());
+            var factory = new WikitextConverterFactory(languageCodes, ignoredTemplates, false);
+            var textConverter = factory.CreateConverter(new TextConverters.ContextArguments(null, null));
+            var output = textConverter.ConvertText(args.Text);
+            Console.WriteLine(output);
         }
     }
 }

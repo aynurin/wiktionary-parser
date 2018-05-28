@@ -168,7 +168,7 @@ namespace Fabu.Wiktionary.Tests.TextConverters
       "encyclopedia:{{audio|en-us-encyclopedia.ogg|Audio (US)|lang=en}}"*/
 
             var creole = ", {{audio|en-us-dictionary.ogg|Audio (US)|lang=en}}.";
-            var html = "<p>, .</p>";
+            var html = "<p>, Audio (US): <audio controls src='en-us-dictionary.ogg'></audio>.</p>";
             var formatted = Convert(creole, sectionName: "Pronunciation");
             Assert.Equal(html, formatted.ToHtml());
             Assert.Single(formatted.Proninciations);

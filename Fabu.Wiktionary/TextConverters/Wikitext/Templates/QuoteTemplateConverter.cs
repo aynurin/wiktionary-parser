@@ -225,7 +225,17 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
                 items.Add("&rdquo;");
             }
             else if (name.OriginalName == "quote" && template.Arguments.TryGet(out Wikitext value, 1))
-                items.Add(value.TooSmart());
+            {
+                if (context.LanguageCodes.ContainsKey(value.ToString()))
+                {
+                    if (template.Arguments.TryGet(out value, 2))
+                        items.Add(value.TooSmart());
+                }
+                else
+                {
+                    items.Add(value.TooSmart());
+                }
+            }
 
             var result = new ConversionResult();
             result.Write(items);

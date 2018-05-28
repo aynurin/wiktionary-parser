@@ -31,12 +31,30 @@ namespace Fabu.Wiktionary.Tests.TextConverters
             { "onw", "Nubian" }
         };
 
-        protected FormattedString Convert(string creole, bool allowLinks = false, string sectionName = "TEST")
+        protected TestConverterOutput Convert(string creole, bool allowLinks = false, string sectionName = "TEST")
         {
             var ignoredTemplates = DumpTool.LoadDump<List<string>>(BaseArgs.DefaultDumpDir, DumpTool.IgnoredTemplatesDump);
-            var converter = new WikitextProcessor(_dictionary, ignoredTemplates, allowLinks);
-            var formatted = converter.ConvertToStructured(new ContextArguments() { PageTitle = "TEST", SectionName = sectionName }, creole);
-            return formatted;
+            var converterFactory = new WikitextConverterFactory(_dictionary, ignoredTemplates, allowLinks);
+            var converter = converterFactory.CreateConverter(new ContextArguments("TEST", sectionName));
+            var converted = converter.ConvertText(creole);
+            return new TestConverterOutput(converted, converter.Context.Proninciations);
+        }
+
+        public class TestConverterOutput
+        {
+            public TestConverterOutput(string converted, List<Proninciation> proninciations)
+            {
+                Converted = converted;
+                Proninciations = proninciations;
+            }
+
+            public string Converted { get; set; }
+            public List<Proninciation> Proninciations { get; set; }
+
+            public string ToHtml()
+            {
+                return Converted;
+            }
         }
     }
 }

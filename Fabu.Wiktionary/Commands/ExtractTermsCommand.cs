@@ -38,9 +38,9 @@ namespace Fabu.Wiktionary.Commands
             var transform = new FixTyposSectionName(languageSearch, sectionsSearch, true);
 
             var wiktionaryDump = DumpTool.LoadWikimediaDump(args.DumpDir, args.WiktionaryDumpFile);
-            var textConverter = new WikitextProcessor(lagnuageCodes, ignoredTemplates, false);
             var processor = new PageGraphProcessor(transform);
-            var writer = new FileWordWriter(Path.Combine(args.DumpDir, "output"), textConverter);
+            var textProcessorFactory = new WikitextConverterFactory(lagnuageCodes, ignoredTemplates, false);
+            var writer = new GoogleSearchAPIWordWriter(textProcessorFactory);
             var extractor = new WiktionaryTermExtractor(processor, args.Term, writer);
             var analyzer = new WiktionaryAnalyzer(extractor, wiktionaryDump);
             var pagesProcessed = 0;
