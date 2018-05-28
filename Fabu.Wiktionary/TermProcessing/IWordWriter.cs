@@ -1,4 +1,5 @@
-﻿using Fabu.Wiktionary.TextConverters;
+﻿using Fabu.Wiktionary.AWS.CloudSearch;
+using Fabu.Wiktionary.TextConverters;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -138,16 +139,11 @@ namespace Fabu.Wiktionary.TermProcessing
         void Write(string title, string html, string language);
     }
 
-    public class AWSCloudSearchHtmlWriter : IHtmlWriter
+    public class AWSCloudSearchHtmlWriter : DocumentIndexer, IHtmlWriter
     {
-        public AWSCloudSearchHtmlWriter(IConfigurationRoot config, string domainName)
+        public AWSCloudSearchHtmlWriter(IConfigurationRoot config, string domainName) : base(config, domainName, 100)
         {
 
-        }
-
-        public void Write(string title, string body, string language)
-        {
-            throw new NotImplementedException();
         }
     }
 }

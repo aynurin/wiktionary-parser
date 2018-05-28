@@ -19,12 +19,13 @@
     <PackageReference Include="LevenshteinMinimumEditDistance" Version="1.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.2" />
     <PackageReference Include="Mup" Version="1.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Phonix" Version="1.0.1" />
     <PackageReference Include="QuickGraph" Version="3.6.61119.7" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fabu.Wiktionary.AWS.CloudSearch\Fabu.Wiktionary.AWS.CloudSearch.csproj" />
     <ProjectReference Include="..\WikimediaProcessing\WikimediaProcessing.Portable.csproj" />
   </ItemGroup>
 
