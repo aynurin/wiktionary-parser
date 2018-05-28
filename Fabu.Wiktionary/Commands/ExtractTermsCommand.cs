@@ -40,8 +40,9 @@ namespace Fabu.Wiktionary.Commands
             var wiktionaryDump = DumpTool.LoadWikimediaDump(args.DumpDir, args.WiktionaryDumpFile);
             var processor = new PageGraphProcessor(transform);
             var textProcessorFactory = new WikitextConverterFactory(lagnuageCodes, ignoredTemplates, false);
-            var writer = new GoogleSearchAPIWordWriter(textProcessorFactory);
-            var extractor = new WiktionaryTermExtractor(processor, args.Term, writer);
+            var indexWriter = new AWSCloudSearchHtmlWriter(Config, Config.GetSection("WordIndex")["DomainName"]);
+            var htmlWriter = new SingleHtmlWordWriter(textProcessorFactory, indexWriter);
+            var extractor = new WiktionaryTermExtractor(processor, args.Term, htmlWriter);
             var analyzer = new WiktionaryAnalyzer(extractor, wiktionaryDump);
             var pagesProcessed = 0;
             if (onProgress != null)

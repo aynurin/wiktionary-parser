@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Diagnostics;
 
 namespace Fabu.Wiktionary.Commands
@@ -6,8 +7,11 @@ namespace Fabu.Wiktionary.Commands
     internal abstract class BaseCommand<T>
         where T: BaseArgs
     {
-        public int Run(T args, Func<int, BaseArgs, bool> onProgress)
+        protected IConfigurationRoot Config { get; private set; }
+
+        public int Run(IConfigurationRoot config, T args, Func<int, BaseArgs, bool> onProgress)
         {
+            Config = config;
             RunCommand(args, onProgress);
             return 0;
         }

@@ -1,0 +1,9 @@
+﻿{
+  "AWS": {
+    "Region": "us-east-1",
+    "Profile": "fabu-admin-service"
+  },
+  "WordIndex": {
+    "DomainName": "fabu-wiktionary-words"
+  }
+}

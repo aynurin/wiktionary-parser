@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabu.Wiktionary.Tests", "Fa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WikimediaProcessing.Portable", "WikimediaProcessing\WikimediaProcessing.Portable.csproj", "{3D1EEB8F-A0D8-4986-AAD6-79862D36FC61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabu.Wiktionary.AWS.CloudSearch", "Fabu.Wiktionary.AWS.CloudSearch\Fabu.Wiktionary.AWS.CloudSearch.csproj", "{9E68168E-B75C-4FD6-ABE5-0F029746F697}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3D1EEB8F-A0D8-4986-AAD6-79862D36FC61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D1EEB8F-A0D8-4986-AAD6-79862D36FC61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D1EEB8F-A0D8-4986-AAD6-79862D36FC61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E68168E-B75C-4FD6-ABE5-0F029746F697}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E68168E-B75C-4FD6-ABE5-0F029746F697}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E68168E-B75C-4FD6-ABE5-0F029746F697}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E68168E-B75C-4FD6-ABE5-0F029746F697}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

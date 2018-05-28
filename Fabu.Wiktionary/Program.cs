@@ -1,7 +1,9 @@
 ﻿using CommandLine;
 using Fabu.Wiktionary.Commands;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace Fabu.Wiktionary
 {
@@ -13,6 +15,11 @@ namespace Fabu.Wiktionary
         static int Main(string[] args)
         {
             _runTimer.Start();
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("config.json");
+            var config = builder.Build();
+
             return Parser.Default.ParseArguments<
                 PrepDictsCommand.Args,
                 StandardSectionsCommand.Args,
@@ -20,11 +27,11 @@ namespace Fabu.Wiktionary
                 CreoleCommand.Args,
                 SectionGraphCommand.Args>(args)
               .MapResult(
-                    (PrepDictsCommand.Args opts) => new PrepDictsCommand().Run(opts, Progress),
-                    (StandardSectionsCommand.Args opts) => new StandardSectionsCommand().Run(opts, Progress),
-                    (ExtractTermsCommand.Args opts) => new ExtractTermsCommand().Run(opts, Progress),
-                    (CreoleCommand.Args opts) => new CreoleCommand().Run(opts, Progress),
-                    (SectionGraphCommand.Args opts) => new SectionGraphCommand().Run(opts, Progress),
+                    (PrepDictsCommand.Args opts) => new PrepDictsCommand().Run(config, opts, Progress),
+                    (StandardSectionsCommand.Args opts) => new StandardSectionsCommand().Run(config, opts, Progress),
+                    (ExtractTermsCommand.Args opts) => new ExtractTermsCommand().Run(config, opts, Progress),
+                    (CreoleCommand.Args opts) => new CreoleCommand().Run(config, opts, Progress),
+                    (SectionGraphCommand.Args opts) => new SectionGraphCommand().Run(config, opts, Progress),
                     errs => 1);
         }
 

@@ -1,4 +1,5 @@
 ﻿using Fabu.Wiktionary.TextConverters;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,28 +16,26 @@ namespace Fabu.Wiktionary.TermProcessing
         void Write(List<Term> word);
     }
 
-    internal class GoogleSearchAPIWordWriter : IWordWriter
+    internal class SingleHtmlWordWriter : IWordWriter
     {
         private readonly ITextConverterFactory _textConverterFactory;
+        private readonly IHtmlWriter _writerImpl;
 
-        public GoogleSearchAPIWordWriter(ITextConverterFactory converterFactory)
+        public SingleHtmlWordWriter(ITextConverterFactory converterFactory, IHtmlWriter writerImpl)
         {
             _textConverterFactory = converterFactory;
+            _writerImpl = writerImpl;
         }
 
         public void Write(List<Term> wordTerms)
         {
             var title = wordTerms.First().Title;
+            var language = wordTerms.First().Language;
             var word = new MobileDeviceWordDefinition(title);
             word.PopulateTerms(_textConverterFactory, wordTerms);
             var json = word.ToJson();
-            IndexWord(json);
-        }
-
-        private void IndexWord(string json)
-        {
             var html = ToHtml(json);
-            Debugger.Break();
+            _writerImpl.Write(title, html, language);
         }
 
         private string ToHtml(string json)
@@ -131,6 +130,24 @@ namespace Fabu.Wiktionary.TermProcessing
                 var other = obj as WordSection;
                 return Content.CompareTo(other.Content);
             }
+        }
+    }
+
+    public interface IHtmlWriter
+    {
+        void Write(string title, string html, string language);
+    }
+
+    public class AWSCloudSearchHtmlWriter : IHtmlWriter
+    {
+        public AWSCloudSearchHtmlWriter(IConfigurationRoot config, string domainName)
+        {
+
+        }
+
+        public void Write(string title, string body, string language)
+        {
+            throw new NotImplementedException();
         }
     }
 }
