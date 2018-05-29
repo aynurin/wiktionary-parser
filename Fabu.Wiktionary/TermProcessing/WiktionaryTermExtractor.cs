@@ -15,13 +15,13 @@ namespace Fabu.Wiktionary.TermProcessing
         /// Process only this given term
         /// </summary>
         private readonly string _onlyTheTerm;
-        private readonly IWordWriter _wordWriter;
+        private readonly IWordCreator _wordWriter;
 
         public int WordsCount { get; set; }
         public int TermsCount { get; set; }
         public List<string> EmptyResults { get; } = new List<string>();
 
-        public WiktionaryTermExtractor(PageGraphProcessor processor, string onlyTheTerm, IWordWriter writer)
+        public WiktionaryTermExtractor(PageGraphProcessor processor, string onlyTheTerm, IWordCreator writer)
         {
             _graphProcessor = processor;
             _onlyTheTerm = onlyTheTerm;
@@ -49,7 +49,7 @@ namespace Fabu.Wiktionary.TermProcessing
 
             if (termsDefined.Count > 0)
             {
-                _wordWriter.Write(termsDefined);
+                _wordWriter.Create(termsDefined);
                 WordsCount += 1;
                 TermsCount += termsDefined.Count;
             }

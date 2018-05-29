@@ -23,10 +23,9 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
             }
 
             var fileNameStr = fileName.ToString();
-            var textStr = text.ToString();
 
             if (context.Arguments.SectionName == "Pronunciation")
-                context.AddPronunciation(language, fileNameStr, textStr);
+                context.AddPronunciation(language, fileNameStr, text?.ToString());
 
             if (template.Name.ToString() == "audio-IPA" && text != null)
             {
@@ -36,10 +35,10 @@ namespace Fabu.Wiktionary.TextConverters.Wiki.Templates
 
             if (!String.IsNullOrWhiteSpace(fileNameStr))
             {
-                if (!String.IsNullOrWhiteSpace(textStr))
+                if (text != null)
                 {
                     result.WriteSpaceIfNotEmpty();
-                    result.Write(textStr);
+                    result.Write(text.TooSmart());
                     result.Write(": ");
                 }
                 else if (!String.IsNullOrWhiteSpace(language))

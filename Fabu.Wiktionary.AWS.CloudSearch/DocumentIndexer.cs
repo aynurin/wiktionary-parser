@@ -35,15 +35,14 @@ namespace Fabu.Wiktionary.AWS.CloudSearch
         public AWSOptions AwsConfig { get; }
         public IAmazonCloudSearchDomain CloudSearchDomain { get; }
 
-        private readonly List<dynamic> _buffer;
-        private readonly MD5 _md5 = MD5.Create();
+        private readonly List<object> _buffer;
 
         public void Dispose()
         {
             FlushBuffer();
         }
 
-        public void Write(string title, string body, string language)
+        public void Write(object document)
         {
             if (_buffer.Capacity == _buffer.Count)
             {
@@ -51,15 +50,8 @@ namespace Fabu.Wiktionary.AWS.CloudSearch
             }
             else
             {
-                _buffer.Add(new { type = "add", id = GetDocId(language, title), fields = new { body, doctype = "word", language, word = title } });
+                _buffer.Add(document);
             }
-        }
-
-        public string GetDocId(string language, string title)
-        {
-            var inputBytes = System.Text.Encoding.ASCII.GetBytes($"{language}_{title}");
-            var hash = new Guid(_md5.ComputeHash(inputBytes));
-            return hash.ToString("n");
         }
 
         public void FlushBuffer()
@@ -72,7 +64,6 @@ namespace Fabu.Wiktionary.AWS.CloudSearch
             using (var writer = new StreamWriter(stream))
             {
                 serializer.Serialize(writer, _buffer);
-                _buffer.Clear();
                 writer.Flush();
                 stream.Position = 0;
                 var request = new UploadDocumentsRequest
@@ -82,6 +73,7 @@ namespace Fabu.Wiktionary.AWS.CloudSearch
                 };
                 var awaiter = CloudSearchDomain.UploadDocumentsAsync(request);
                 awaiter.Wait();
+                _buffer.Clear();
             }
         }
     }

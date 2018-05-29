@@ -1,149 +1,178 @@
 ﻿using Fabu.Wiktionary.AWS.CloudSearch;
 using Fabu.Wiktionary.TextConverters;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
+using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 namespace Fabu.Wiktionary.TermProcessing
 {
-    internal interface IWordWriter
+    internal interface IWordCreator
     {
-        void Write(List<Term> word);
+        void Create(List<Term> word);
     }
 
-    internal class SingleHtmlWordWriter : IWordWriter
+    public interface IWordSaver
+    {
+        void Save(SavableWordDefinition wordDefinition);
+    }
+
+    internal class HtmlWordCreator : IWordCreator
     {
         private readonly ITextConverterFactory _textConverterFactory;
-        private readonly IHtmlWriter _writerImpl;
+        private readonly IWordSaver _writerImpl;
 
-        public SingleHtmlWordWriter(ITextConverterFactory converterFactory, IHtmlWriter writerImpl)
+        public HtmlWordCreator(ITextConverterFactory converterFactory, IWordSaver writerImpl)
         {
             _textConverterFactory = converterFactory;
             _writerImpl = writerImpl;
         }
 
-        public void Write(List<Term> wordTerms)
+        public void Create(List<Term> wordTerms)
         {
             var title = wordTerms.First().Title;
             var language = wordTerms.First().Language;
-            var word = new MobileDeviceWordDefinition(title);
+            var slugline = wordTerms.SelectMany(term => term.Properties)
+                .Where(kvp => kvp.Key != Term.Etymology && kvp.Key != Term.Pronunciation)
+                .FirstOrDefault().Value?.Content;
+            var word = new SavableWordDefinition(language, title);
+            word.SetSlugline(_textConverterFactory, title, slugline);
             word.PopulateTerms(_textConverterFactory, wordTerms);
-            var json = word.ToJson();
-            var html = ToHtml(json);
-            _writerImpl.Write(title, html, language);
+            word.CreateHtml();
+            _writerImpl.Save(word);
+        }
+    }
+
+    public class SavableWordDefinition
+    {
+        const int TermMainHeaderLevel = 1; // hX used to format word itself. So X+1 is for POS.
+
+        public SavableWordDefinition(string language, string title)
+        {
+            Language = language;
+            Title = title;
         }
 
-        private string ToHtml(string json)
+        public string Language { get; }
+        public string Title { get; }
+        public List<WordDefinitionSection> Sections { get; private set; }
+        public string Slugline { get; private set; }
+        public string Html { get; private set; }
+
+        internal void PopulateTerms(ITextConverterFactory textConverterFactory, List<Term> wordTerms)
         {
-            var items = JsonConvert.DeserializeObject(json) as JArray;
-            var result = String.Join("", items.Select(token => token["Content"].ToString()));
-            return result;
-        }
-
-        private class MobileDeviceWordDefinition
-        {
-            const int TermMainHeaderLevel = 1; // hX used to format word itself. So X+1 is for POS.
-
-            public MobileDeviceWordDefinition(string title)
+            var sections = new List<WordDefinitionSection>();
+            var addedItems = new List<TermProperty>();
+            for (var wordCounter = 0; wordCounter < wordTerms.Count; wordCounter++)
             {
-                Title = title;
-            }
-
-            public string Title { get; }
-            public List<WordSection> Sections { get; private set; }
-
-            internal void PopulateTerms(ITextConverterFactory textConverterFactory, List<Term> wordTerms)
-            {
-                var sections = new List<WordSection>();
-                var addedItems = new List<TermProperty>();
-                for (var wordCounter = 0; wordCounter < wordTerms.Count; wordCounter++)
+                var term = wordTerms[wordCounter];
+                if (wordCounter > 0)
                 {
-                    var term = wordTerms[wordCounter];
-                    if (wordCounter > 0)
-                    {
-                        var section = new WordSection(wordCounter);
-                        section.Type = Term.Divider;
-                        section.Content = "<hr />";
-                        sections.Add(section);
-                    }
-                    if (term.TryGetValue(Term.Pronunciation, out TermProperty pronunciation) && !addedItems.Contains(pronunciation))
-                    {
-                        addedItems.Add(pronunciation);
-
-                        var section = new WordSection(wordCounter);
-                        var converter = textConverterFactory.CreateConverter(new ContextArguments(term.Title, Term.Pronunciation));
-                        section.Type = Term.Pronunciation;
-                        section.Content = pronunciation.RecursiveContentAsHtml(converter, false, TermMainHeaderLevel + 1);
-                        sections.Add(section);
-                    }
-                    if (term.TryGetValue(Term.Etymology, out TermProperty etymology) && !addedItems.Contains(etymology))
-                    {
-                        addedItems.Add(etymology);
-
-                        var section = new WordSection(wordCounter);
-                        var converter = textConverterFactory.CreateConverter(new ContextArguments(term.Title, Term.Etymology));
-                        section.Type = Term.Etymology;
-                        section.Content = etymology.RecursiveContentAsHtml(converter, false, TermMainHeaderLevel + 1);
-                        sections.Add(section);
-                    }
-                    foreach (var prop in term)
-                    {
-                        if (addedItems.Contains(prop.Value) || prop.Key == Term.Pronunciation || prop.Key == Term.Etymology)
-                            continue;
-                        addedItems.Add(prop.Value);
-
-                        var section = new WordSection(wordCounter);
-                        var converter = textConverterFactory.CreateConverter(new ContextArguments(term.Title, prop.Key));
-                        section.Type = prop.Key;
-                        section.Content = prop.Value.RecursiveContentAsHtml(converter, true, TermMainHeaderLevel + 1);
-                        sections.Add(section);
-                    }
+                    var section = new WordDefinitionSection(wordCounter);
+                    section.Type = Term.Divider;
+                    section.Content = "<hr />";
+                    sections.Add(section);
                 }
-                Sections = sections;
-            }
+                if (term.TryGetValue(Term.Pronunciation, out TermProperty pronunciation) && !addedItems.Contains(pronunciation))
+                {
+                    addedItems.Add(pronunciation);
 
-            internal string ToJson()
-            {
-                return JsonConvert.SerializeObject(Sections, Formatting.Indented);
+                    var section = new WordDefinitionSection(wordCounter);
+                    var converter = textConverterFactory.CreateConverter(new ContextArguments(term.Title, Term.Pronunciation));
+                    section.Type = Term.Pronunciation;
+                    section.Content = pronunciation.RecursiveContentAsHtml(converter, false, TermMainHeaderLevel + 1);
+                    sections.Add(section);
+                }
+                if (term.TryGetValue(Term.Etymology, out TermProperty etymology) && !addedItems.Contains(etymology))
+                {
+                    addedItems.Add(etymology);
+
+                    var section = new WordDefinitionSection(wordCounter);
+                    var converter = textConverterFactory.CreateConverter(new ContextArguments(term.Title, Term.Etymology));
+                    section.Type = Term.Etymology;
+                    section.Content = etymology.RecursiveContentAsHtml(converter, false, TermMainHeaderLevel + 1);
+                    sections.Add(section);
+                }
+                foreach (var prop in term)
+                {
+                    if (addedItems.Contains(prop.Value) || prop.Key == Term.Pronunciation || prop.Key == Term.Etymology)
+                        continue;
+                    addedItems.Add(prop.Value);
+
+                    var section = new WordDefinitionSection(wordCounter);
+                    var converter = textConverterFactory.CreateConverter(new ContextArguments(term.Title, prop.Key));
+                    section.Type = prop.Key;
+                    section.Content = prop.Value.RecursiveContentAsHtml(converter, true, TermMainHeaderLevel + 1);
+                    sections.Add(section);
+                }
             }
+            Sections = sections;
         }
 
-        private class WordSection : IComparable
+        internal void SetSlugline(ITextConverterFactory textConverterFactory, string title, string slugline)
         {
-            private int wordCounter;
+            if (String.IsNullOrWhiteSpace(slugline))
+                return;
+            var converter = textConverterFactory.CreateConverter(new ContextArguments(title, slugline));
+            Slugline = converter.ConvertText(slugline)
+                .Split(new[] { "<li>", "<p>", "<ul>", "<ol>", "<div>" }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(line => Regex.Replace(line, "<[^>]+>", String.Empty))
+                .FirstOrDefault()?.Trim();
+        }
 
-            public WordSection(int wordCounter)
-            {
-                this.wordCounter = wordCounter;
-            }
-
-            public string Type { get; internal set; }
-            public string Content { get; internal set; }
-
-            public int CompareTo(object obj)
-            {
-                var other = obj as WordSection;
-                return Content.CompareTo(other.Content);
-            }
+        internal void CreateHtml()
+        {
+            Html = String.Join("", Sections.Select(section => section.Content));
         }
     }
 
-    public interface IHtmlWriter
+    public class WordDefinitionSection : IComparable
     {
-        void Write(string title, string html, string language);
+        private readonly int _wordCounter;
+
+        public WordDefinitionSection(int wordCounter)
+        {
+            _wordCounter = wordCounter;
+        }
+
+        public string Type { get; internal set; }
+        public string Content { get; internal set; }
+
+        public int CompareTo(object obj)
+        {
+            var other = obj as WordDefinitionSection;
+            return Content.CompareTo(other.Content);
+        }
     }
 
-    public class AWSCloudSearchHtmlWriter : DocumentIndexer, IHtmlWriter
+    public class AWSCloudSearchHtmlWriter : DocumentIndexer, IWordSaver
     {
-        public AWSCloudSearchHtmlWriter(IConfigurationRoot config, string domainName) : base(config, domainName, 100)
-        {
+        private readonly MD5 _md5 = MD5.Create();
 
+        public AWSCloudSearchHtmlWriter(IConfigurationRoot config, string domainName) : base(config, domainName, 1000)
+        { }
+
+        private string GetDocId(string language, string title)
+        {
+            var inputBytes = System.Text.Encoding.ASCII.GetBytes($"{language}_{title}");
+            var hash = new Guid(_md5.ComputeHash(inputBytes));
+            return hash.ToString("n");
         }
+
+        public void Save(SavableWordDefinition wordDefinition) => Write(new
+        {
+            type = "add",
+            id = GetDocId(wordDefinition.Language, wordDefinition.Title),
+            fields = new
+            {
+                body = wordDefinition.Html,
+                doctype = "word",
+                language = wordDefinition.Language,
+                word = wordDefinition.Title,
+                slugline = wordDefinition.Slugline ?? String.Empty
+            }
+        });
     }
 }

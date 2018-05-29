@@ -4,8 +4,8 @@
     "Profile": "fabu-admin-service"
   },
   "WordIndex": {
-    "SearchEndpoint": "https://search-fabu-wiktionary-words-a3es2udsep3f6zgwyatwddd5pm.us-east-1.cloudsearch.amazonaws.com",
-    "DocumentEndpoint": "https://doc-fabu-wiktionary-words-a3es2udsep3f6zgwyatwddd5pm.us-east-1.cloudsearch.amazonaws.com",
+    "SearchEndpoint": "https://search-fabu-wiktionary-words-02-yiihv3d4x7is4uq6eigw7bwu4a.us-east-1.cloudsearch.amazonaws.com",
+    "DocumentEndpoint": "https://doc-fabu-wiktionary-words-02-yiihv3d4x7is4uq6eigw7bwu4a.us-east-1.cloudsearch.amazonaws.com",
     "DomainName": "fabu-wiktionary-words"
   }
 }
