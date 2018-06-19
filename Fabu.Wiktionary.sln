@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabu.Wiktionary.AWS.CloudSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabu.Wiktionary.ElasticHosted", "Fabu.Wiktionary.AWS.ElasticHosted\Fabu.Wiktionary.ElasticHosted.csproj", "{E6728A44-D19B-4803-8489-A4435A787B09}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wordy.ClientServer.Model", "..\Fabu.Common\Fabu.ClientServer.Model\Wordy.ClientServer.Model.csproj", "{200496A8-A6AA-42DA-8D13-AF29EC86D10F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wordy.ClientServer.Model", "..\shared-model\Wordy.ClientServer.Model.csproj", "{200496A8-A6AA-42DA-8D13-AF29EC86D10F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
