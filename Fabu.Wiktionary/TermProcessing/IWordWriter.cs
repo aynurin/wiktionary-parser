@@ -1,4 +1,4 @@
-﻿using Fabu.Wiktionary.AWS.CloudSearch;
+﻿using Fabu.Wiktionary.ElasticHosted;
 using Fabu.Wiktionary.TextConverters;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -60,6 +60,7 @@ namespace Fabu.Wiktionary.TermProcessing
         public List<WordDefinitionSection> Sections { get; private set; }
         public string Slugline { get; private set; }
         public string Html { get; private set; }
+        public string Audio { get; private set; }
 
         internal void PopulateTerms(ITextConverterFactory textConverterFactory, List<Term> wordTerms)
         {
@@ -83,6 +84,8 @@ namespace Fabu.Wiktionary.TermProcessing
                     var converter = textConverterFactory.CreateConverter(new ContextArguments(term.Title, Term.Pronunciation));
                     section.Type = Term.Pronunciation;
                     section.Content = pronunciation.RecursiveContentAsHtml(converter, false, TermMainHeaderLevel + 1);
+                    if (String.IsNullOrWhiteSpace(Audio) && converter.Context.Proninciations.Count > 0)
+                        Audio = converter.Context.Proninciations.First().FileName;
                     sections.Add(section);
                 }
                 if (term.TryGetValue(Term.Etymology, out TermProperty etymology) && !addedItems.Contains(etymology))
@@ -161,18 +164,16 @@ namespace Fabu.Wiktionary.TermProcessing
             return hash.ToString("n");
         }
 
-        public void Save(SavableWordDefinition wordDefinition) => Write(new
-        {
-            type = "add",
-            id = GetDocId(wordDefinition.Language, wordDefinition.Title),
-            fields = new
+        public void Save(SavableWordDefinition wordDefinition) => Write(
+            GetDocId(wordDefinition.Language, wordDefinition.Title),
+            "words",
+            new ElasticDocument
             {
-                body = wordDefinition.Html,
-                doctype = "word",
-                language = wordDefinition.Language,
-                word = wordDefinition.Title,
-                slugline = wordDefinition.Slugline ?? String.Empty
-            }
-        });
+                Body = wordDefinition.Html,
+                Language = wordDefinition.Language,
+                Slugline = wordDefinition.Slugline ?? String.Empty,
+                Word = wordDefinition.Title,
+                Audio = wordDefinition.Audio
+            });
     }
 }
